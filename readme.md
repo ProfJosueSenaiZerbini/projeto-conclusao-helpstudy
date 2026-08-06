@@ -1,7 +1,10 @@
-Este readme deve ser modificado.
+# HelpStudy
 
-Acrescente
+## Integrantes
 
-- Nome dos integrantes
-- Descrição resumida do trabalho
-- Descrição de como instalar o sistema
+- Diego Nicoletti Gazano
+- Luanna Bagaroli Moreira
+- Alice Mendoça Ferreira
+- Joao Vitor Silva
+- Joao Vitor Adão Dos Santos
+

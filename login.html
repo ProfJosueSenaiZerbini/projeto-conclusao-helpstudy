@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Study - Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-hs-blue-50 dark:bg-hs-blue-950 text-hs-blue-900 dark:text-hs-blue-50 min-h-screen">
+
+<div class="min-h-screen grid lg:grid-cols-2">
+
+    <!-- Lado esquerdo -->
+    <div class="hidden lg:flex relative bg-gradient-to-br from-hs-blue-100 via-hs-blue-50 to-white dark:from-hs-blue-900 dark:via-hs-blue-950 dark:to-black items-center justify-center overflow-hidden">
+
+        <div class="absolute top-10 left-10 w-24 h-24 rounded-full bg-hs-yellow-300/40 blur-2xl"></div>
+
+        <div class="absolute bottom-16 right-10 w-32 h-32 rounded-full bg-hs-blue-300/40 blur-2xl"></div>
+
+        <div class="relative z-10 text-center px-12">
+
+            <div class="mx-auto w-64 h-64 rounded-xl2 bg-white/70 dark:bg-white/5 backdrop-blur shadow-soft flex items-center justify-center">
+
+                <svg width="140" height="140" viewBox="0 0 24 24" fill="none">
+
+                    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H12v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"
+                        stroke="#2563eb"
+                        stroke-width="1.4"/>
+
+                    <path d="M20 4.5A2.5 2.5 0 0 0 17.5 2H12v20h5.5a2.5 2.5 0 0 0 2.5-2.5v-15Z"
+                        stroke="#2563eb"
+                        stroke-width="1.4"/>
+
+                </svg>
+
+            </div>
+
+            <h2 class="font-display font-bold text-2xl mt-8">
+
+                Estudar fica mais leve
+                <br>
+                quando tem direção.
+
+            </h2>
+
+            <p class="mt-3 text-gray-500">
+
+                Exercícios, planos personalizados e progresso em um só lugar.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Login -->
+
+    <div class="flex items-center justify-center p-8">
+
+        <div class="w-full max-w-sm">
+
+            <div class="flex items-center gap-2 mb-10">
+
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+
+                    📘
+
+                </div>
+
+                <span class="font-bold text-xl">
+
+                    Help
+                    <span class="text-blue-600">Study</span>
+
+                </span>
+
+            </div>
+
+            <h1 class="text-2xl font-bold">
+
+                Bem-vindo de volta!
+
+            </h1>
+
+            <p class="text-gray-500 mb-8">
+
+                Faça login para continuar
+
+            </p>
+
+            <form id="loginForm">
+
+                <div class="mb-4">
+
+                    <label>E-mail</label>
+
+                    <input
+                        type="email"
+                        required
+                        class="w-full border rounded-xl p-3">
+
+                </div>
+
+                <div class="mb-5">
+
+                    <label>Senha</label>
+
+                    <input
+                        id="senha"
+                        type="password"
+                        required
+                        class="w-full border rounded-xl p-3">
+
+                </div>
+
+                <button
+
+                    type="submit"
+
+                    class="w-full bg-blue-600 text-white p-3 rounded-xl">
+
+                    Entrar
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
