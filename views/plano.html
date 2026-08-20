@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Estudos · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/plano.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano" class="active"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <div class="topbar">
+            <h2>Plano de estudos</h2>
+            <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+        </div>
+
+        <div class="card plano-intro">
+            <div class="plano-intro__text">
+                <div class="plano-intro__icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div>
+                    <h1>Seu plano personalizado</h1>
+                    <p>Gerado automaticamente com base no seu desempenho em cada matéria.</p>
+                </div>
+            </div>
+            <button class="btn btn-outline" id="btn-regerar"><i class="fa-solid fa-arrows-rotate"></i> Atualizar plano</button>
+        </div>
+
+        <div class="plano-lista" id="plano-lista">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando seu plano...</div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/plano.js"></script>
+</body>
+</html>

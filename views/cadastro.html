@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/login.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<button class="theme-toggle theme-toggle-fixed" data-theme-toggle aria-label="Alternar tema claro/escuro">
+    <i class="fa-solid fa-moon"></i>
+</button>
+
+<div class="auth-wrapper">
+    <!-- Lado ilustrativo -->
+    <aside class="auth-side">
+        <div class="auth-side__content">
+            <div class="auth-side__badge"><i class="fa-solid fa-seedling"></i></div>
+            <h1>Comece sua jornada</h1>
+            <p>Crie uma conta gratuita e receba um plano de estudos pensado para as suas dificuldades específicas.</p>
+            <div class="auth-side__stats">
+                <div><strong>4</strong><span>Áreas do saber</span></div>
+                <div><strong>IA</strong><span>Plano adaptativo</span></div>
+                <div><strong>Grátis</strong><span>Para sempre</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Formulário -->
+    <section class="auth-form-side">
+        <div class="auth-form">
+            <div class="auth-form__logo">
+                <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+                HelpStudy
+            </div>
+
+            <h2>Crie sua conta ✨</h2>
+            <p class="text-muted">Leva menos de um minuto.</p>
+
+            <form id="form-cadastro" novalidate>
+                <div class="field" id="field-nome">
+                    <label for="nome">Nome completo</label>
+                    <div class="field-input">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="nome" name="nome" placeholder="Como podemos te chamar?" autocomplete="name" required>
+                    </div>
+                </div>
+
+                <div class="field" id="field-email">
+                    <label for="email">E-mail</label>
+                    <div class="field-input">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" autocomplete="email" required>
+                    </div>
+                </div>
+
+                <div class="field" id="field-serie">
+                    <label for="serie">Série / Ano escolar</label>
+                    <div class="field-input">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <select id="serie" name="serie">
+                            <option value="">Selecione (opcional)</option>
+                            <option value="6º ano">6º ano do Fundamental</option>
+                            <option value="7º ano">7º ano do Fundamental</option>
+                            <option value="8º ano">8º ano do Fundamental</option>
+                            <option value="9º ano">9º ano do Fundamental</option>
+                            <option value="1º ano EM">1º ano do Ensino Médio</option>
+                            <option value="2º ano EM">2º ano do Ensino Médio</option>
+                            <option value="3º ano EM">3º ano do Ensino Médio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field" id="field-senha">
+                    <label for="senha">Senha</label>
+                    <div class="field-input">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
+                        <button type="button" class="toggle-senha" tabindex="-1" aria-label="Mostrar senha">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="field-error">A senha deve ter pelo menos 6 caracteres.</span>
+                </div>
+
+                <div class="field" id="field-confirmar-senha">
+                    <label for="confirmar-senha">Confirmar senha</label>
+                    <div class="field-input">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Repita a senha" autocomplete="new-password" required>
+                    </div>
+                    <span class="field-error">As senhas não coincidem.</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Criar minha conta <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="auth-form__footer">
+                Já tem uma conta? <a href="/login">Fazer login</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/login.js"></script>
+</body>
+</html>
