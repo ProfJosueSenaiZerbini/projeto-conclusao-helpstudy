@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
 <title>Criar conta · HelpStudy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -114,3 +115,133 @@
 <script src="/js/login.js"></script>
 </body>
 </html>
+=======
+<title>Help Study — Seu aprendizado, do seu jeito</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['Poppins', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+        colors: {
+          hs: {
+            blue: {
+              50: '#eef5ff',
+              100: '#dcebff',
+              300: '#8fbdfb',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#0b1a33',
+              950: '#060f1f',
+            },
+            yellow: {
+              300: '#fde68a',
+              400: '#fbbf24',
+              500: '#f5a623',
+            },
+          }
+        },
+        boxShadow: {
+          soft: '0 8px 30px -8px rgba(37, 99, 235, 0.15)',
+          softd: '0 8px 30px -8px rgba(0, 0, 0, 0.5)',
+        },
+        borderRadius: {
+          xl2: '1.25rem',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+  h1,h2,h3,.font-display { font-family: 'Poppins', sans-serif; }
+  .view { display: none; }
+  .view.active { display: block; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #cfe0fb; border-radius: 8px; }
+  .dark ::-webkit-scrollbar-thumb { background: #14213d; }
+  .transition-theme { transition: background-color .3s ease, color .3s ease, border-color .3s ease; }
+  .progress-ring { transition: stroke-dashoffset 0.6s ease; }
+  input:focus, button:focus, select:focus { outline: 2px solid #fbbf24; outline-offset: 2px; }
+</style>
+</head>
+<body class="bg-hs-blue-50 dark:bg-hs-blue-950 text-hs-blue-900 dark:text-hs-blue-50 transition-theme min-h-screen">
+ 
+<!-- ============ TELA 1: LOGIN ============ -->
+<div id="view-login" class="view active min-h-screen">
+  <div class="min-h-screen grid lg:grid-cols-2">
+    <!-- Ilustração lateral -->
+    <div class="hidden lg:flex relative bg-gradient-to-br from-hs-blue-100 via-hs-blue-50 to-white dark:from-hs-blue-900 dark:via-hs-blue-950 dark:to-black items-center justify-center overflow-hidden">
+      <div class="absolute top-10 left-10 w-24 h-24 rounded-full bg-hs-yellow-300/40 blur-2xl"></div>
+      <div class="absolute bottom-16 right-10 w-32 h-32 rounded-full bg-hs-blue-300/40 blur-2xl"></div>
+      <div class="relative z-10 text-center px-12">
+        <div class="mx-auto w-64 h-64 rounded-xl2 bg-white/70 dark:bg-white/5 backdrop-blur shadow-soft dark:shadow-softd flex items-center justify-center border border-white/60 dark:border-white/10">
+          <svg width="140" height="140" viewBox="0 0 24 24" fill="none" class="text-hs-blue-600 dark:text-hs-yellow-400">
+            <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H12v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M20 4.5A2.5 2.5 0 0 0 17.5 2H12v20h5.5a2.5 2.5 0 0 0 2.5-2.5v-15Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-semibold text-xl mt-8 text-hs-blue-900 dark:text-white">Estudar fica mais leve<br/>quando tem direção.</h3>
+        <p class="text-hs-blue-700/70 dark:text-hs-blue-100/60 mt-2 text-sm max-w-xs mx-auto">Exercícios, planos personalizados e progresso, tudo num só lugar.</p>
+      </div>
+    </div>
+ 
+    <!-- Formulário -->
+    <div class="flex items-center justify-center p-8">
+      <div class="w-full max-w-sm">
+        <div class="flex items-center gap-2 mb-10">
+          <div class="w-10 h-10 rounded-xl bg-hs-blue-600 flex items-center justify-center shadow-soft">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H12v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" stroke="white" stroke-width="1.6"/><path d="M20 4.5A2.5 2.5 0 0 0 17.5 2H12v20h5.5a2.5 2.5 0 0 0 2.5-2.5v-15Z" stroke="white" stroke-width="1.6"/></svg>
+          </div>
+          <span class="font-display font-bold text-xl">Help<span class="text-hs-blue-600 dark:text-hs-yellow-400">Study</span></span>
+        </div>
+ 
+        <h1 class="font-display font-bold text-2xl mb-1">Bem-vindo de volta!</h1>
+        <p class="text-hs-blue-700/60 dark:text-hs-blue-100/50 text-sm mb-8">Faça login para continuar</p>
+ 
+        <form onsubmit="event.preventDefault(); showView('dashboard');" class="space-y-4">
+          <div>
+            <label class="text-sm font-medium block mb-1.5">E-mail</label>
+            <input type="email" required placeholder="seuemail@exemplo.com"
+              class="w-full px-4 py-3 rounded-xl border border-hs-blue-100 dark:border-white/10 bg-white dark:bg-white/5 text-sm placeholder:text-hs-blue-900/30 dark:placeholder:text-white/30 focus:border-hs-blue-500">
+          </div>
+          <div>
+            <label class="text-sm font-medium block mb-1.5">Senha</label>
+            <div class="relative">
+              <input id="pw-input" type="password" required placeholder="Sua senha"
+                class="w-full px-4 py-3 rounded-xl border border-hs-blue-100 dark:border-white/10 bg-white dark:bg-white/5 text-sm pr-10 focus:border-hs-blue-500">
+              <button type="button" onclick="togglePw()" class="absolute right-3 top-1/2 -translate-y-1/2 text-hs-blue-900/40 dark:text-white/40 text-sm">👁</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-sm pt-1">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" class="rounded accent-hs-blue-600"> Lembrar de mim
+            </label>
+            <a href="#" class="text-hs-blue-600 dark:text-hs-yellow-400 font-medium hover:underline">Esqueci minha senha</a>
+          </div>
+          <button type="submit"
+            class="w-full py-3 rounded-xl bg-hs-blue-600 hover:bg-hs-blue-700 text-white font-semibold shadow-soft transition-colors">
+            Entrar
+          </button>
+        </form>
+ 
+        <p class="text-center text-sm mt-6 text-hs-blue-700/60 dark:text-hs-blue-100/50">
+          Não tem uma conta? <a href="#" class="text-hs-blue-600 dark:text-hs-yellow-400 font-semibold hover:underline">Cadastre-se</a>
+        </p>
+ 
+        <button onclick="toggleTheme()" class="mt-10 mx-auto flex items-center gap-2 text-xs text-hs-blue-700/50 dark:text-hs-blue-100/40 hover:text-hs-blue-600 dark:hover:text-hs-yellow-400">
+          <span id="theme-icon-login">🌙</span> Alternar tema
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+>>>>>>> 2d02819e18d0c0429f28a9337756c2d567c01165

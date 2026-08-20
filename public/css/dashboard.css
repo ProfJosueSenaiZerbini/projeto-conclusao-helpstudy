@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* =====================================================================
    HelpStudy — Dashboard (painel inicial com as matérias)
 ===================================================================== */
@@ -133,3 +134,729 @@
     .dashboard-grid { grid-template-columns: 1fr; }
     .greeting-card { flex-direction: column; align-items: flex-start; }
 }
+=======
+/* ==========================================
+   HELP STUDY
+   DASHBOARD
+========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root{
+
+    --azul:#3B82F6;
+    --azul-escuro:#1E3A8A;
+
+    --amarelo:#FACC15;
+
+    --branco:#FFFFFF;
+
+    --cinza:#F3F4F6;
+
+    --texto:#374151;
+
+    --sombra:0 10px 30px rgba(0,0,0,.08);
+
+    --borda:18px;
+
+}
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+
+}
+
+body{
+
+    background:#eef5ff;
+
+    color:var(--texto);
+
+}
+
+/* ============================
+LAYOUT
+============================ */
+
+.wrapper{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+.content{
+
+    flex:1;
+
+    padding:40px;
+
+}
+
+/* ============================
+SIDEBAR
+============================ */
+
+.sidebar{
+
+    width:260px;
+
+    background:white;
+
+    box-shadow:var(--sombra);
+
+    padding:30px;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    bottom:0;
+
+}
+
+.logo{
+
+    text-align:center;
+
+    margin-bottom:50px;
+
+}
+
+.logo img{
+
+    width:70px;
+
+    margin-bottom:15px;
+
+}
+
+.logo h2{
+
+    color:var(--azul);
+
+    font-weight:700;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.sidebar li i{
+
+    font-size:20px;
+
+}
+
+.sidebar li:hover{
+
+    background:#e8f1ff;
+
+}
+
+.sidebar .active{
+
+    background:var(--azul);
+
+    color:white;
+
+}
+
+/* ============================
+TOPO
+============================ */
+
+.topo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-left:280px;
+
+    margin-bottom:35px;
+
+}
+
+.topo h2{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+}
+
+.topo p{
+
+    color:#6b7280;
+
+    margin-top:5px;
+
+}
+
+.acoes{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+#btnTema{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:white;
+
+    box-shadow:var(--sombra);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#btnTema:hover{
+
+    transform:scale(1.08);
+
+}
+
+.avatar{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    box-shadow:var(--sombra);
+
+}
+
+/* ============================
+CARD PROGRESSO
+============================ */
+
+.progresso-geral{
+
+    margin-left:280px;
+
+    margin-bottom:30px;
+
+}
+
+.card-geral{
+
+    background:linear-gradient(135deg,#3B82F6,#2563EB);
+
+    color:white;
+
+    border-radius:25px;
+
+    padding:35px;
+
+    box-shadow:var(--sombra);
+
+}
+
+.card-geral h3{
+
+    font-size:20px;
+
+    font-weight:500;
+
+}
+
+.card-geral h1{
+
+    font-size:60px;
+
+    font-weight:700;
+
+    margin:15px 0;
+
+}
+
+.card-geral p{
+
+    opacity:.9;
+
+}
+
+/* ============================
+MATÉRIAS
+============================ */
+
+.cards-materias{
+
+    margin-left:280px;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+
+    gap:25px;
+
+}
+
+.card-materia{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:var(--sombra);
+
+    transition:.3s;
+
+}
+
+.card-materia:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.card-materia h4{
+
+    margin-top:20px;
+
+    margin-bottom:10px;
+
+    font-weight:600;
+
+}
+
+.card-materia p{
+
+    color:#6b7280;
+
+    font-size:14px;
+
+    margin-bottom:15px;
+
+}
+
+.card-materia span{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:18px;
+
+    font-weight:600;
+
+    color:#2563EB;
+
+}
+
+.card-materia .btn{
+
+    width:100%;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+/* ============================
+ÍCONE
+============================ */
+
+.icone{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:28px;
+
+}
+
+.azul{
+
+    background:#3B82F6;
+
+}
+
+.amarelo{
+
+    background:#FACC15;
+
+}
+
+.vermelho{
+
+    background:#EF4444;
+
+}
+
+.verde{
+
+    background:#10B981;
+
+}
+
+.roxo{
+
+    background:#8B5CF6;
+
+}
+
+.rosa{
+
+    background:#EC4899;
+
+}
+
+/* ============================
+BARRA
+============================ */
+
+.progress{
+
+    height:10px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:#E5E7EB;
+
+}
+
+.progress-bar{
+
+    transition:.5s;
+
+}
+
+/* ==========================================
+   CONTINUAR ESTUDANDO
+========================================== */
+
+.continuar-estudo{
+
+    margin-left:280px;
+
+    margin-top:35px;
+
+}
+
+.card-continuar{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--sombra);
+
+}
+
+.card-continuar h3{
+
+    font-size:22px;
+
+    font-weight:600;
+
+    margin-bottom:10px;
+
+}
+
+.card-continuar p{
+
+    color:#6B7280;
+
+    margin-bottom:20px;
+
+}
+
+.card-continuar button{
+
+    border-radius:12px;
+
+    padding:12px 25px;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark{
+
+    background:#111827;
+
+    color:white;
+
+}
+
+body.dark .sidebar{
+
+    background:#1F2937;
+
+}
+
+body.dark .logo h2{
+
+    color:white;
+
+}
+
+body.dark .sidebar li{
+
+    color:#E5E7EB;
+
+}
+
+body.dark .sidebar li:hover{
+
+    background:#374151;
+
+}
+
+body.dark .card-materia,
+body.dark .card-continuar{
+
+    background:#1F2937;
+
+    color:white;
+
+}
+
+body.dark .card-materia p,
+body.dark .card-continuar p,
+body.dark .topo p{
+
+    color:#D1D5DB;
+
+}
+
+body.dark .topo h2{
+
+    color:white;
+
+}
+
+body.dark #btnTema{
+
+    background:#374151;
+
+    color:white;
+
+}
+
+body.dark .progress{
+
+    background:#374151;
+
+}
+
+/* ==========================================
+   ANIMAÇÕES
+========================================== */
+
+.card-materia,
+.card-geral,
+.card-continuar{
+
+    animation:fadeUp .5s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media(max-width:991px){
+
+.sidebar{
+
+    position:relative;
+
+    width:100%;
+
+    height:auto;
+
+}
+
+.wrapper{
+
+    flex-direction:column;
+
+}
+
+.content{
+
+    padding:20px;
+
+}
+
+.topo,
+.progresso-geral,
+.cards-materias,
+.continuar-estudo{
+
+    margin-left:0;
+
+}
+
+.cards-materias{
+
+    grid-template-columns:1fr;
+
+}
+
+.topo{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+.acoes{
+
+    width:100%;
+
+    justify-content:space-between;
+
+}
+
+.card-geral h1{
+
+    font-size:42px;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.logo h2{
+
+    font-size:22px;
+
+}
+
+.card-materia{
+
+    padding:20px;
+
+}
+
+.card-geral{
+
+    padding:25px;
+
+}
+
+.card-geral h1{
+
+    font-size:34px;
+
+}
+
+.topo h2{
+
+    font-size:24px;
+
+}
+
+.avatar{
+
+    width:45px;
+
+    height:45px;
+
+}
+
+}
+>>>>>>> 2d02819e18d0c0429f28a9337756c2d567c01165

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* =====================================================================
    HelpStudy — Página de Exercícios (questões)
 ===================================================================== */
@@ -152,3 +153,177 @@
     .nav-questoes { order: -1; }
     .nav-questoes__grid { grid-template-columns: repeat(8, 1fr); }
 }
+=======
+/* ==========================================
+   HELP STUDY - EXERCÍCIOS
+========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+    color:#1f2937;
+}
+
+.container{
+    max-width:900px;
+    margin:40px auto;
+    padding:0 20px;
+}
+
+/* =======================
+   TOPO
+======================= */
+
+.topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.topo h2{
+    font-size:32px;
+    font-weight:700;
+}
+
+.topo p{
+    color:#64748b;
+}
+
+.cronometro{
+    background:#3B82F6;
+    color:white;
+    padding:15px 25px;
+    border-radius:15px;
+    font-size:20px;
+    font-weight:600;
+}
+
+/* =======================
+   BARRA DE PROGRESSO
+======================= */
+
+.progress{
+    height:12px;
+    border-radius:15px;
+    overflow:hidden;
+    background:#e5e7eb;
+}
+
+.progress-bar{
+    transition:.4s;
+}
+
+/* =======================
+   CARD DA QUESTÃO
+======================= */
+
+.card-pergunta{
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+#numeroQuestao{
+    color:#3B82F6;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+#pergunta{
+    margin-bottom:30px;
+    font-size:28px;
+    line-height:1.5;
+}
+
+/* =======================
+   ALTERNATIVAS
+======================= */
+
+.alternativa{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:#f8fafc;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+    cursor:pointer;
+    transition:.3s;
+    border:2px solid transparent;
+}
+
+.alternativa:hover{
+    background:#dbeafe;
+    border-color:#3B82F6;
+}
+
+.alternativa input{
+    transform:scale(1.3);
+    cursor:pointer;
+}
+
+.alternativa label{
+    width:100%;
+    cursor:pointer;
+    font-size:17px;
+}
+
+/* =======================
+   BOTÕES
+======================= */
+
+.botoes{
+    margin-top:30px;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.btn{
+    min-width:170px;
+    border-radius:12px;
+    font-weight:600;
+    padding:10px 20px;
+}
+
+/* =======================
+   RESPONSIVO
+======================= */
+
+@media(max-width:768px){
+
+    .topo{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .cronometro{
+        width:100%;
+        text-align:center;
+    }
+
+    #pergunta{
+        font-size:22px;
+    }
+
+    .botoes{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+}
+>>>>>>> 2d02819e18d0c0429f28a9337756c2d567c01165

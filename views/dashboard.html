@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+<<<<<<< HEAD
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,3 +95,484 @@
 <script src="/js/dashboard.js"></script>
 </body>
 </html>
+=======
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Help Study - Dashboard</title>
+
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+        href="../public/css/dashboard.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- ================= MENU ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img src="../public/images/logo.png" alt="Logo">
+
+            <h2>Help Study</h2>
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>Matérias</span>
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-file-pen"></i>
+
+                <span>Exercícios</span>
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>Progresso</span>
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Perfil</span>
+
+            </li>
+
+            <li id="logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- ================= CONTEÚDO ================= -->
+
+    <main class="content">
+
+        <!-- TOPO -->
+
+        <header class="topo">
+
+            <div>
+
+                <h2 id="nomeUsuario">
+
+                    Olá, Aluno 👋
+
+                </h2>
+
+                <p>
+
+                    Continue seus estudos.
+
+                </p>
+
+            </div>
+
+            <div class="acoes">
+
+                <button id="btnTema">
+
+                    <i class="fa-solid fa-moon"></i>
+
+                </button>
+
+                <img
+                    src="../public/images/avatar.png"
+                    class="avatar">
+
+            </div>
+
+        </header>
+
+        <!-- PROGRESSO GERAL -->
+
+        <section class="progresso-geral">
+
+            <div class="card-geral">
+
+                <h3>Progresso Geral</h3>
+
+                <h1 id="progressoTotal">
+
+                    0%
+
+                </h1>
+
+                <p>
+
+                    Você ainda não concluiu nenhuma lição.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- MATÉRIAS -->
+
+        <section class="materias">
+
+                    <!-- ================= MATÉRIAS ================= -->
+
+        <div class="cards-materias">
+
+            <!-- Matemática -->
+
+            <div class="card-materia">
+
+                <div class="icone azul">
+
+                    <i class="fa-solid fa-square-root-variable"></i>
+
+                </div>
+
+                <h4>Matemática</h4>
+
+                <p id="licoes-matematica">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-matematica"
+                        class="progress-bar bg-primary"
+                        style="width:0%;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-matematica">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=matematica"
+                    class="btn btn-primary">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+            <!-- Português -->
+
+            <div class="card-materia">
+
+                <div class="icone amarelo">
+
+                    <i class="fa-solid fa-book"></i>
+
+                </div>
+
+                <h4>Português</h4>
+
+                <p id="licoes-portugues">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-portugues"
+                        class="progress-bar bg-warning"
+                        style="width:0%;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-portugues">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=portugues"
+                    class="btn btn-warning">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+            <!-- História -->
+
+            <div class="card-materia">
+
+                <div class="icone vermelho">
+
+                    <i class="fa-solid fa-landmark"></i>
+
+                </div>
+
+                <h4>História</h4>
+
+                <p id="licoes-historia">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-historia"
+                        class="progress-bar bg-danger"
+                        style="width:0%;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-historia">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=historia"
+                    class="btn btn-danger">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+            <!-- Geografia -->
+
+            <div class="card-materia">
+
+                <div class="icone verde">
+
+                    <i class="fa-solid fa-earth-americas"></i>
+
+                </div>
+
+                <h4>Geografia</h4>
+
+                <p id="licoes-geografia">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-geografia"
+                        class="progress-bar bg-success"
+                        style="width:0%;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-geografia">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=geografia"
+                    class="btn btn-success">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+        </div>
+
+                    <!-- Ciências -->
+
+            <div class="card-materia">
+
+                <div class="icone roxo">
+
+                    <i class="fa-solid fa-flask"></i>
+
+                </div>
+
+                <h4>Ciências</h4>
+
+                <p id="licoes-ciencias">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-ciencias"
+                        class="progress-bar"
+                        style="width:0%; background:#6f42c1;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-ciencias">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=ciencias"
+                    class="btn"
+                    style="background:#6f42c1;color:white;">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+            <!-- Inglês -->
+
+            <div class="card-materia">
+
+                <div class="icone rosa">
+
+                    <i class="fa-solid fa-language"></i>
+
+                </div>
+
+                <h4>Inglês</h4>
+
+                <p id="licoes-ingles">
+
+                    0 de 5 lições concluídas
+
+                </p>
+
+                <div class="progress">
+
+                    <div
+                        id="barra-ingles"
+                        class="progress-bar"
+                        style="width:0%; background:#e83e8c;">
+
+                    </div>
+
+                </div>
+
+                <span id="porcentagem-ingles">
+
+                    0%
+
+                </span>
+
+                <a href="materia.html?materia=ingles"
+                    class="btn"
+                    style="background:#e83e8c;color:white;">
+
+                    Continuar
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- CONTINUAR ESTUDANDO -->
+
+        <section class="continuar-estudo">
+
+            <div class="card-continuar">
+
+                <h3>Continuar estudando</h3>
+
+                <p id="proximaLicao">
+
+                    Você ainda não iniciou nenhuma lição.
+
+                </p>
+
+                <button
+                    id="btnContinuar"
+                    class="btn btn-primary"
+                    disabled>
+
+                    Iniciar primeira lição
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript -->
+
+<script src="../public/js/dashboard.js"></script>
+
+</body>
+
+</html>
+>>>>>>> 2d02819e18d0c0429f28a9337756c2d567c01165

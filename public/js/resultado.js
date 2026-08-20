@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // =====================================================================
 // Lógica da página de Resultado
 // =====================================================================
@@ -61,3 +62,32 @@ async function carregarResultado() {
 }
 
 document.addEventListener('DOMContentLoaded', carregarResultado);
+=======
+const resultado =
+JSON.parse(
+localStorage.getItem("resultado")
+);
+
+if(!resultado){
+
+    window.location.href="dashboard.html";
+
+}
+
+document.getElementById("acertos").innerHTML =
+resultado.acertos;
+
+document.getElementById("erros").innerHTML =
+resultado.erros;
+
+document.getElementById("nota").innerHTML =
+resultado.nota.toFixed(1);
+
+document
+.getElementById("voltar")
+.onclick=()=>{
+
+window.location.href="dashboard.html";
+
+};
+>>>>>>> 2d02819e18d0c0429f28a9337756c2d567c01165
