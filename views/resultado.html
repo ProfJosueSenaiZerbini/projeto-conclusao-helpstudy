@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultado · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/resultado.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <div class="topbar">
+            <div></div>
+            <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+        </div>
+
+        <section class="resultado-hero">
+            <div class="resultado-hero__emoji" id="resultado-emoji">🎉</div>
+            <h1 id="resultado-titulo">Parabéns, <span data-user-name>Aluno</span>!</h1>
+            <p id="resultado-texto">Você concluiu a lista de exercícios.</p>
+        </section>
+
+        <div class="resultado-stats">
+            <div class="card resultado-stat">
+                <i class="fa-solid fa-star"></i>
+                <strong id="stat-nota">0.0</strong>
+                <span>Nota final</span>
+            </div>
+            <div class="card resultado-stat">
+                <i class="fa-solid fa-check-double"></i>
+                <strong id="stat-acertos">0/0</strong>
+                <span>Acertos</span>
+            </div>
+            <div class="card resultado-stat">
+                <i class="fa-solid fa-percent"></i>
+                <strong id="stat-percentual">0%</strong>
+                <span>Aproveitamento</span>
+            </div>
+            <div class="card resultado-stat">
+                <i class="fa-regular fa-clock"></i>
+                <strong id="stat-tempo">0min</strong>
+                <span>Tempo total</span>
+            </div>
+        </div>
+
+        <div class="card panel">
+            <h3>Revisão das questões</h3>
+            <div id="lista-revisao" style="margin-top:14px;">
+                <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+            </div>
+        </div>
+
+        <div class="resultado-acoes">
+            <a href="#" id="btn-refazer" class="btn btn-primary">Praticar novamente <i class="fa-solid fa-rotate-right"></i></a>
+            <a href="/plano" class="btn btn-outline">Ver plano de estudos</a>
+            <a href="/dashboard" class="btn btn-ghost">Voltar ao início</a>
+        </div>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/resultado.js"></script>
+</body>
+</html>

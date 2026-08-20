@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard" class="active"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <!-- Área principal -->
+    <main class="main-area">
+        <div class="topbar">
+            <button class="theme-toggle" data-menu-toggle aria-label="Abrir menu" style="display:none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div></div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saudação -->
+        <section class="greeting-card">
+            <div>
+                <h1><span id="saudacao-hora">Olá</span>, <span data-user-name>Aluno</span>! 👋</h1>
+                <p>Pronto para continuar de onde parou? Escolha uma matéria abaixo e vamos praticar juntos.</p>
+            </div>
+            <div style="display:flex; gap:14px;">
+                <div class="greeting-card__stat">
+                    <strong id="stat-respondidas">0</strong>
+                    <span>Respondidas</span>
+                </div>
+                <div class="greeting-card__stat">
+                    <strong id="stat-corretas">0</strong>
+                    <span>Acertos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matérias -->
+        <div class="section-heading">
+            <h2>Escolha sua matéria para estudar</h2>
+        </div>
+        <div class="materias-grid" id="grid-materias">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando matérias...</div>
+        </div>
+
+        <!-- Resumo -->
+        <div class="dashboard-grid">
+            <div class="card panel">
+                <h3>Seu progresso geral</h3>
+                <div class="progress-ring-wrap" id="progresso-anel"></div>
+            </div>
+            <div class="card panel">
+                <h3>Sugestões de estudo</h3>
+                <div id="mini-plano">
+                    <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+                </div>
+                <a href="/plano" class="btn btn-outline btn-block btn-sm" style="margin-top:14px;">Ver plano completo</a>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>
