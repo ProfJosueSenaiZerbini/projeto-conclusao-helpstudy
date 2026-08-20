@@ -1,3 +1,11 @@
+# Participantes
+
+## Diego Nicoletti Gazano (Lider)
+## Alice Mendoça Ferreira
+## Luanna Moreira Santos
+## Joao Vitor Silva 
+## Joao Vitor Dos Santos Adao
+
 # 🎓 HelpStudy
 
 **Sistema Inteligente para Auxílio ao Ensino de Alunos com Dificuldades de Aprendizagem**
