@@ -6,7 +6,7 @@
 ## Joao Vitor Silva 
 ## Joao Vitor Dos Santos Adao
 
-# 🎓 HelpStudy
+#  HelpStudy
 
 **Sistema Inteligente para Auxílio ao Ensino de Alunos com Dificuldades de Aprendizagem**
 
@@ -14,7 +14,7 @@ Projeto de TCC — plataforma web para apoiar estudantes com defasagens de apren
 
 ---
 
-## 🧱 Tecnologias
+##  Tecnologias
 
 | Camada    | Tecnologias |
 |-----------|-------------|
@@ -27,7 +27,7 @@ Projeto de TCC — plataforma web para apoiar estudantes com defasagens de apren
 
 ---
 
-## 📁 Estrutura de pastas
+##  Estrutura de pastas
 
 ```
 help-study/
@@ -95,7 +95,7 @@ Duas pastas foram adicionadas em relação ao briefing original: `config/` (cone
 
 ---
 
-## ⚙️ Como rodar o projeto
+##  Como rodar o projeto
 
 ### 1. Pré-requisitos
 - [Node.js](https://nodejs.org/) 18+
@@ -138,7 +138,7 @@ Acesse **http://localhost:3000** no navegador. Você será redirecionado para a 
 
 ---
 
-## 🗃️ Modelo de dados (tabelas)
+##  Modelo de dados (tabelas)
 
 | Tabela | Descrição |
 |---|---|
@@ -152,7 +152,7 @@ Acesse **http://localhost:3000** no navegador. Você será redirecionado para a 
 
 ---
 
-## 🔌 Principais rotas da API
+##  Principais rotas da API
 
 | Método | Rota | Descrição |
 |---|---|---|
@@ -172,7 +172,7 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 
 ---
 
-## 🧠 Como funciona a lógica de "dificuldades de aprendizagem"
+##  Como funciona a lógica de "dificuldades de aprendizagem"
 
 1. O aluno responde questões de uma matéria; cada resposta é salva em `respostas`.
 2. A cada resposta, `progresso` é recalculado (% de acerto e nível sugerido: fácil/médio/difícil).
@@ -181,7 +181,7 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 
 ---
 
-## 🎨 Identidade visual
+##  Identidade visual
 
 - Cor de marca: rosa vibrante (`#E91E8C` → `#C1157A` em gradiente).
 - Cada matéria tem uma cor própria (azul para Matemática, roxo para Português, laranja para História, etc.), reaproveitada em ícones, gráficos e badges.
@@ -190,7 +190,7 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 
 ---
 
-## 📝 Próximos passos sugeridos
+##  Próximos passos sugeridos
 
 - Painel do professor/responsável para acompanhar múltiplos alunos.
 - Upload de imagens nas questões (a coluna `imagem` já existe em `questoes`).
@@ -199,4 +199,4 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 
 ---
 
-Feito com 💗 para apoiar alunos com dificuldades de aprendizagem.
+Feito para apior os estudos e a aprendizagem dos alunos.
