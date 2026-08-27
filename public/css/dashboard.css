@@ -1,135 +1,487 @@
 /* =====================================================================
-   HelpStudy — Dashboard (painel inicial com as matérias)
+   HelpStudy — Dashboard
+   Painel inicial com as matérias
+===================================================================== */
+
+
+/* =====================================================================
+   SAUDAÇÃO
 ===================================================================== */
 
 .greeting-card {
-    background: var(--brand-gradient);
+    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
     border-radius: var(--radius-lg);
     padding: 30px 34px;
     color: #fff;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 20px;
     margin-bottom: 28px;
+
     position: relative;
     overflow: hidden;
+
+    box-shadow: 0 8px 24px rgba(13, 110, 253, 0.16);
 }
+
 .greeting-card::after {
     content: '';
+
     position: absolute;
-    width: 200px; height: 200px;
+
+    width: 200px;
+    height: 200px;
+
     border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    right: -60px; top: -70px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    right: -60px;
+    top: -70px;
 }
-.greeting-card h1 { color: #fff; font-size: 1.5rem; margin-bottom: 6px; }
-.greeting-card p { opacity: 0.92; font-size: 0.92rem; max-width: 420px; }
+
+.greeting-card h1 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+
+.greeting-card p {
+    opacity: 0.92;
+    font-size: 0.92rem;
+    max-width: 420px;
+}
+
+
+/* =====================================================================
+   ESTATÍSTICAS DA SAUDAÇÃO
+===================================================================== */
+
 .greeting-card__stat {
-    background: rgba(255,255,255,0.16);
+    background: rgba(255, 255, 255, 0.16);
+
     border-radius: var(--radius-md);
+
     padding: 14px 22px;
+
     text-align: center;
+
     backdrop-filter: blur(4px);
+
     z-index: 1;
+
+    min-width: 90px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
 }
-.greeting-card__stat strong { display: block; font-size: 1.6rem; font-family: var(--font-display); }
-.greeting-card__stat span { font-size: 0.72rem; opacity: 0.85; text-transform: uppercase; letter-spacing: .04em; }
+
+.greeting-card__stat:hover {
+    transform: translateY(-2px);
+
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.greeting-card__stat strong {
+    display: block;
+
+    font-size: 1.6rem;
+
+    font-family: var(--font-display);
+}
+
+.greeting-card__stat span {
+    font-size: 0.72rem;
+
+    opacity: 0.85;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+}
+
+
+/* =====================================================================
+   TÍTULO DA SEÇÃO
+===================================================================== */
 
 .section-heading {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
+
     margin: 6px 0 16px;
 }
-.section-heading h2 { font-size: 1.15rem; }
 
-/* -------- Grade de matérias -------- */
+.section-heading h2 {
+    font-size: 1.15rem;
+}
+
+
+/* =====================================================================
+   GRADE DE MATÉRIAS
+===================================================================== */
+
 .materias-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(190px, 1fr));
+
     gap: 18px;
+
     margin-bottom: 32px;
 }
 
 .materia-card {
     padding: 22px 20px;
+
     display: flex;
     flex-direction: column;
+
     gap: 14px;
-    transition: transform .18s ease, box-shadow .18s ease;
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+
     cursor: pointer;
 }
-.materia-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-pop); }
 
-.materia-card__icon {
-    width: 50px; height: 50px;
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    color: #fff;
+.materia-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: var(--shadow-pop);
 }
 
-.materia-card h3 { font-size: 1rem; }
-.materia-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+.materia-card__icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.3rem;
+
+    color: #fff;
+
+    transition: transform 0.2s ease;
+}
+
+.materia-card:hover .materia-card__icon {
+    transform: scale(1.05);
+}
+
+.materia-card h3 {
+    font-size: 1rem;
+}
+
+.materia-card p {
+    font-size: 0.78rem;
+
+    color: var(--text-muted);
+
+    line-height: 1.4;
+}
 
 .materia-card__footer {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
+
     margin-top: auto;
+
     font-size: 0.75rem;
+
     color: var(--text-muted);
 }
 
-/* -------- Painel de resumo (progresso + plano) -------- */
+
+/* =====================================================================
+   PAINEL DE RESUMO
+===================================================================== */
+
 .dashboard-grid {
     display: grid;
+
     grid-template-columns: 1.3fr 1fr;
+
     gap: 22px;
 }
 
-.panel { padding: 24px; }
-.panel h3 { font-size: 1rem; margin-bottom: 18px; }
+.panel {
+    padding: 24px;
+
+    min-height: 280px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+}
+
+.panel h3 {
+    font-size: 1rem;
+
+    margin-bottom: 18px;
+
+    text-align: center;
+}
+
+
+/* =====================================================================
+   PROGRESSO GERAL
+===================================================================== */
 
 .progress-ring-wrap {
+    width: 100%;
+
+    min-height: 210px;
+
     display: flex;
+
+    flex-direction: column;
+
     align-items: center;
-    gap: 22px;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    text-align: center;
+
+    padding: 5px 0 10px;
 }
-.progress-ring-wrap svg { flex-shrink: 0; }
-.progress-ring-label strong { font-size: 1.6rem; display: block; font-family: var(--font-display); color: var(--brand); }
-.progress-ring-label span { font-size: 0.82rem; color: var(--text-muted); }
+
+
+/* Círculo de progresso */
+
+.progress-ring-wrap svg {
+    width: 150px;
+    height: 150px;
+
+    flex-shrink: 0;
+
+    display: block;
+
+    overflow: visible;
+
+    /* Sem sombra */
+    filter: none;
+}
+
+
+/* Círculo preenchido */
+
+.progress-ring-wrap svg circle:nth-of-type(2) {
+    stroke: #0D6EFD !important;
+}
+
+
+/* Porcentagem */
+
+.progress-ring-label {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    line-height: 1.2;
+
+    margin-top: -2px;
+}
+
+.progress-ring-label strong {
+    font-size: 1.8rem;
+
+    font-weight: 700;
+
+    display: block;
+
+    font-family: var(--font-display);
+
+    color: #0D6EFD;
+
+    line-height: 1;
+}
+
+.progress-ring-label span {
+    font-size: 0.82rem;
+
+    font-weight: 500;
+
+    color: var(--text-muted);
+
+    margin-top: 5px;
+}
+
+
+/* =====================================================================
+   PLANO DE ESTUDOS
+===================================================================== */
 
 .mini-plano-item {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     padding: 12px 0;
+
     border-bottom: 1px solid var(--border);
 }
-.mini-plano-item:last-child { border-bottom: none; }
+
+.mini-plano-item:last-child {
+    border-bottom: none;
+}
+
 .mini-plano-item__icon {
-    width: 36px; height: 36px;
+    width: 36px;
+    height: 36px;
+
     border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
     color: #fff;
+
     font-size: 0.9rem;
+
     flex-shrink: 0;
 }
-.mini-plano-item__text { flex: 1; }
-.mini-plano-item__text strong { display: block; font-size: 0.88rem; }
-.mini-plano-item__text span { font-size: 0.74rem; color: var(--text-muted); }
+
+.mini-plano-item__text {
+    flex: 1;
+}
+
+.mini-plano-item__text strong {
+    display: block;
+
+    font-size: 0.88rem;
+}
+
+.mini-plano-item__text span {
+    font-size: 0.74rem;
+
+    color: var(--text-muted);
+}
+
+
+/* =====================================================================
+   ESTADO VAZIO / CARREGAMENTO
+===================================================================== */
 
 .empty-state {
     text-align: center;
+
     padding: 30px 16px;
+
     color: var(--text-muted);
+
     font-size: 0.88rem;
 }
-.empty-state i { font-size: 1.8rem; margin-bottom: 10px; color: var(--brand-light); display: block; }
+
+.empty-state i {
+    font-size: 1.8rem;
+
+    margin-bottom: 10px;
+
+    color: #0D6EFD;
+
+    display: block;
+}
+
+
+/* =====================================================================
+   BOTÃO "VER PLANO COMPLETO"
+===================================================================== */
+
+.btn-block {
+    width: 100%;
+}
+
+
+/* =====================================================================
+   RESPONSIVIDADE
+===================================================================== */
 
 @media (max-width: 900px) {
-    .dashboard-grid { grid-template-columns: 1fr; }
-    .greeting-card { flex-direction: column; align-items: flex-start; }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .greeting-card {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .greeting-card {
+        padding: 24px 20px;
+    }
+
+    .greeting-card > div:last-child {
+        width: 100%;
+    }
+
+    .greeting-card__stat {
+        flex: 1;
+    }
+
+    .materias-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 12px;
+    }
+
+    .materia-card {
+        padding: 18px 16px;
+    }
+
+    .dashboard-grid {
+        gap: 16px;
+    }
+
+    .panel {
+        padding: 20px;
+    }
+
+    .progress-ring-wrap {
+        min-height: 190px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .materias-grid {
+        grid-template-columns: 1fr;
+    }
+
 }

@@ -22,13 +22,13 @@ function desenharAnelProgresso(percentual) {
     return `
         <svg width="120" height="120" viewBox="0 0 120 120">
             <circle cx="60" cy="60" r="${raio}" fill="none" stroke="var(--surface-soft)" stroke-width="12"/>
-            <circle cx="60" cy="60" r="${raio}" fill="none" stroke="url(#gradRing)" stroke-width="12"
+            <circle cx="60" cy="60" r="${raio}" fill="none" stroke="#0D6EFD" stroke-width="12"
                 stroke-linecap="round" stroke-dasharray="${circunferencia}" stroke-dashoffset="${offset}"
                 transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 1s ease"/>
             <defs>
                 <linearGradient id="gradRing" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FF7CB4"/>
-                    <stop offset="100%" stop-color="#C1157A"/>
+                    <stop offset="0%" stop-color="#4DA3FF"/>
+                    <stop offset="100%" stop-color="#0D6EFD"/>
                 </linearGradient>
             </defs>
         </svg>`;

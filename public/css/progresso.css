@@ -9,16 +9,38 @@
     margin-bottom: 22px;
 }
 
-.chart-card { padding: 24px; }
-.chart-card h3 { font-size: 1rem; margin-bottom: 18px; }
+.chart-card {
+    padding: 24px;
+}
 
-.donut-wrap { display: flex; align-items: center; justify-content: center; position: relative; }
+.chart-card h3 {
+    font-size: 1rem;
+    margin-bottom: 18px;
+}
+
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
 .donut-center {
     position: absolute;
     text-align: center;
 }
-.donut-center strong { display: block; font-size: 1.7rem; font-family: var(--font-display); color: var(--brand); }
-.donut-center span { font-size: .78rem; color: var(--text-muted); }
+
+.donut-center strong {
+    display: block;
+    font-size: 1.7rem;
+    font-family: var(--font-display);
+    color: #0D6EFD;
+}
+
+.donut-center span {
+    font-size: .78rem;
+    color: var(--text-muted);
+}
 
 .materia-bar-row {
     display: flex;
@@ -26,31 +48,128 @@
     gap: 12px;
     margin-bottom: 16px;
 }
+
 .materia-bar-row__label {
     width: 100px;
     font-size: .85rem;
     font-weight: 600;
     flex-shrink: 0;
 }
-.materia-bar-row .progress-bar { flex: 1; }
-.materia-bar-row__value { width: 42px; text-align: right; font-size: .82rem; color: var(--text-muted); flex-shrink: 0; }
 
-.evolucao-card { padding: 24px; margin-bottom: 22px; }
+.materia-bar-row .progress-bar {
+    flex: 1;
+}
+
+.materia-bar-row__value {
+    width: 42px;
+    text-align: right;
+    font-size: .82rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.evolucao-card {
+    padding: 24px;
+    margin-bottom: 22px;
+}
 
 .conquistas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 14px;
 }
+
 .conquista-item {
     padding: 18px;
     text-align: center;
 }
-.conquista-item i { font-size: 1.5rem; color: var(--brand); margin-bottom: 8px; }
-.conquista-item strong { display: block; font-size: .85rem; margin-bottom: 4px; }
-.conquista-item span { font-size: .74rem; color: var(--text-muted); }
-.conquista-item.bloqueada { opacity: .4; filter: grayscale(1); }
+
+.conquista-item i {
+    font-size: 1.5rem;
+    color: #0D6EFD;
+    margin-bottom: 8px;
+}
+
+.conquista-item strong {
+    display: block;
+    font-size: .85rem;
+    margin-bottom: 4px;
+}
+
+.conquista-item span {
+    font-size: .74rem;
+    color: var(--text-muted);
+}
+
+.conquista-item.bloqueada {
+    opacity: .4;
+    filter: grayscale(1);
+}
 
 @media (max-width: 900px) {
-    .progresso-grid { grid-template-columns: 1fr; }
+    .progresso-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   RESPOSTAS RECENTES — CORREÇÃO
+   ============================================================ */
+
+#historico-recente {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+#historico-recente .revisao-item {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    overflow: hidden !important;
+}
+
+#historico-recente .revisao-item__icon {
+    flex: 0 0 auto !important;
+}
+
+#historico-recente .revisao-item__text {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+}
+
+#historico-recente .revisao-item__text strong {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+}
+
+#historico-recente .revisao-item__text span {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }

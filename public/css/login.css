@@ -10,7 +10,7 @@
 
 /* -------- Lado ilustrativo -------- */
 .auth-side {
-    background: var(--brand-gradient);
+    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -28,8 +28,20 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
 }
-.auth-side::before { width: 320px; height: 320px; top: -80px; left: -100px; }
-.auth-side::after { width: 220px; height: 220px; bottom: -60px; right: -60px; }
+
+.auth-side::before {
+    width: 320px;
+    height: 320px;
+    top: -80px;
+    left: -100px;
+}
+
+.auth-side::after {
+    width: 220px;
+    height: 220px;
+    bottom: -60px;
+    right: -60px;
+}
 
 .auth-side__content {
     position: relative;
@@ -66,9 +78,21 @@
     margin-top: 36px;
     justify-content: center;
 }
-.auth-side__stats div { text-align: center; }
-.auth-side__stats strong { display: block; font-size: 1.3rem; font-family: var(--font-display); }
-.auth-side__stats span { font-size: 0.75rem; opacity: 0.85; }
+
+.auth-side__stats div {
+    text-align: center;
+}
+
+.auth-side__stats strong {
+    display: block;
+    font-size: 1.3rem;
+    font-family: var(--font-display);
+}
+
+.auth-side__stats span {
+    font-size: 0.75rem;
+    opacity: 0.85;
+}
 
 /* -------- Lado do formulário -------- */
 .auth-form-side {
@@ -91,22 +115,31 @@
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.2rem;
-    color: var(--brand-dark);
+    color: #1557B0;
 }
+
 .auth-form__logo .icon-mark {
     width: 40px; height: 40px;
     border-radius: 12px;
-    background: var(--brand-gradient);
+    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
     color: #fff;
     display: flex; align-items: center; justify-content: center;
 }
 
-.auth-form h2 { font-size: 1.5rem; margin-bottom: 6px; }
-.auth-form > p.text-muted { margin-bottom: 28px; font-size: 0.92rem; }
+.auth-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+}
+
+.auth-form > p.text-muted {
+    margin-bottom: 28px;
+    font-size: 0.92rem;
+}
 
 .field {
     margin-bottom: 18px;
 }
+
 .field label {
     display: block;
     font-size: 0.85rem;
@@ -120,12 +153,14 @@
     display: flex;
     align-items: center;
 }
+
 .field-input i {
     position: absolute;
     left: 16px;
     color: var(--text-soft);
     font-size: 0.9rem;
 }
+
 .field-input input,
 .field-input select {
     width: 100%;
@@ -137,12 +172,14 @@
     font-size: 0.92rem;
     transition: border-color .15s, background .15s;
 }
+
 .field-input input:focus,
 .field-input select:focus {
     outline: none;
-    border-color: var(--brand);
+    border-color: #0D6EFD;
     background: var(--surface);
 }
+
 .field-input .toggle-senha {
     position: absolute;
     right: 14px;
@@ -156,12 +193,35 @@
     margin-top: 6px;
     display: none;
 }
-.field.has-error .field-input input { border-color: var(--danger); }
-.field.has-error .field-error { display: block; }
 
-.field-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
-.checkbox-remember { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); }
-.link-esqueci { font-size: 0.85rem; color: var(--brand); font-weight: 600; }
+.field.has-error .field-input input {
+    border-color: var(--danger);
+}
+
+.field.has-error .field-error {
+    display: block;
+}
+
+.field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.checkbox-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.link-esqueci {
+    font-size: 0.85rem;
+    color: #0D6EFD;
+    font-weight: 600;
+}
 
 .auth-form__footer {
     margin-top: 26px;
@@ -169,7 +229,11 @@
     font-size: 0.88rem;
     color: var(--text-muted);
 }
-.auth-form__footer a { color: var(--brand); font-weight: 700; }
+
+.auth-form__footer a {
+    color: #0D6EFD;
+    font-weight: 700;
+}
 
 .divider-or {
     display: flex;
@@ -179,7 +243,9 @@
     color: var(--text-soft);
     font-size: 0.8rem;
 }
-.divider-or::before, .divider-or::after {
+
+.divider-or::before,
+.divider-or::after {
     content: '';
     flex: 1;
     height: 1px;
@@ -193,6 +259,11 @@
 }
 
 @media (max-width: 860px) {
-    .auth-wrapper { grid-template-columns: 1fr; }
-    .auth-side { display: none; }
+    .auth-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-side {
+        display: none;
+    }
 }
