@@ -191,12 +191,10 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 ---
 
 ##  Próximos passos sugeridos
-
-- Painel do professor/responsável para acompanhar múltiplos alunos.
 - Upload de imagens nas questões (a coluna `imagem` já existe em `questoes`).
 - Adaptação automática de dificuldade em tempo real (question by question), não só por matéria.
-- Testes automatizados (Jest) para controllers e models.
+
 
 ---
 
-Feito para apior os estudos e a aprendizagem dos alunos.
+Feito para apoiar os estudos e a aprendizagem dos alunos.
