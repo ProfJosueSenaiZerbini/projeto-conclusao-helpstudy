@@ -272,85 +272,70 @@ async function carregarProgresso() {
 // =====================================================================
 
 async function carregarConquistas() {
+    try {
+        const resp = await API.chamar('/api/progresso/conquistas');
 
-    const resp =
-        await API.chamar('/api/progresso/conquistas');
+        console.log('Resposta das conquistas:', resp);
 
-    const grid =
-        document.getElementById('conquistas-grid');
+        const grid = document.getElementById('conquistas-grid');
 
-
-    const todasConquistas = [
-
-        {
-            codigo: 'primeira_questao',
-            titulo: 'Primeiro Passo',
-            descricao: 'Respondeu a 1ª questão',
-            icone: 'fa-shoe-prints'
-        },
-
-        {
-            codigo: 'dez_acertos',
-            titulo: 'Em Chamas',
-            descricao: '10 acertos seguidos',
-            icone: 'fa-fire'
-        },
-
-        {
-            codigo: 'materia_completa',
-            titulo: 'Dedicação Total',
-            descricao: 'Completou uma matéria',
-            icone: 'fa-trophy'
-        },
-
-        {
-            codigo: 'semana_ativa',
-            titulo: 'Constância',
-            descricao: '7 dias seguidos',
-            icone: 'fa-calendar-check'
+        if (!grid) {
+            console.error('Elemento #conquistas-grid não encontrado!');
+            return;
         }
 
-    ];
+        const todasConquistas = [
+            {
+                codigo: 'primeira_questao',
+                titulo: 'Primeiro Passo',
+                descricao: 'Respondeu a 1ª questão',
+                icone: 'fa-shoe-prints'
+            },
+            {
+                codigo: 'dez_acertos',
+                titulo: 'Em Chamas',
+                descricao: '10 acertos seguidos',
+                icone: 'fa-fire'
+            },
+            {
+                codigo: 'materia_completa',
+                titulo: 'Dedicação Total',
+                descricao: 'Completou uma matéria',
+                icone: 'fa-trophy'
+            },
+            {
+                codigo: 'semana_ativa',
+                titulo: 'Constância',
+                descricao: '7 dias seguidos',
+                icone: 'fa-calendar-check'
+            }
+        ];
 
+        const obtidas = resp?.conquistas || [];
 
-    const obtidas =
-        (resp && resp.conquistas) || [];
+        console.log('Conquistas obtidas:', obtidas);
 
-    const codigosObtidos =
-        obtidas.map(
-            (c) => c.codigo
-        );
+        const codigosObtidos = obtidas.map(c => c.codigo);
 
-
-    grid.innerHTML = todasConquistas
-        .map((c) => {
-
-            const desbloqueada =
-                codigosObtidos.includes(c.codigo);
+        grid.innerHTML = todasConquistas.map(c => {
+            const desbloqueada = codigosObtidos.includes(c.codigo);
 
             return `
-                <div class="card conquista-item ${
-                    desbloqueada
-                        ? ''
-                        : 'bloqueada'
-                }">
-
+                <div class="card conquista-item ${desbloqueada ? '' : 'bloqueada'}">
                     <i class="fa-solid ${c.icone}"></i>
 
-                    <strong>
-                        ${c.titulo}
-                    </strong>
+                    <strong>${c.titulo}</strong>
 
-                    <span>
-                        ${c.descricao}
-                    </span>
-
+                    <span>${c.descricao}</span>
                 </div>
             `;
+        }).join('');
 
-        })
-        .join('');
+    } catch (erro) {
+        console.error('Erro ao carregar conquistas:', erro);
+    }
 }
+
 
 
 // =====================================================================

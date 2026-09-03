@@ -143,7 +143,7 @@ Acesse **http://localhost:3000** no navegador. Você será redirecionado para a 
 | Tabela | Descrição |
 |---|---|
 | `usuarios` | Contas dos alunos (nome, e-mail, senha com hash, série) |
-| `materias` | Áreas do conhecimento (Matemática, Português, História, Geografia, Ciências, Inglês) |
+| `materias` | Áreas do conhecimento (Matemática, Português, História, Geografia, Quimica, Fisica, Biologia, Inglês) |
 | `questoes` | Banco de questões de múltipla escolha, vinculadas a uma matéria, com nível de dificuldade e dica |
 | `respostas` | Registro de cada resposta dada por um aluno (certo/errado, tempo gasto) |
 | `progresso` | Agregado por aluno + matéria (questões respondidas, % de acerto, nível de dificuldade sugerido) |
