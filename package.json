@@ -2,14 +2,28 @@
   "name": "help-study",
   "version": "1.0.0",
   "description": "Sistema Inteligente para Auxílio ao Ensino de Alunos com Dificuldades de Aprendizagem",
+  "keywords": [
+    "tcc",
+    "ensino",
+    "educacao",
+    "aprendizagem"
+  ],
+  "homepage": "https://github.com/ProfJosueSenaiZerbini/projeto-conclusao-helpstudy#readme",
+  "bugs": {
+    "url": "https://github.com/ProfJosueSenaiZerbini/projeto-conclusao-helpstudy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProfJosueSenaiZerbini/projeto-conclusao-helpstudy.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["tcc", "ensino", "educacao", "aprendizagem"],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
