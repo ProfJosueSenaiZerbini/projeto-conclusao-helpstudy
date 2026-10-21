@@ -47,6 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------- Formulário de LOGIN --------
     const formLogin = document.getElementById('form-login');
     if (formLogin) {
+        // Veio do cadastro: preenche o e-mail e avisa para fazer login
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('cadastro') === 'ok') {
+            const emailCadastrado = params.get('email');
+            if (emailCadastrado) document.getElementById('email').value = emailCadastrado;
+            document.getElementById('senha').focus();
+            mostrarToast('Conta criada! Digite sua senha para entrar.', 'sucesso');
+        }
+
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -125,10 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                localStorage.setItem('helpstudy_token', dados.token);
-                localStorage.setItem('helpstudy_usuario', JSON.stringify(dados.usuario));
-                mostrarToast('Conta criada com sucesso!', 'sucesso');
-                setTimeout(() => (window.location.href = '/dashboard'), 700);
+                // Conta criada: não entra direto, manda para o login com o e-mail já preenchido
+                await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+                mostrarToast('Conta criada com sucesso! Agora faça seu login.', 'sucesso');
+                setTimeout(() => (window.location.href = '/login?cadastro=ok&email=' + encodeURIComponent(email)), 1200);
             } catch (err) {
                 console.error(err);
                 mostrarToast('Erro de conexão com o servidor.', 'erro');

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrar · HelpStudy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/login.css">
@@ -20,25 +20,68 @@
 <div class="auth-wrapper">
     <!-- Lado ilustrativo -->
     <aside class="auth-side">
-        <div class="auth-side__content">
-            <div class="auth-side__badge"><i class="fa-solid fa-graduation-cap"></i></div>
-            <h1>Bem-vindo de volta!</h1>
-            <p>Continue de onde parou. Suas trilhas de estudo personalizadas estão esperando por você.</p>
-            <div class="auth-side__stats">
-                <div><strong>6</strong><span>Matérias</span></div>
-                <div><strong>+300</strong><span>Questões</span></div>
-                <div><strong>100%</strong><span>No seu ritmo</span></div>
-            </div>
+        <h1 class="auth-side__titulo">Estude no seu ritmo, aprenda de verdade.</h1>
+
+        <div class="auth-side__arte" aria-hidden="true">
+            <svg viewBox="0 0 520 520" width="520" height="520">
+                <!-- sombra -->
+                <ellipse cx="290" cy="470" rx="210" ry="22" fill="#08112F" opacity="0.10"/>
+                <!-- livros em leque -->
+                <g transform="rotate(-28 300 300)">
+                    <rect x="150" y="130" width="230" height="300" rx="14" fill="#E91E8C"/>
+                    <rect x="150" y="130" width="22" height="300" rx="8" fill="#C2177A"/>
+                </g>
+                <g transform="rotate(-16 300 300)">
+                    <rect x="170" y="120" width="230" height="300" rx="14" fill="#FF6B6B"/>
+                    <rect x="170" y="120" width="22" height="300" rx="8" fill="#E25555"/>
+                </g>
+                <g transform="rotate(-5 300 300)">
+                    <rect x="190" y="112" width="230" height="300" rx="14" fill="#F5B82E"/>
+                    <rect x="190" y="112" width="22" height="300" rx="8" fill="#DE9F16"/>
+                </g>
+                <g transform="rotate(7 300 300)">
+                    <rect x="210" y="108" width="230" height="300" rx="14" fill="#2ECC8F"/>
+                    <rect x="210" y="108" width="22" height="300" rx="8" fill="#22AD76"/>
+                    <!-- etiqueta -->
+                    <rect x="270" y="160" width="130" height="40" rx="8" fill="#ECEEF0"/>
+                    <rect x="284" y="173" width="70" height="6" rx="3" fill="#3E53A0"/>
+                    <rect x="284" y="185" width="46" height="5" rx="2.5" fill="#A9B8EE"/>
+                </g>
+                <!-- lápis -->
+                <g transform="rotate(38 330 360)">
+                    <rect x="210" y="350" width="220" height="24" rx="4" fill="#3E53A0"/>
+                    <rect x="210" y="350" width="34" height="24" rx="4" fill="#ECEEF0"/>
+                    <rect x="236" y="350" width="10" height="24" fill="#CCD4DE"/>
+                    <polygon points="430,350 470,362 430,374" fill="#F7D9A8"/>
+                    <polygon points="456,358 470,362 456,366" fill="#08112F"/>
+                </g>
+                <!-- chapéu de formatura -->
+                <g transform="translate(120 60)">
+                    <polygon points="90,20 180,56 90,92 0,56" fill="#08112F"/>
+                    <path d="M40 72 v34 c0 14 100 14 100 0 v-34 l-50 20z" fill="#08112F"/>
+                    <line x1="170" y1="56" x2="170" y2="110" stroke="#F5B82E" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="170" cy="114" r="8" fill="#F5B82E"/>
+                </g>
+                <!-- brilhos -->
+                <path d="M440 70 l7 18 l18 7 l-18 7 l-7 18 l-7 -18 l-18 -7 l18 -7z" fill="#FFFFFF"/>
+                <circle cx="80" cy="300" r="9" fill="#FFFFFF" opacity="0.8"/>
+                <circle cx="470" cy="200" r="6" fill="#FFFFFF" opacity="0.7"/>
+            </svg>
+        </div>
+
+        <div class="auth-side__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
         </div>
     </aside>
 
     <!-- Formulário -->
     <section class="auth-form-side">
         <div class="auth-form">
-            <div class="auth-form__logo">
-                <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
-                HelpStudy
-            </div>
+            <nav class="auth-tabs">
+                <a href="/cadastro">Inscrever-se</a>
+                <a href="/login" class="active" aria-current="page">Entrar</a>
+            </nav>
 
             <h2>Olá, aluno! 👋</h2>
             <p class="text-muted">Entre com sua conta para continuar estudando.</p>
@@ -47,17 +90,18 @@
                 <div class="field" id="field-email">
                     <label for="email">E-mail</label>
                     <div class="field-input">
-                        <i class="fa-regular fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="seu@email.com" autocomplete="email" required>
+                        <input type="email" id="email" name="email" placeholder="Insira seu endereço de e-mail" autocomplete="email" required>
                     </div>
                     <span class="field-error">Informe um e-mail válido.</span>
                 </div>
 
                 <div class="field" id="field-senha">
-                    <label for="senha">Senha</label>
+                    <div class="field-label-row">
+                        <label for="senha">Senha</label>
+                        <a href="#" class="link-esqueci">Esqueci a senha</a>
+                    </div>
                     <div class="field-input">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="senha" name="senha" placeholder="Sua senha" autocomplete="current-password" required>
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
                         <button type="button" class="toggle-senha" tabindex="-1" aria-label="Mostrar senha">
                             <i class="fa-solid fa-eye"></i>
                         </button>
@@ -69,11 +113,10 @@
                     <label class="checkbox-remember">
                         <input type="checkbox" id="lembrar"> Lembrar de mim
                     </label>
-                    <a href="#" class="link-esqueci">Esqueci minha senha</a>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
-                    Entrar <i class="fa-solid fa-arrow-right"></i>
+                <button type="submit" class="btn btn-primary btn-block btn-auth">
+                    Entrar
                 </button>
             </form>
 
