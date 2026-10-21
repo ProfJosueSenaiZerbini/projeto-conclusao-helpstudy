@@ -10,8 +10,11 @@ const ICONES_MATERIA = {
     'fa-flask': 'fa-solid fa-flask',
     'fa-comments': 'fa-solid fa-comments',
     'fa-atom': 'fa-solid fa-atom',
-    'fa-dna': 'fa-solid fa-dna'
+    'fa-dna': 'fa-solid fa-dna',
+    'fa-brain': 'fa-solid fa-brain',
+    'fa-users': 'fa-solid fa-users'
 };
+
 
 function iconeClasse(icone) {
     return ICONES_MATERIA[icone] || 'fa-solid fa-book';

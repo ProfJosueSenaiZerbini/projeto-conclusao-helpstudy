@@ -1,4 +1,3 @@
-/*
 -- =====================================================================
 -- 1. APAGAR O BANCO ANTIGO
 -- =====================================================================
@@ -10,7 +9,7 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE helpstudy;
-*/
+
 
 -- =====================================================================
 -- 2. TABELA DE USUÁRIOS
@@ -188,6 +187,8 @@ CREATE TABLE usuario_conquistas (
 -- 6 Física
 -- 7 Biologia
 -- 8 Inglês
+-- 9 Filosofia
+-- 10 Sociologia
 --
 -- NÃO EXISTE "Ciências".
 -- =====================================================================
@@ -226,7 +227,15 @@ VALUES
 
 (8, 'Inglês', 'ingles',
  'Vocabulário, gramática e compreensão em inglês',
- 'fa-comments', '#E91E8C');
+ 'fa-comments', '#E91E8C'),
+
+(9, 'Filosofia', 'filosofia',
+ 'Pensamento crítico, ética e grandes filósofos',
+ 'fa-brain', '#6C5CE7'),
+
+(10, 'Sociologia', 'sociologia',
+ 'Sociedade, cultura e relações sociais',
+ 'fa-users', '#E74C3C');
 
 
 -- =====================================================================
@@ -1047,7 +1056,189 @@ VALUES
 
 
 -- =====================================================================
--- 20. VERIFICAÇÃO
+-- 20. FILOSOFIA - 10 QUESTÕES
+-- materia_id = 9
+-- =====================================================================
+
+INSERT INTO questoes
+(materia_id, enunciado, alternativa_a, alternativa_b,
+ alternativa_c, alternativa_d, correta, explicacao, nivel, dica)
+VALUES
+
+(9,
+ 'Qual filósofo grego ficou conhecido por ensinar por meio de perguntas, o método chamado maiêutica?',
+ 'Platão', 'Sócrates', 'Aristóteles', 'Tales de Mileto',
+ 'b',
+ 'Sócrates usava perguntas para levar a pessoa a descobrir o conhecimento por si mesma.',
+ 'facil',
+ 'Ele não deixou nada escrito.'),
+
+(9,
+ 'A frase "Penso, logo existo" é atribuída a qual filósofo?',
+ 'Immanuel Kant', 'René Descartes', 'Friedrich Nietzsche', 'Jean-Paul Sartre',
+ 'b',
+ 'A frase resume o pensamento de René Descartes sobre a certeza da própria existência.',
+ 'facil',
+ 'Filósofo francês do século XVII.'),
+
+(9,
+ 'A palavra "filosofia" significa:',
+ 'Medo do saber', 'Amor à sabedoria', 'Estudo dos números', 'Arte de falar bem',
+ 'b',
+ 'Vem do grego philo (amor) e sophia (sabedoria).',
+ 'facil',
+ 'Pense na origem grega da palavra.'),
+
+(9,
+ 'A ética é a área da filosofia que estuda:',
+ 'Os astros e planetas', 'O comportamento moral e os valores', 'A formação das rochas', 'As operações matemáticas',
+ 'b',
+ 'A ética reflete sobre o certo e o errado nas ações humanas.',
+ 'facil',
+ 'Está ligada ao certo e ao errado.'),
+
+(9,
+ 'O "Mito da Caverna" foi escrito por qual filósofo?',
+ 'Aristóteles', 'Sócrates', 'Platão', 'Epicuro',
+ 'c',
+ 'Platão apresenta o Mito da Caverna na obra A República.',
+ 'medio',
+ 'Foi aluno de Sócrates.'),
+
+(9,
+ 'A lógica é a área da filosofia que estuda:',
+ 'As regras do raciocínio correto', 'A história dos povos', 'A origem das plantas', 'As formas de governo',
+ 'a',
+ 'A lógica analisa como construir argumentos válidos.',
+ 'facil',
+ 'Tem relação com argumentos.'),
+
+(9,
+ 'Aristóteles foi aluno de qual filósofo?',
+ 'Sócrates', 'Platão', 'Tales de Mileto', 'Pitágoras',
+ 'b',
+ 'Aristóteles estudou por muitos anos na Academia de Platão.',
+ 'medio',
+ 'Esse filósofo fundou a Academia.'),
+
+(9,
+ 'Qual pensador é considerado um dos primeiros filósofos gregos e dizia que a água era a origem de todas as coisas?',
+ 'Tales de Mileto', 'Platão', 'Sócrates', 'Aristóteles',
+ 'a',
+ 'Tales de Mileto buscava na água o princípio (arché) de tudo.',
+ 'medio',
+ 'Era de Mileto.'),
+
+(9,
+ 'Quem escreveu a obra "O Contrato Social"?',
+ 'Jean-Jacques Rousseau', 'Karl Marx', 'Platão', 'René Descartes',
+ 'a',
+ 'Rousseau defende que o poder legítimo vem de um acordo entre as pessoas.',
+ 'medio',
+ 'Filósofo do Iluminismo.'),
+
+(9,
+ 'O que diferencia a filosofia do senso comum?',
+ 'A filosofia aceita tudo sem questionar', 'O senso comum usa sempre experimentos científicos', 'A filosofia busca reflexão crítica e argumentação', 'Não existe nenhuma diferença',
+ 'c',
+ 'A filosofia questiona e fundamenta ideias com argumentos.',
+ 'medio',
+ 'Pense em questionar e argumentar.');
+
+
+-- =====================================================================
+-- 20B. SOCIOLOGIA - 10 QUESTÕES
+-- materia_id = 10
+-- =====================================================================
+
+INSERT INTO questoes
+(materia_id, enunciado, alternativa_a, alternativa_b,
+ alternativa_c, alternativa_d, correta, explicacao, nivel, dica)
+VALUES
+
+(10,
+ 'A Sociologia é a ciência que estuda:',
+ 'Os astros e o universo', 'A sociedade e as relações sociais', 'As reações químicas', 'Os seres vivos microscópicos',
+ 'b',
+ 'A Sociologia estuda como as pessoas vivem em grupo e se relacionam.',
+ 'facil',
+ 'Pense em sociedade.'),
+
+(10,
+ 'Qual pensador criou o termo "Sociologia"?',
+ 'Auguste Comte', 'Karl Marx', 'Platão', 'Charles Darwin',
+ 'a',
+ 'Auguste Comte criou o termo no século XIX e é considerado o pai da Sociologia.',
+ 'medio',
+ 'Foi o fundador do positivismo.'),
+
+(10,
+ 'O conceito de "fato social" foi desenvolvido por qual sociólogo?',
+ 'Max Weber', 'Karl Marx', 'Émile Durkheim', 'Auguste Comte',
+ 'c',
+ 'Para Durkheim, fatos sociais são maneiras de agir e pensar que existem fora do indivíduo e exercem pressão sobre ele.',
+ 'medio',
+ 'Sociólogo francês.'),
+
+(10,
+ 'Qual pensador é conhecido pela ideia de "luta de classes"?',
+ 'Émile Durkheim', 'Karl Marx', 'Max Weber', 'Auguste Comte',
+ 'b',
+ 'Marx via a história marcada pelo conflito entre classes sociais, como burguesia e proletariado.',
+ 'facil',
+ 'Escreveu O Capital.'),
+
+(10,
+ 'O conceito de "ação social" é central na obra de qual sociólogo?',
+ 'Karl Marx', 'Émile Durkheim', 'Auguste Comte', 'Max Weber',
+ 'd',
+ 'Weber estudou a ação social como o comportamento orientado pela ação de outras pessoas.',
+ 'medio',
+ 'Sociólogo alemão.'),
+
+(10,
+ 'O que é socialização?',
+ 'O processo pelo qual a pessoa aprende as normas e os valores da sociedade', 'A venda de produtos em uma loja', 'O estudo das rochas', 'Uma forma de governo',
+ 'a',
+ 'Pela socialização, aprendemos a viver em sociedade, começando pela família e pela escola.',
+ 'facil',
+ 'Começa na infância.'),
+
+(10,
+ 'O que caracteriza a desigualdade social?',
+ 'Todos têm as mesmas oportunidades', 'A ausência de leis', 'A diferença no acesso a renda, educação, saúde e outros direitos', 'A igualdade de salários',
+ 'c',
+ 'A desigualdade social aparece quando grupos têm acesso desigual a recursos e direitos.',
+ 'facil',
+ 'Pense em diferenças de oportunidades.'),
+
+(10,
+ 'Em Sociologia, cultura significa:',
+ 'Apenas as obras de arte de um museu', 'O conjunto de costumes, crenças, valores e saberes de um grupo', 'Somente a música clássica', 'A quantidade de livros de um país',
+ 'b',
+ 'Para a Sociologia, toda sociedade tem cultura, que inclui hábitos, crenças e modos de vida.',
+ 'facil',
+ 'Não é só arte.'),
+
+(10,
+ 'O que é etnocentrismo?',
+ 'Respeitar todas as culturas igualmente', 'Estudar a história de outros países', 'Considerar a própria cultura superior e julgar as outras a partir dela', 'Viajar para conhecer outros povos',
+ 'c',
+ 'O etnocentrismo leva a ver outras culturas como inferiores ou estranhas.',
+ 'medio',
+ 'A própria cultura no centro.'),
+
+(10,
+ 'Qual destes é um exemplo de instituição social?',
+ 'Família', 'Montanha', 'Rio', 'Chuva',
+ 'a',
+ 'Instituições sociais, como família, escola e Estado, organizam a vida em sociedade.',
+ 'facil',
+ 'Pense em algo criado pelas pessoas.');
+
+
+-- =====================================================================
+-- 21. VERIFICAÇÃO
 -- =====================================================================
 -- Execute estas consultas depois do script.
 -- Elas devem mostrar exatamente 10 questões por matéria.
@@ -1065,7 +1256,7 @@ ORDER BY m.id;
 
 
 -- =====================================================================
--- 21. VERIFICAR TOTAL
+-- 22. VERIFICAR TOTAL
 -- =====================================================================
 
 SELECT COUNT(*) AS total_questoes
@@ -1073,7 +1264,7 @@ FROM questoes;
 
 
 -- =====================================================================
--- 22. VERIFICAR MATÉRIAS
+-- 23. VERIFICAR MATÉRIAS
 -- =====================================================================
 
 SELECT
@@ -1085,7 +1276,7 @@ ORDER BY id;
 
 
 -- =====================================================================
--- 23. VERIFICAR CONQUISTAS
+-- 24. VERIFICAR CONQUISTAS
 -- =====================================================================
 
 SELECT
