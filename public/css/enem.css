@@ -1,0 +1,390 @@
+/* =====================================================================
+   HelpStudy — Página de Questões do ENEM
+   (usa também os estilos de alternativas de exercicios.css)
+===================================================================== */
+
+/* ---------- Apresentação + placar ---------- */
+.enem-intro {
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.enem-intro__text {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 240px;
+}
+
+.enem-intro__icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--brand-gradient);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.enem-intro h1 {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+.enem-intro p {
+    font-size: .85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.enem-placar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.enem-placar__item {
+    background: var(--brand-light);
+    border-radius: var(--radius-md);
+    padding: 9px 16px;
+    min-width: 92px;
+}
+
+.enem-placar__item strong {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+}
+
+.enem-placar__item span {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+html.dark-mode .enem-placar__item strong { color: #fff; }
+
+/* ---------- Filtros ---------- */
+.enem-filtros {
+    padding: 22px 24px;
+    margin-bottom: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.enem-filtros__linha {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.enem-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.enem-campo > span,
+.enem-filtros__rotulo {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.enem-campo select,
+.enem-campo input {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: border-color .15s;
+}
+
+.enem-campo select:focus,
+.enem-campo input:focus {
+    outline: none;
+    border-color: var(--brand);
+}
+
+.enem-campo select:disabled { opacity: .6; }
+
+.enem-ir {
+    display: flex;
+    gap: 8px;
+}
+
+.enem-ir .btn { height: 42px; }
+
+.enem-filtros__areas {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.enem-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.enem-area {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 14px 7px 7px;
+    border-radius: var(--radius-full);
+    background: var(--surface-soft);
+    border: 1.5px solid transparent;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--text);
+    transition: border-color .15s, background .15s, transform .1s;
+}
+
+.enem-area:hover { border-color: var(--brand); }
+.enem-area:active { transform: scale(0.97); }
+
+.enem-area__icone {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+.enem-area__total {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-radius: var(--radius-full);
+    padding: 2px 8px;
+}
+
+.enem-area.ativa {
+    background: var(--brand);
+    color: #fff;
+}
+
+.enem-area.ativa .enem-area__total {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+.enem-filtros__acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Topo do resultado ---------- */
+.chip-label {
+    background: var(--border);
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+html.dark-mode .chip-label { background: var(--surface-soft); }
+
+.enem-resultado-topo { flex-wrap: wrap; }
+
+/* ---------- Lista de questões ---------- */
+.enem-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.enem-questao {
+    padding: 26px 28px;
+}
+
+.enem-questao__topo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.enem-questao__numero {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-right: 4px;
+}
+
+.enem-questao__area {
+    color: #fff !important;
+}
+
+.enem-questao__status {
+    margin-left: auto;
+}
+
+.enem-texto {
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 18px;
+    overflow-wrap: anywhere;
+}
+
+.enem-texto p { margin-bottom: 12px; }
+.enem-texto p:last-child { margin-bottom: 0; }
+
+.enem-texto a {
+    color: var(--brand);
+    text-decoration: underline;
+}
+
+.enem-texto img,
+.alternativa__imagem {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    margin: 6px 0;
+}
+
+.enem-texto img {
+    max-height: 520px;
+    object-fit: contain;
+}
+
+.enem-enunciado {
+    font-weight: 600;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.enem-questao .alternativas { margin-bottom: 18px; }
+
+.enem-questao .alternativa {
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+    line-height: 1.5;
+}
+
+.enem-questao .alternativa__texto {
+    flex: 1;
+    min-width: 0;
+    padding-top: 4px;
+}
+
+.alternativa__imagem { max-height: 220px; }
+
+.enem-imagem-indisponivel {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border);
+    background: var(--surface-soft);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.enem-feedback {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.enem-feedback.ok { background: var(--success-bg); color: var(--success); }
+.enem-feedback.erro { background: var(--danger-bg); color: var(--danger); }
+.enem-feedback.info { background: var(--brand-light); color: var(--brand-dark); }
+html.dark-mode .enem-feedback.info { color: #fff; }
+
+.enem-questao__acoes {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.enem-questao__acoes .btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ---------- Paginação ---------- */
+.enem-paginacao {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 26px 0 10px;
+}
+
+.enem-pagina {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.86rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background .15s, color .15s;
+}
+
+.enem-pagina:hover:not(:disabled) { background: var(--brand-light); color: var(--brand-dark); }
+.enem-pagina.atual { background: var(--brand); color: #fff; }
+.enem-pagina:disabled { opacity: .45; cursor: not-allowed; }
+.enem-pagina--reticencias { background: transparent; pointer-events: none; }
+html.dark-mode .enem-pagina:hover:not(:disabled) { color: #fff; }
+
+.enem-fonte {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--text-soft);
+    margin-top: 18px;
+}
+
+.enem-fonte a { text-decoration: underline; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 1100px) {
+    .enem-filtros__linha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+    .enem-filtros__linha { grid-template-columns: 1fr; }
+    .enem-questao { padding: 20px 18px; }
+    .enem-intro { padding: 20px; }
+    .enem-placar__item { min-width: 0; flex: 1; padding: 9px 10px; }
+    .enem-placar__item span { font-size: 0.58rem; letter-spacing: 0; }
+    .enem-questao__status { margin-left: 0; }
+    .enem-filtros__acoes .btn { width: 100%; }
+}

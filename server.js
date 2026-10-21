@@ -11,6 +11,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const materiaRoutes = require('./routes/materias');
 const progressoRoutes = require('./routes/progresso');
+const enemRoutes = require('./routes/enem');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/materias', materiaRoutes);
 app.use('/api/progresso', progressoRoutes);
+app.use('/api/enem', enemRoutes);
 
 // ---------- Rotas de páginas (views) ----------
 const views = path.join(__dirname, 'views');
@@ -36,6 +38,7 @@ app.get('/exercicios', (req, res) => res.sendFile(path.join(views, 'exercicios.h
 app.get('/resultado', (req, res) => res.sendFile(path.join(views, 'resultado.html')));
 app.get('/progresso', (req, res) => res.sendFile(path.join(views, 'progresso.html')));
 app.get('/plano', (req, res) => res.sendFile(path.join(views, 'plano.html')));
+app.get('/enem', (req, res) => res.sendFile(path.join(views, 'enem.html')));
 
 // ---------- 404 ----------
 app.use((req, res) => {

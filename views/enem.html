@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENEM · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/exercicios.css">
+<link rel="stylesheet" href="/css/enem.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
+            <a href="/enem" class="active"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Questões do ENEM</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Apresentação + placar -->
+        <section class="card enem-intro">
+            <div class="enem-intro__text">
+                <div class="enem-intro__icon"><i class="fa-solid fa-file-pen"></i></div>
+                <div>
+                    <h1>Pratique com provas reais do ENEM</h1>
+                    <p>Escolha o ano, a área e o idioma. Questões de <span id="faixa-anos">2009 a 2023</span>, com gabarito oficial.</p>
+                </div>
+            </div>
+            <div class="enem-placar">
+                <div class="enem-placar__item">
+                    <strong id="placar-respondidas">0</strong>
+                    <span>Respondidas</span>
+                </div>
+                <div class="enem-placar__item">
+                    <strong id="placar-acertos">0</strong>
+                    <span>Acertos</span>
+                </div>
+                <div class="enem-placar__item">
+                    <strong id="placar-percentual">0%</strong>
+                    <span>Aproveitamento</span>
+                </div>
+                <button class="theme-toggle" id="btn-zerar" title="Zerar respostas do ENEM" aria-label="Zerar respostas do ENEM"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+        </section>
+
+        <!-- Filtros -->
+        <section class="card enem-filtros">
+            <div class="enem-filtros__linha">
+                <label class="enem-campo">
+                    <span>Ano da prova</span>
+                    <select id="filtro-ano" disabled><option>Carregando...</option></select>
+                </label>
+                <label class="enem-campo" id="campo-idioma">
+                    <span>Língua estrangeira</span>
+                    <select id="filtro-idioma"></select>
+                </label>
+                <label class="enem-campo">
+                    <span>Questões por página</span>
+                    <select id="filtro-limite">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </label>
+                <form class="enem-campo enem-campo--ir" id="form-ir">
+                    <span>Ir para a questão nº</span>
+                    <div class="enem-ir">
+                        <input type="number" id="input-numero" min="1" max="185" placeholder="Ex.: 136">
+                        <button type="submit" class="btn btn-outline btn-sm">Ir</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="enem-filtros__areas">
+                <span class="enem-filtros__rotulo">Área do conhecimento</span>
+                <div class="enem-areas" id="filtro-areas"></div>
+            </div>
+
+            <div class="enem-filtros__acoes">
+                <button class="btn btn-primary btn-sm" id="btn-aleatoria"><i class="fa-solid fa-shuffle"></i> Questão aleatória</button>
+            </div>
+        </section>
+
+        <!-- Resultado -->
+        <div class="section-heading enem-resultado-topo">
+            <h2 id="titulo-resultado">Questões</h2>
+            <span class="chip-label" id="info-resultado"></span>
+        </div>
+
+        <div id="lista-questoes" class="enem-lista">
+            <div class="card empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando provas do ENEM...</div>
+        </div>
+
+        <nav class="enem-paginacao" id="paginacao" aria-label="Paginação"></nav>
+
+        <p class="enem-fonte">Fonte dos dados: <a href="https://enem.dev" target="_blank" rel="noopener">API ENEM (enem.dev)</a> — projeto aberto, sem vínculo com o INEP/MEC.</p>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/enem.js"></script>
+</body>
+</html>
