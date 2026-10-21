@@ -15,7 +15,7 @@
 .plano-intro__icon {
     width: 56px; height: 56px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
+    background: var(--brand-gradient);
     color: #fff;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.4rem;

@@ -1,26 +1,33 @@
 /* =====================================================================
    HelpStudy — Estilos globais / Design Tokens
-   Paleta: azul vibrante como cor de marca, cartões brancos arredondados,
-   cores de destaque por matéria.
+   Design: sidebar azul em duas faixas, fundo cinza-claro, cartões
+   arredondados, fonte Inter (Semi Bold / Regular).
+   Paleta: #ECEEF0 · #CCD4DE · #323954 · #08112F · #3E53A0 · #5A77DF
 ===================================================================== */
 
 :root {
     /* Marca */
-    --brand: #2F6FEE;
-    --brand-dark: #15398C;
-    --brand-light: #E3EEFF;
-    --brand-gradient: linear-gradient(135deg, #2F6FEE 0%, #15398C 100%);
+    --brand: #5A77DF;
+    --brand-dark: #3E53A0;
+    --brand-light: #DFE5FA;
+    --brand-soft: #A9B8EE;
+    --brand-gradient: linear-gradient(135deg, #5A77DF 0%, #3E53A0 100%);
+
+    /* Sidebar */
+    --rail: #5A77DF;
+    --sidebar-bg: #3E53A0;
+    --sidebar-text: #FFFFFF;
 
     /* Neutros */
-    --bg: #F6F9FF;
-    --surface: #FFFFFF;
-    --surface-soft: #F0F6FF;
-    --border: #DCE8F8;
-    --text: #202B3C;
-    --text-muted: #718096;
-    --text-soft: #A5B1C2;
+    --bg: #ECEEF0;
+    --surface: #F8F9FB;
+    --surface-soft: #E6E9EE;
+    --border: #CCD4DE;
+    --text: #08112F;
+    --text-muted: #5D667C;
+    --text-soft: #98A2B6;
 
-    /* Cores das matérias */
+    /* Cores das matérias (mantidas) */
     --cor-matematica: #4A6CF7;
     --cor-portugues: #9B59B6;
     --cor-historia: #F39C12;
@@ -29,24 +36,28 @@
     --cor-ingles: #2F6FEE;
 
     /* Feedback */
-    --success: #2ECC71;
-    --success-bg: #E9FBF0;
-    --danger: #FF5A6E;
-    --danger-bg: #FFEBEE;
+    --success: #22A861;
+    --success-bg: #E3F6EB;
+    --danger: #E5485D;
+    --danger-bg: #FCE8EB;
     --warning: #F5A623;
 
     /* Forma */
     --radius-sm: 10px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
     --radius-full: 999px;
-    --shadow-soft: 0 8px 24px rgba(47, 111, 238, 0.08);
-    --shadow-card: 0 4px 16px rgba(32, 43, 60, 0.06);
-    --shadow-pop: 0 16px 40px rgba(47, 111, 238, 0.16);
+    --shadow-soft: 0 6px 18px rgba(62, 83, 160, 0.14);
+    --shadow-card: 0 1px 2px rgba(8, 17, 47, 0.04);
+    --shadow-pop: 0 14px 34px rgba(62, 83, 160, 0.18);
 
     /* Tipografia */
-    --font-display: 'Poppins', 'Segoe UI', sans-serif;
+    --font-display: 'Inter', 'Segoe UI', sans-serif;
     --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+    /* Larguras da sidebar */
+    --rail-w: 64px;
+    --sidebar-w: 260px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,11 +76,12 @@ h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
     font-weight: 600;
     color: var(--text);
+    letter-spacing: -0.01em;
 }
 
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 input, select, textarea { font-family: inherit; }
 
 img { max-width: 100%; display: block; }
@@ -77,7 +89,7 @@ img { max-width: 100%; display: block; }
 /* ---------- Scrollbar ---------- */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
-::-webkit-scrollbar-thumb:hover { background: var(--brand-light); }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-soft); }
 
 /* ---------- Foco visível (acessibilidade) ---------- */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
@@ -92,10 +104,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 13px 26px;
+    padding: 12px 24px;
     border-radius: var(--radius-full);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
     white-space: nowrap;
 }
@@ -103,24 +115,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-    background: var(--brand-gradient);
+    background: var(--brand);
     color: #fff;
-    box-shadow: var(--shadow-soft);
 }
 
 .btn-primary:hover {
-    box-shadow: var(--shadow-pop);
-    transform: translateY(-2px);
+    background: var(--brand-dark);
+    box-shadow: var(--shadow-soft);
 }
 
 .btn-outline {
-    background: var(--surface);
-    color: var(--brand);
-    border: 1.5px solid var(--brand-light);
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--text);
 }
 
 .btn-outline:hover {
-    background: var(--brand-light);
+    background: var(--text);
+    color: var(--surface);
 }
 
 .btn-ghost {
@@ -133,14 +145,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .btn-block { width: 100%; }
-.btn-sm { padding: 9px 18px; font-size: 0.85rem; }
+.btn-sm { padding: 8px 16px; font-size: 0.82rem; }
 
 /* ---------- Cartões ---------- */
 .card {
     background: var(--surface);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
+    border: none;
 }
 
 /* ---------- Badges ---------- */
@@ -148,15 +160,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 4px 11px;
     border-radius: var(--radius-full);
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 600;
 }
 
 .badge-success { background: var(--success-bg); color: var(--success); }
 .badge-danger { background: var(--danger-bg); color: var(--danger); }
-.badge-neutral { background: var(--surface-soft); color: var(--text-muted); }
+.badge-neutral { background: var(--brand-light); color: var(--brand-dark); }
 
 /* ---------- Barra de progresso ---------- */
 .progress-bar {
@@ -170,7 +182,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .progress-bar__fill {
     height: 100%;
     border-radius: var(--radius-full);
-    background: var(--brand-gradient);
+    background: var(--brand);
     transition: width .6s ease;
 }
 
@@ -181,7 +193,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     right: 24px;
     z-index: 999;
     background: var(--surface);
-    border: 1px solid var(--border);
+    color: var(--text);
     border-left: 4px solid var(--brand);
     box-shadow: var(--shadow-pop);
     border-radius: var(--radius-md);
@@ -216,81 +228,147 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .text-muted { color: var(--text-muted); }
 .hidden { display: none !important; }
 
-/* ---------- Sidebar (usada no dashboard e páginas internas) ---------- */
+/* ---------- Estado vazio / carregando (todas as páginas) ---------- */
+.empty-state {
+    text-align: center;
+    padding: 30px 16px;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.empty-state i {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: var(--brand);
+    display: block;
+}
+
+/* =====================================================================
+   ESTRUTURA DO APP (sidebar + área principal)
+===================================================================== */
 .app-shell {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: var(--sidebar-w) 1fr;
     min-height: 100vh;
 }
 
+/* Sidebar em duas faixas: trilho de ícones + painel de textos */
 .sidebar {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 28px 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background: linear-gradient(to right, var(--rail) 0 var(--rail-w), var(--sidebar-bg) var(--rail-w));
+    color: var(--sidebar-text);
+    padding: 26px 0 26px 0;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 30px;
+    border-radius: 0 28px 28px 0;
+    overflow: hidden;
 }
 
 .sidebar__logo {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+    margin-left: var(--rail-w);
+    padding: 6px 16px 20px;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--brand-dark);
+    font-size: 1.25rem;
+    color: #fff;
 }
 
 .sidebar__logo .icon-mark {
-    width: 38px; height: 38px;
-    border-radius: 12px;
-    background: var(--brand-gradient);
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.16);
     color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .sidebar__nav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
-.sidebar__nav a {
+.sidebar__nav a,
+.sidebar__footer a {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    border-radius: var(--radius-md);
-    color: var(--text-muted);
-    font-weight: 500;
-    font-size: 0.92rem;
-    transition: background .15s, color .15s;
+    min-height: 46px;
+    padding-left: calc(var(--rail-w) + 20px);
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color .15s;
 }
 
-.sidebar__nav a i {
-    width: 18px;
+/* Ícone posicionado no trilho da esquerda */
+.sidebar__nav a i,
+.sidebar__footer a i {
+    position: absolute;
+    left: 0;
+    width: var(--rail-w);
     text-align: center;
+    font-size: 1.05rem;
+    color: #fff;
 }
 
-.sidebar__nav a:hover {
-    background: var(--surface-soft);
-    color: var(--brand-dark);
+/* Pílula clara atrás do texto */
+.sidebar__nav a::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--rail-w) + 6px);
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 24px 0 0 24px;
+    background: transparent;
+    z-index: -1;
+    transition: background .15s;
+}
+
+.sidebar__nav a { z-index: 0; }
+
+.sidebar__nav a:hover::before {
+    background: rgba(255, 255, 255, 0.10);
 }
 
 .sidebar__nav a.active {
-    background: var(--brand-light);
     color: var(--brand-dark);
+}
+
+.sidebar__nav a.active::before {
+    background: var(--bg);
+}
+
+/* Indicador branco no trilho */
+.sidebar__nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: #fff;
 }
 
 .sidebar__footer {
     margin-top: auto;
 }
 
+.sidebar__footer a:hover { color: #fff; }
+
+/* ---------- Área principal ---------- */
 .main-area {
-    padding: 28px 34px;
-    overflow-y: auto;
+    padding: 22px 34px 34px;
+    min-width: 0;
 }
 
 .topbar {
@@ -298,43 +376,89 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     align-items: center;
     justify-content: space-between;
     margin-bottom: 26px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
     gap: 16px;
 }
+
+.topbar__left,
+.topbar__right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.topbar h2,
+.topbar__title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.topbar__sep {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+}
+
+.menu-btn { display: none !important; }
 
 .user-chip {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 6px 14px 6px 6px;
-    border-radius: var(--radius-full);
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .user-chip__avatar {
-    width: 34px; height: 34px;
+    width: 38px; height: 38px;
     border-radius: 50%;
-    background: var(--brand-gradient);
+    background: var(--brand-dark);
     color: #fff;
     display: flex; align-items: center; justify-content: center;
     font-weight: 700;
     font-size: 0.85rem;
 }
 
-/* ---------- Toggle Dark Mode ---------- */
+/* ---------- Botão de tema / ícone ---------- */
 .theme-toggle {
-    width: 42px; height: 42px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    background: var(--surface-soft);
+    background: transparent;
     display: flex; align-items: center; justify-content: center;
-    color: var(--text-muted);
+    color: var(--text);
+    font-size: 1.05rem;
     transition: background .15s, color .15s;
 }
 
 .theme-toggle:hover {
-    background: var(--brand-light);
-    color: var(--brand-dark);
+    background: var(--surface-soft);
+    color: var(--brand);
 }
+
+/* ---------- Cabeçalho de seção (título + link "Ver tudo") ---------- */
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 4px 0 14px;
+    gap: 12px;
+}
+
+.section-heading h2,
+.section-heading h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.link-see-all {
+    font-size: 0.88rem;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.link-see-all:hover { color: var(--brand); }
 
 /* ---------- Responsivo ---------- */
 @media (max-width: 900px) {
@@ -344,7 +468,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
     .sidebar {
         position: fixed;
-        inset: 0 30% 0 0;
+        top: 0; left: 0; bottom: 0;
+        width: var(--sidebar-w);
         z-index: 200;
         transform: translateX(-100%);
         transition: transform .25s ease;
@@ -355,9 +480,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
         transform: translateX(0);
     }
 
+    .menu-btn { display: flex !important; }
+
     .main-area {
-        padding: 20px;
+        padding: 18px 16px 28px;
     }
+
+    .user-chip span:not(.user-chip__avatar) { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,7 +3,7 @@
 ===================================================================== */
 
 .resultado-hero {
-    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
+    background: var(--brand-gradient);
     border-radius: var(--radius-lg);
     padding: 36px;
     color: #fff;
@@ -52,7 +52,7 @@
 
 .resultado-stat i {
     font-size: 1.3rem;
-    color: #0D6EFD;
+    color: var(--brand);
     margin-bottom: 8px;
 }
 

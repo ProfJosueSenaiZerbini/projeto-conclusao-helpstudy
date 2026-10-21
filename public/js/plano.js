@@ -8,7 +8,9 @@ const ICONES_MATERIA = {
     'fa-landmark': 'fa-solid fa-landmark',
     'fa-earth-americas': 'fa-solid fa-earth-americas',
     'fa-flask': 'fa-solid fa-flask',
-    'fa-comments': 'fa-solid fa-comments'
+    'fa-comments': 'fa-solid fa-comments',
+    'fa-atom': 'fa-solid fa-atom',
+    'fa-dna': 'fa-solid fa-dna'
 };
 
 function iconeClasse(icone) {

@@ -34,7 +34,7 @@
     display: block;
     font-size: 1.7rem;
     font-family: var(--font-display);
-    color: #0D6EFD;
+    color: var(--brand);
 }
 
 .donut-center span {
@@ -86,7 +86,7 @@
 
 .conquista-item i {
     font-size: 1.5rem;
-    color: #0D6EFD;
+    color: var(--brand);
     margin-bottom: 8px;
 }
 

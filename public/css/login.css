@@ -10,7 +10,8 @@
 
 /* -------- Lado ilustrativo -------- */
 .auth-side {
-    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
+    background: linear-gradient(to right, var(--rail) 0 64px, var(--sidebar-bg) 64px);
+    border-radius: 0 32px 32px 0;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -115,13 +116,13 @@
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.2rem;
-    color: #1557B0;
+    color: var(--brand-dark);
 }
 
 .auth-form__logo .icon-mark {
     width: 40px; height: 40px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
+    background: var(--brand-gradient);
     color: #fff;
     display: flex; align-items: center; justify-content: center;
 }
@@ -167,7 +168,7 @@
     padding: 13px 16px 13px 42px;
     border-radius: var(--radius-md);
     border: 1.5px solid var(--border);
-    background: var(--surface-soft);
+    background: var(--surface);
     color: var(--text);
     font-size: 0.92rem;
     transition: border-color .15s, background .15s;
@@ -176,8 +177,9 @@
 .field-input input:focus,
 .field-input select:focus {
     outline: none;
-    border-color: #0D6EFD;
+    border-color: var(--brand);
     background: var(--surface);
+    box-shadow: 0 0 0 3px var(--brand-light);
 }
 
 .field-input .toggle-senha {
@@ -219,7 +221,7 @@
 
 .link-esqueci {
     font-size: 0.85rem;
-    color: #0D6EFD;
+    color: var(--brand);
     font-weight: 600;
 }
 
@@ -231,7 +233,7 @@
 }
 
 .auth-form__footer a {
-    color: #0D6EFD;
+    color: var(--brand);
     font-weight: 700;
 }
 

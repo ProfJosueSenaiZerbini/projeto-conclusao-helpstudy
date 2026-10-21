@@ -3,124 +3,105 @@
    Painel inicial com as matérias
 ===================================================================== */
 
+/* =====================================================================
+   LAYOUT: coluna principal + coluna lateral
+===================================================================== */
+
+.dash-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: start;
+}
+
+.dash-main { min-width: 0; }
+
 
 /* =====================================================================
    SAUDAÇÃO
 ===================================================================== */
 
 .greeting-card {
-    background: linear-gradient(135deg, #0D6EFD 0%, #1557B0 100%);
+    background: var(--surface);
     border-radius: var(--radius-lg);
-    padding: 30px 34px;
-    color: #fff;
-
+    padding: 28px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     gap: 20px;
-    margin-bottom: 28px;
-
-    position: relative;
-    overflow: hidden;
-
-    box-shadow: 0 8px 24px rgba(13, 110, 253, 0.16);
-}
-
-.greeting-card::after {
-    content: '';
-
-    position: absolute;
-
-    width: 200px;
-    height: 200px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, 0.12);
-
-    right: -60px;
-    top: -70px;
+    margin-bottom: 30px;
+    min-height: 170px;
 }
 
 .greeting-card h1 {
-    color: #fff;
-    font-size: 1.5rem;
-    margin-bottom: 6px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .greeting-card p {
-    opacity: 0.92;
-    font-size: 0.92rem;
-    max-width: 420px;
+    color: var(--text);
+    font-size: 0.98rem;
+    line-height: 1.5;
+    max-width: 380px;
 }
 
-
-/* =====================================================================
-   ESTATÍSTICAS DA SAUDAÇÃO
-===================================================================== */
+.greeting-card__stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
 
 .greeting-card__stat {
-    background: rgba(255, 255, 255, 0.16);
-
+    background: var(--brand-light);
     border-radius: var(--radius-md);
-
-    padding: 14px 22px;
-
-    text-align: center;
-
-    backdrop-filter: blur(4px);
-
-    z-index: 1;
-
-    min-width: 90px;
-
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-}
-
-.greeting-card__stat:hover {
-    transform: translateY(-2px);
-
-    background: rgba(255, 255, 255, 0.22);
+    padding: 10px 18px;
+    min-width: 100px;
 }
 
 .greeting-card__stat strong {
     display: block;
-
-    font-size: 1.6rem;
-
-    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--brand-dark);
 }
 
 .greeting-card__stat span {
     font-size: 0.72rem;
-
-    opacity: 0.85;
-
+    color: var(--text-muted);
     text-transform: uppercase;
-
     letter-spacing: 0.04em;
 }
 
+.greeting-card__art svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Modo escuro: saudação em azul, como no design */
+html.dark-mode .greeting-card { background: var(--brand); }
+html.dark-mode .greeting-card h1,
+html.dark-mode .greeting-card p { color: #fff; }
+html.dark-mode .greeting-card__stat { background: rgba(255, 255, 255, 0.16); }
+html.dark-mode .greeting-card__stat strong { color: #fff; }
+html.dark-mode .greeting-card__stat span { color: rgba(255, 255, 255, 0.85); }
+
 
 /* =====================================================================
-   TÍTULO DA SEÇÃO
+   RÓTULO (chip cinza, ex.: "Por matéria")
 ===================================================================== */
 
-.section-heading {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    margin: 6px 0 16px;
+.chip-label {
+    background: var(--border);
+    color: var(--text);
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
 }
 
-.section-heading h2 {
-    font-size: 1.15rem;
-}
+html.dark-mode .chip-label { background: var(--surface-soft); }
 
 
 /* =====================================================================
@@ -129,294 +110,341 @@
 
 .materias-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fill, minmax(190px, 1fr));
-
-    gap: 18px;
-
-    margin-bottom: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
 }
 
 .materia-card {
-    padding: 22px 20px;
-
+    padding: 18px;
     display: flex;
     flex-direction: column;
-
-    gap: 14px;
-
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-
+    gap: 12px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
     cursor: pointer;
 }
 
 .materia-card:hover {
-    transform: translateY(-4px);
-
+    transform: translateY(-3px);
     box-shadow: var(--shadow-pop);
 }
 
 .materia-card__icon {
-    width: 50px;
-    height: 50px;
-
-    border-radius: 14px;
-
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-size: 1.3rem;
-
+    font-size: 1.15rem;
     color: #fff;
-
-    transition: transform 0.2s ease;
-}
-
-.materia-card:hover .materia-card__icon {
-    transform: scale(1.05);
 }
 
 .materia-card h3 {
     font-size: 1rem;
+    margin-bottom: 2px;
 }
 
 .materia-card p {
     font-size: 0.78rem;
-
     color: var(--text-muted);
-
     line-height: 1.4;
 }
 
 .materia-card__footer {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
-
     margin-top: auto;
-
-    font-size: 0.75rem;
-
+    font-size: 0.76rem;
     color: var(--text-muted);
 }
 
+.materia-card__footer > i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+html.dark-mode .materia-card__footer > i { color: #fff; }
+
 
 /* =====================================================================
-   PAINEL DE RESUMO
+   PAINÉIS (desempenho + progresso geral)
 ===================================================================== */
 
 .dashboard-grid {
     display: grid;
-
-    grid-template-columns: 1.3fr 1fr;
-
+    grid-template-columns: 1.5fr 1fr;
     gap: 22px;
 }
 
 .panel {
-    padding: 24px;
-
-    min-height: 280px;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.panel:hover {
-    transform: translateY(-2px);
+    padding: 22px;
+    min-height: 300px;
 }
 
 .panel h3 {
     font-size: 1rem;
-
-    margin-bottom: 18px;
-
-    text-align: center;
+    margin-bottom: 6px;
 }
 
 
-/* =====================================================================
-   PROGRESSO GERAL
-===================================================================== */
+/* ---------- Desempenho (barras verticais) ---------- */
+
+.desempenho-card__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.desempenho-card__top strong {
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.desempenho-card__top span {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    max-width: 130px;
+    line-height: 1.3;
+}
+
+.desempenho-card__top .btn {
+    margin-left: auto;
+}
+
+.barras-dash {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+    min-height: 170px;
+}
+
+.barra-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.barra-col__valor {
+    font-size: 0.7rem;
+    color: var(--text);
+}
+
+.barra-col__trilho {
+    width: 100%;
+    max-width: 26px;
+    height: 110px;
+    border-radius: 4px;
+    background: var(--brand);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.barra-col__preenchido {
+    width: 100%;
+    background: var(--brand-dark);
+    transition: height .8s ease;
+}
+
+.barra-col__nome {
+    font-size: 0.66rem;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.2;
+    min-height: 2.4em;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+html.dark-mode .barra-col__preenchido { background: #2F3C7A; }
+
+
+/* ---------- Progresso geral (anel) ---------- */
 
 .progress-ring-wrap {
     width: 100%;
-
-    min-height: 210px;
-
+    min-height: 250px;
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
-    gap: 8px;
-
+    gap: 10px;
     text-align: center;
-
-    padding: 5px 0 10px;
 }
-
-
-/* Círculo de progresso */
 
 .progress-ring-wrap svg {
     width: 150px;
     height: 150px;
-
     flex-shrink: 0;
-
     display: block;
-
     overflow: visible;
-
-    /* Sem sombra */
-    filter: none;
 }
-
-
-/* Círculo preenchido */
-
-.progress-ring-wrap svg circle:nth-of-type(2) {
-    stroke: #0D6EFD !important;
-}
-
-
-/* Porcentagem */
 
 .progress-ring-label {
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
-    justify-content: center;
-
     line-height: 1.2;
-
-    margin-top: -2px;
 }
 
 .progress-ring-label strong {
     font-size: 1.8rem;
-
     font-weight: 700;
-
-    display: block;
-
-    font-family: var(--font-display);
-
-    color: #0D6EFD;
-
+    color: var(--text);
     line-height: 1;
 }
 
 .progress-ring-label span {
     font-size: 0.82rem;
-
-    font-weight: 500;
-
     color: var(--text-muted);
-
     margin-top: 5px;
 }
 
 
 /* =====================================================================
-   PLANO DE ESTUDOS
+   COLUNA LATERAL
 ===================================================================== */
 
+.side-card {
+    padding: 20px;
+}
+
+.side-card .section-heading {
+    align-items: flex-start;
+}
+
+.side-card__sub {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+}
+
+
+/* ---------- Plano de estudos (estilo agenda) ---------- */
+
 .mini-plano-item {
+    position: relative;
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
-    padding: 12px 0;
-
-    border-bottom: 1px solid var(--border);
+    padding: 14px;
+    margin-left: 14px;
+    margin-bottom: 10px;
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
 }
 
-.mini-plano-item:last-child {
-    border-bottom: none;
+.mini-plano-item::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--brand-dark);
 }
+
+/* O primeiro item fica em destaque (azul) */
+.mini-plano-item:first-child {
+    background: var(--brand);
+    color: #fff;
+}
+
+.mini-plano-item:first-child .mini-plano-item__text span { color: rgba(255, 255, 255, 0.88); }
+.mini-plano-item:first-child .badge { background: rgba(255, 255, 255, 0.22); color: #fff; }
+.mini-plano-item:first-child::before { background: var(--brand); }
 
 .mini-plano-item__icon {
-    width: 36px;
-    height: 36px;
-
-    border-radius: 10px;
-
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     color: #fff;
-
-    font-size: 0.9rem;
-
+    font-size: 0.85rem;
     flex-shrink: 0;
+}
+
+.mini-plano-item:first-child .mini-plano-item__icon {
+    background: #fff !important;
+    color: var(--brand);
 }
 
 .mini-plano-item__text {
     flex: 1;
+    min-width: 0;
 }
 
 .mini-plano-item__text strong {
     display: block;
-
-    font-size: 0.88rem;
+    font-size: 0.9rem;
 }
 
 .mini-plano-item__text span {
     font-size: 0.74rem;
-
     color: var(--text-muted);
 }
 
 
-/* =====================================================================
-   ESTADO VAZIO / CARREGAMENTO
-===================================================================== */
+/* ---------- Respostas recentes (estilo eventos) ---------- */
 
-.empty-state {
-    text-align: center;
+.recente-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+}
 
-    padding: 30px 16px;
+.recente-item__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
 
+.recente-item__icon.ok { background: var(--success); }
+.recente-item__icon.erro { background: var(--danger); }
+
+.recente-item__text {
+    flex: 1;
+    min-width: 0;
+}
+
+.recente-item__text strong {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    margin-bottom: 4px;
+}
+
+.recente-item__text span {
+    font-size: 0.72rem;
     color: var(--text-muted);
-
-    font-size: 0.88rem;
-}
-
-.empty-state i {
-    font-size: 1.8rem;
-
-    margin-bottom: 10px;
-
-    color: #0D6EFD;
-
-    display: block;
-}
-
-
-/* =====================================================================
-   BOTÃO "VER PLANO COMPLETO"
-===================================================================== */
-
-.btn-block {
-    width: 100%;
 }
 
 
@@ -424,64 +452,58 @@
    RESPONSIVIDADE
 ===================================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
+    .dash-layout {
+        grid-template-columns: 1fr;
+    }
+}
 
+@media (max-width: 900px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
-
-    .greeting-card {
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
 }
 
-
 @media (max-width: 600px) {
-
     .greeting-card {
-        padding: 24px 20px;
+        padding: 22px 20px;
     }
 
-    .greeting-card > div:last-child {
-        width: 100%;
-    }
-
-    .greeting-card__stat {
-        flex: 1;
+    .greeting-card__art {
+        display: none;
     }
 
     .materias-grid {
         grid-template-columns: 1fr 1fr;
-
         gap: 12px;
     }
 
     .materia-card {
-        padding: 18px 16px;
-    }
-
-    .dashboard-grid {
-        gap: 16px;
+        padding: 16px 14px;
     }
 
     .panel {
-        padding: 20px;
+        padding: 18px;
     }
 
-    .progress-ring-wrap {
-        min-height: 190px;
-    }
-
+    .barra-col__nome { font-size: 0.6rem; }
 }
 
-
 @media (max-width: 420px) {
-
     .materias-grid {
         grid-template-columns: 1fr;
     }
-
 }
+
+/* Nomes das barras não estouram a largura em telas pequenas */
+@media (max-width: 600px) {
+    .barra-col__nome {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-height: 0;
+    }
+}
+
+.dashboard-grid > div { min-width: 0; }

@@ -23,7 +23,7 @@ function desenharDonut(percentual) {
                 cy="80" 
                 r="${raio}" 
                 fill="none" 
-                stroke="#0D6EFD" 
+                stroke="#5A77DF" 
                 stroke-width="16"
                 stroke-linecap="round" 
                 stroke-dasharray="${circunferencia}" 
@@ -153,20 +153,20 @@ async function carregarProgresso() {
                             : [0],
 
                         /* AZUL */
-                        borderColor: '#0D6EFD',
+                        borderColor: '#5A77DF',
 
                         /* Fundo azul suave */
                         backgroundColor:
-                            'rgba(13, 110, 253, 0.10)',
+                            'rgba(90, 119, 223, 0.15)',
 
                         fill: true,
 
                         tension: 0.4,
 
                         /* Pontos azuis */
-                        pointBackgroundColor: '#0D6EFD',
+                        pointBackgroundColor: '#5A77DF',
 
-                        pointBorderColor: '#0D6EFD',
+                        pointBorderColor: '#5A77DF',
 
                         pointRadius: 4
                     }

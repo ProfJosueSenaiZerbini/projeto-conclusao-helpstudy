@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resultado · HelpStudy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/resultado.css">
@@ -20,7 +20,7 @@
             HelpStudy
         </div>
         <nav class="sidebar__nav">
-            <a href="/dashboard"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
             <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
             <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
         </nav>
@@ -30,10 +30,20 @@
     </aside>
 
     <main class="main-area">
-        <div class="topbar">
-            <div></div>
-            <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
-        </div>
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Resultado</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
 
         <section class="resultado-hero">
             <div class="resultado-hero__emoji" id="resultado-emoji">🎉</div>

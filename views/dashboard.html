@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel · HelpStudy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/dashboard.css">
@@ -21,7 +21,7 @@
             HelpStudy
         </div>
         <nav class="sidebar__nav">
-            <a href="/dashboard" class="active"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="/dashboard" class="active"><i class="fa-solid fa-table-cells-large"></i> Início</a>
             <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
             <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
         </nav>
@@ -32,59 +32,135 @@
 
     <!-- Área principal -->
     <main class="main-area">
-        <div class="topbar">
-            <button class="theme-toggle" data-menu-toggle aria-label="Abrir menu" style="display:none">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div></div>
-            <div style="display:flex; align-items:center; gap:12px;">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Início</h2>
+            </div>
+            <div class="topbar__right">
                 <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
                 <div class="user-chip">
                     <span class="user-chip__avatar" data-user-initials>?</span>
                     <span data-user-name>Aluno</span>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- Saudação -->
-        <section class="greeting-card">
-            <div>
-                <h1><span id="saudacao-hora">Olá</span>, <span data-user-name>Aluno</span>! 👋</h1>
-                <p>Pronto para continuar de onde parou? Escolha uma matéria abaixo e vamos praticar juntos.</p>
-            </div>
-            <div style="display:flex; gap:14px;">
-                <div class="greeting-card__stat">
-                    <strong id="stat-respondidas">0</strong>
-                    <span>Respondidas</span>
+        <div class="dash-layout">
+            <!-- Coluna principal -->
+            <div class="dash-main">
+
+                <!-- Saudação -->
+                <section class="greeting-card">
+                    <div class="greeting-card__text">
+                        <h1><span id="saudacao-hora">Olá</span>, <span data-user-name>Aluno</span>!</h1>
+                        <p>Pronto para continuar de onde parou? Escolha uma matéria abaixo e vamos praticar juntos.</p>
+                        <div class="greeting-card__stats">
+                            <div class="greeting-card__stat">
+                                <strong id="stat-respondidas">0</strong>
+                                <span>Respondidas</span>
+                            </div>
+                            <div class="greeting-card__stat">
+                                <strong id="stat-corretas">0</strong>
+                                <span>Acertos</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="greeting-card__art" aria-hidden="true">
+                        <svg viewBox="0 0 240 170" width="240" height="170">
+                            <!-- mesa -->
+                            <rect x="20" y="118" width="200" height="10" rx="5" fill="#3E53A0"/>
+                            <rect x="40" y="128" width="8" height="38" rx="3" fill="#3E53A0"/>
+                            <rect x="192" y="128" width="8" height="38" rx="3" fill="#3E53A0"/>
+                            <!-- monitor -->
+                            <rect x="58" y="44" width="92" height="62" rx="8" fill="#08112F"/>
+                            <rect x="64" y="50" width="80" height="50" rx="4" fill="#5A77DF"/>
+                            <rect x="72" y="60" width="40" height="6" rx="3" fill="#ECEEF0"/>
+                            <rect x="72" y="72" width="60" height="5" rx="2.5" fill="#A9B8EE"/>
+                            <rect x="72" y="82" width="50" height="5" rx="2.5" fill="#A9B8EE"/>
+                            <rect x="98" y="106" width="12" height="12" fill="#08112F"/>
+                            <!-- livros -->
+                            <rect x="160" y="100" width="44" height="9" rx="2" fill="#5A77DF"/>
+                            <rect x="164" y="91" width="38" height="9" rx="2" fill="#CCD4DE"/>
+                            <rect x="158" y="82" width="42" height="9" rx="2" fill="#3E53A0"/>
+                            <rect x="158" y="109" width="48" height="9" rx="2" fill="#08112F"/>
+                            <!-- chapéu de formatura -->
+                            <polygon points="181,52 205,62 181,72 157,62" fill="#08112F"/>
+                            <rect x="171" y="64" width="20" height="10" rx="3" fill="#08112F"/>
+                            <line x1="203" y1="62" x2="203" y2="76" stroke="#F5A623" stroke-width="2.5"/>
+                            <!-- planta -->
+                            <rect x="28" y="100" width="16" height="18" rx="4" fill="#CCD4DE"/>
+                            <ellipse cx="32" cy="90" rx="6" ry="12" fill="#2E9E6A"/>
+                            <ellipse cx="41" cy="92" rx="5" ry="10" fill="#22A861"/>
+                            <!-- brilhos -->
+                            <path d="M178 22 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#5A77DF"/>
+                            <circle cx="214" cy="40" r="4" fill="#A9B8EE"/>
+                            <circle cx="40" cy="40" r="5" fill="#A9B8EE"/>
+                        </svg>
+                    </div>
+                </section>
+
+                <!-- Matérias -->
+                <div class="section-heading">
+                    <h2>Escolha sua matéria para estudar</h2>
                 </div>
-                <div class="greeting-card__stat">
-                    <strong id="stat-corretas">0</strong>
-                    <span>Acertos</span>
+                <div class="materias-grid" id="grid-materias">
+                    <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando matérias...</div>
+                </div>
+
+                <!-- Desempenho + progresso geral -->
+                <div class="dashboard-grid">
+                    <div>
+                        <div class="section-heading">
+                            <h2>Desempenho</h2>
+                            <span class="chip-label">Por matéria</span>
+                        </div>
+                        <div class="card panel desempenho-card">
+                            <h3>Sua melhor matéria:</h3>
+                            <div class="desempenho-card__top">
+                                <strong id="melhor-percentual">0%</strong>
+                                <span id="melhor-nome">Responda questões para descobrir</span>
+                                <a href="/progresso" class="btn btn-outline btn-sm">Ver progresso</a>
+                            </div>
+                            <div class="barras-dash" id="barras-dash"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-heading">
+                            <h2>Progresso geral</h2>
+                        </div>
+                        <div class="card panel">
+                            <div class="progress-ring-wrap" id="progresso-anel"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Matérias -->
-        <div class="section-heading">
-            <h2>Escolha sua matéria para estudar</h2>
-        </div>
-        <div class="materias-grid" id="grid-materias">
-            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando matérias...</div>
-        </div>
+            <!-- Coluna lateral -->
+            <aside class="dash-side">
+                <div class="card side-card">
+                    <div class="section-heading">
+                        <div>
+                            <h3>Sugestões de estudo</h3>
+                            <span class="side-card__sub">Seu plano personalizado</span>
+                        </div>
+                        <a href="/plano" class="link-see-all">Ver tudo</a>
+                    </div>
+                    <div id="mini-plano">
+                        <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+                    </div>
+                    <a href="/plano" class="btn btn-primary btn-block btn-sm" style="margin-top:14px;">Ver plano completo</a>
+                </div>
 
-        <!-- Resumo -->
-        <div class="dashboard-grid">
-            <div class="card panel">
-                <h3>Seu progresso geral</h3>
-                <div class="progress-ring-wrap" id="progresso-anel"></div>
-            </div>
-            <div class="card panel">
-                <h3>Sugestões de estudo</h3>
-                <div id="mini-plano">
+                <div class="section-heading" style="margin-top:22px;">
+                    <h2>Respostas recentes</h2>
+                    <a href="/progresso" class="link-see-all">Ver tudo</a>
+                </div>
+                <div id="dash-recentes">
                     <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
                 </div>
-                <a href="/plano" class="btn btn-outline btn-block btn-sm" style="margin-top:14px;">Ver plano completo</a>
-            </div>
+            </aside>
         </div>
     </main>
 </div>

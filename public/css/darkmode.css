@@ -4,28 +4,36 @@
 ===================================================================== */
 
 html.dark-mode {
-    --bg: #1B1622;
-    --surface: #241D2C;
-    --surface-soft: #2C2436;
-    --border: #3A3044;
-    --text: #F3EEF6;
-    --text-muted: #A99CB4;
-    --text-soft: #776C82;
+    --bg: #2B3150;
+    --surface: #363D5E;
+    --surface-soft: #424A6D;
+    --border: #4E577C;
+    --text: #ECEEF0;
+    --text-muted: #B4BCCB;
+    --text-soft: #8890A8;
 
-    --brand-light: #102A56;
-    --success-bg: #143323;
-    --danger-bg: #3A1B22;
+    --brand-light: #3B4682;
+    --brand-soft: #6F86DE;
 
-    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
-    --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.3);
-    --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.45);
+    --rail: #434B6E;
+    --sidebar-bg: #363D5E;
+
+    --success-bg: #1E4436;
+    --danger-bg: #4D2A3A;
+
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.30);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.20);
+    --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.40);
 }
+
+html.dark-mode .sidebar__nav a.active { color: #fff; }
+
+html.dark-mode .badge-neutral { color: #DDE3FA; }
 
 html.dark-mode img.illustration,
 html.dark-mode img.logo-light {
     filter: brightness(0.92);
 }
 
-html.dark-mode .auth-side {
-    opacity: 0.9;
-}
+html.dark-mode .timer-chip,
+html.dark-mode .timer-chip i { color: var(--text); }
