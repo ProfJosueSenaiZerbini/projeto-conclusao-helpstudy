@@ -3,6 +3,12 @@
 // =====================================================================
 const Materia = require('../models/Materia');
 const Resultado = require('../models/Resultado');
+const Gamificacao = require('../models/Gamificacao');
+
+// Remove a resposta correta e a explicação antes de enviar ao navegador
+function semGabarito(questoes) {
+    return questoes.map(({ correta, explicacao, ...resto }) => resto);
+}
 
 const materiaController = {
     async listar(req, res) {
@@ -29,12 +35,11 @@ const materiaController = {
                 return res.status(404).json({ sucesso: false, mensagem: 'Matéria não encontrada.' });
             }
 
-            const questoes = await Materia.listarQuestoes(materia.id);
+            // Dificuldade adaptativa: as questões vêm na ordem do nível do aluno
+            const nivelAtual = await Materia.nivelDoAluno(req.usuarioId, materia.id);
+            const questoes = await Materia.listarQuestoesAdaptativas(req.usuarioId, materia.id, nivelAtual, 10);
 
-            // Remove a resposta correta e explicação antes de enviar ao cliente
-            const questoesSemGabarito = questoes.map(({ correta, explicacao, ...resto }) => resto);
-
-            return res.json({ sucesso: true, materia, questoes: questoesSemGabarito });
+            return res.json({ sucesso: true, materia, nivelAtual, questoes: semGabarito(questoes) });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar questões.' });
@@ -49,6 +54,11 @@ const materiaController = {
             if (!questaoId || !alternativa) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Dados incompletos.' });
             }
+            if (!['a', 'b', 'c', 'd'].includes(alternativa)) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Alternativa inválida.' });
+            }
+            // O tempo vem do navegador: só aceita números entre 0 e 1 hora
+            const tempo = Math.min(Math.max(parseInt(tempoGasto, 10) || 0, 0), 3600);
 
             const questao = await Materia.buscarQuestaoPorId(questaoId);
             if (!questao) {
@@ -57,26 +67,56 @@ const materiaController = {
 
             const correta = questao.correta === alternativa;
 
-            await Resultado.salvarResposta({
+            const respostaId = await Resultado.salvarResposta({
                 usuarioId,
-                questaoId,
+                questaoId: questao.id,
                 alternativaMarcada: alternativa,
                 correta,
-                tempoGasto
+                tempoGasto: tempo
             });
 
             const progresso = await Resultado.atualizarProgresso(usuarioId, questao.materia_id);
 
+            // XP, ofensiva, meta do dia e conquistas (calculados no servidor)
+            const gamificacao = await Gamificacao.processar(usuarioId);
+
             return res.json({
                 sucesso: true,
+                respostaId,
                 correta,
                 respostaCorreta: questao.correta,
                 explicacao: questao.explicacao,
-                progresso
+                progresso,
+                gamificacao
             });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ sucesso: false, mensagem: 'Erro ao registrar resposta.' });
+        }
+    },
+
+    // GET /api/materias/erros/questoes?materia=slug
+    // Questões do caderno de erros, para refazer (sem o gabarito)
+    async questoesDoCaderno(req, res) {
+        try {
+            const slug = req.query.materia || null;
+            let materia = { nome: 'Caderno de erros', slug: 'erros', cor: '#E5485D', icone: 'fa-book-bookmark' };
+            if (slug) {
+                const encontrada = await Materia.buscarPorSlug(slug);
+                if (!encontrada) {
+                    return res.status(404).json({ sucesso: false, mensagem: 'Matéria não encontrada.' });
+                }
+                materia = { ...encontrada, nome: `${encontrada.nome} · Caderno de erros` };
+            }
+
+            const erros = await Resultado.errosMaterias(req.usuarioId, slug);
+            const questoes = erros.map(
+                ({ alternativa_marcada, respondido_em, vezes, erros: qtd, slug: s, cor, icone, ...q }) => q
+            );
+            return res.json({ sucesso: true, materia, modo: 'erros', questoes: semGabarito(questoes) });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar o caderno de erros.' });
         }
     }
 };

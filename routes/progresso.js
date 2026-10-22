@@ -1,62 +1,27 @@
 // =====================================================================
-// Rotas de progresso, plano de estudos e conquistas
+// Rotas de progresso, plano de estudos, conquistas e caderno de erros
 // =====================================================================
 const express = require('express');
 const router = express.Router();
 const autenticar = require('../middleware/authMiddleware');
-const Resultado = require('../models/Resultado');
+const progressoController = require('../controllers/progressoController');
 
-// Progresso detalhado por matéria + progresso geral
-router.get('/', autenticar, async (req, res) => {
-    try {
-        const usuarioId = req.usuarioId;
-        const [porMateria, geral, evolucao, historico] = await Promise.all([
-            Resultado.progressoPorUsuario(usuarioId),
-            Resultado.progressoGeral(usuarioId),
-            Resultado.evolucaoUltimosDias(usuarioId, 7),
-            Resultado.historicoPorUsuario(usuarioId, 10)
-        ]);
-        res.json({ sucesso: true, porMateria, geral, evolucao, historico });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar progresso.' });
-    }
-});
+// Progresso detalhado por matéria + progresso geral + cards do topo
+router.get('/', autenticar, progressoController.geral);
+router.get('/evolucao', autenticar, progressoController.evolucao);
+router.get('/atividade', autenticar, progressoController.atividade);
+router.get('/materias/:slug', autenticar, progressoController.detalheMateria);
+
+// Revisão de uma atividade e caderno de erros
+router.get('/revisao', autenticar, progressoController.revisao);
+router.get('/erros', autenticar, progressoController.erros);
 
 // Plano de estudos personalizado (gera com base no desempenho)
-router.get('/plano', autenticar, async (req, res) => {
-    try {
-        const plano = await Resultado.buscarPlanoEstudos(req.usuarioId);
-        if (plano.length === 0) {
-            const novoPlano = await Resultado.gerarPlanoEstudos(req.usuarioId);
-            return res.json({ sucesso: true, plano: novoPlano });
-        }
-        res.json({ sucesso: true, plano });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar plano de estudos.' });
-    }
-});
-
-router.post('/plano/gerar', autenticar, async (req, res) => {
-    try {
-        const plano = await Resultado.gerarPlanoEstudos(req.usuarioId);
-        res.json({ sucesso: true, plano });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao gerar plano de estudos.' });
-    }
-});
+router.get('/plano', autenticar, progressoController.plano);
+router.post('/plano/gerar', autenticar, progressoController.gerarPlano);
+router.patch('/plano/:id', autenticar, progressoController.marcarItemPlano);
 
 // Conquistas do usuário
-router.get('/conquistas', autenticar, async (req, res) => {
-    try {
-        const conquistas = await Resultado.listarConquistasUsuario(req.usuarioId);
-        res.json({ sucesso: true, conquistas });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar conquistas.' });
-    }
-});
+router.get('/conquistas', autenticar, progressoController.conquistas);
 
 module.exports = router;

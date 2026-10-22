@@ -22,6 +22,9 @@ CREATE TABLE usuarios (
     senha VARCHAR(255) NOT NULL,
     serie VARCHAR(50) DEFAULT NULL,
     avatar VARCHAR(255) DEFAULT NULL,
+    apelido VARCHAR(40) DEFAULT NULL,
+    meta_diaria INT NOT NULL DEFAULT 10,
+    ranking_publico TINYINT(1) NOT NULL DEFAULT 1,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP
@@ -127,6 +130,7 @@ CREATE TABLE plano_estudos (
     motivo VARCHAR(255) DEFAULT NULL,
     prioridade ENUM('baixa','media','alta') DEFAULT 'media',
     concluido TINYINT(1) DEFAULT 0,
+    lote INT NOT NULL DEFAULT 0,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (usuario_id)
@@ -1285,3 +1289,81 @@ SELECT
     titulo
 FROM conquistas
 ORDER BY id;
+
+
+-- =====================================================================
+-- 13. TABELAS DA GAMIFICAÇÃO, ENEM E SIMULADOS
+-- (Também são criadas automaticamente pelo servidor em config/migracoes.js,
+--  então quem já tem o banco não precisa rodar este script de novo.)
+-- =====================================================================
+
+CREATE TABLE IF NOT EXISTS xp_eventos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    origem VARCHAR(20) NOT NULL,
+    referencia VARCHAR(80) NOT NULL,
+    pontos INT NOT NULL,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_xp_evento (usuario_id, origem, referencia),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS simulados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    ano SMALLINT NOT NULL,
+    area VARCHAR(40) DEFAULT NULL,
+    idioma VARCHAR(20) NOT NULL DEFAULT '',
+    questoes TEXT NOT NULL,
+    respostas TEXT,
+    total_questoes INT NOT NULL,
+    duracao_segundos INT NOT NULL,
+    iniciado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    finalizado_em DATETIME DEFAULT NULL,
+    acertos INT NOT NULL DEFAULT 0,
+    nota DECIMAL(4,2) DEFAULT NULL,
+    tempo_gasto INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS respostas_enem (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    simulado_id INT DEFAULT NULL,
+    ano SMALLINT NOT NULL,
+    numero SMALLINT NOT NULL,
+    idioma VARCHAR(20) NOT NULL DEFAULT '',
+    area VARCHAR(40) DEFAULT NULL,
+    alternativa_marcada CHAR(1) DEFAULT NULL,
+    correta TINYINT(1) NOT NULL DEFAULT 0,
+    revelada TINYINT(1) NOT NULL DEFAULT 0,
+    arquivada TINYINT(1) NOT NULL DEFAULT 0,
+    tempo_gasto INT NOT NULL DEFAULT 0,
+    respondido_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_simulado_questao (simulado_id, numero, idioma),
+    KEY idx_enem_usuario (usuario_id, ano, numero),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (simulado_id) REFERENCES simulados(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS sessoes_foco (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    iniciado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    concluido_em DATETIME DEFAULT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
+-- =====================================================================
+-- 14. CONQUISTAS NOVAS
+-- =====================================================================
+
+INSERT INTO conquistas (codigo, titulo, descricao, icone) VALUES
+('maratonista', 'Maratonista', 'Respondeu 50 questões em um único dia', 'fa-person-running'),
+('coruja', 'Coruja', 'Estudou depois das 22h', 'fa-moon'),
+('enem_20', 'Rumo ao ENEM', 'Respondeu 20 questões do ENEM', 'fa-file-pen'),
+('primeiro_simulado', 'Primeiro Simulado', 'Finalizou um simulado do ENEM', 'fa-stopwatch'),
+('meta_batida', 'Meta Batida', 'Cumpriu a meta diária de questões', 'fa-bullseye'),
+('foco_total', 'Foco Total', 'Completou uma sessão de 25 minutos no modo foco', 'fa-hourglass-half'),
+('nivel_5', 'Estudante Dedicado', 'Chegou ao nível 5', 'fa-ranking-star');

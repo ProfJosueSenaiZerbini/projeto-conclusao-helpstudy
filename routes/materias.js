@@ -7,6 +7,7 @@ const materiaController = require('../controllers/materiaController');
 const autenticar = require('../middleware/authMiddleware');
 
 router.get('/', autenticar, materiaController.listar);
+router.get('/erros/questoes', autenticar, materiaController.questoesDoCaderno);
 router.get('/:slug/questoes', autenticar, materiaController.buscarQuestoes);
 router.post('/responder', autenticar, materiaController.responderQuestao);
 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu perfil · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/perfil.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
+            <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/perfil" class="active"><i class="fa-solid fa-user"></i> Meu perfil</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Meu perfil</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="card perfil-topo" id="perfil-topo">
+            <div class="perfil-topo__avatar" id="perfil-avatar">?</div>
+            <div class="perfil-topo__texto">
+                <h1 id="perfil-nome">Carregando...</h1>
+                <span class="text-muted" id="perfil-sub"></span>
+                <div class="perfil-nivel">
+                    <span class="perfil-nivel__titulo" id="perfil-nivel-titulo">Nível —</span>
+                    <div class="progress-bar"><div class="progress-bar__fill" id="perfil-nivel-barra" style="width:0%"></div></div>
+                    <span class="perfil-nivel__xp" id="perfil-nivel-xp"></span>
+                </div>
+            </div>
+        </section>
+
+        <div class="perfil-grid">
+            <div class="perfil-coluna">
+                <form class="card perfil-card" id="form-perfil" novalidate>
+                    <h3><i class="fa-regular fa-user"></i> Dados do perfil</h3>
+                    <label class="perfil-campo">
+                        <span>Nome completo</span>
+                        <input type="text" id="campo-nome" maxlength="120" required autocomplete="name">
+                    </label>
+                    <label class="perfil-campo">
+                        <span>Apelido público <small>(aparece no ranking no lugar do seu nome)</small></span>
+                        <input type="text" id="campo-apelido" maxlength="30" placeholder="Ex.: Ana Estudiosa">
+                    </label>
+                    <label class="perfil-campo">
+                        <span>Série / ano</span>
+                        <input type="text" id="campo-serie" maxlength="50" placeholder="Ex.: 3º ano do Ensino Médio">
+                    </label>
+                    <div class="perfil-campo">
+                        <span>Avatar</span>
+                        <div class="avatar-opcoes" id="avatar-opcoes" role="radiogroup" aria-label="Escolha seu avatar"></div>
+                    </div>
+                    <label class="perfil-check">
+                        <input type="checkbox" id="campo-ranking">
+                        <span>Aparecer no ranking semanal <small>(só o apelido ou o primeiro nome)</small></span>
+                    </label>
+                    <label class="perfil-check">
+                        <input type="checkbox" id="campo-mascote">
+                        <span>Mostrar o mascote com dicas <small>(vale para este navegador)</small></span>
+                    </label>
+                    <button type="submit" class="btn btn-primary" id="btn-salvar-perfil">Salvar alterações</button>
+                </form>
+
+                <form class="card perfil-card" id="form-senha" novalidate>
+                    <h3><i class="fa-solid fa-lock"></i> Alterar senha</h3>
+                    <label class="perfil-campo">
+                        <span>Senha atual</span>
+                        <input type="password" id="senha-atual" autocomplete="current-password" required>
+                    </label>
+                    <label class="perfil-campo">
+                        <span>Nova senha <small>(mínimo 6 caracteres)</small></span>
+                        <input type="password" id="senha-nova" autocomplete="new-password" minlength="6" required>
+                    </label>
+                    <label class="perfil-campo">
+                        <span>Confirmar nova senha</span>
+                        <input type="password" id="senha-confirmar" autocomplete="new-password" minlength="6" required>
+                    </label>
+                    <button type="submit" class="btn btn-outline" id="btn-salvar-senha">Alterar senha</button>
+                </form>
+            </div>
+
+            <div class="perfil-coluna">
+                <div class="card perfil-card">
+                    <div class="card-titulo">
+                        <h3><i class="fa-solid fa-ranking-star"></i> Ranking da semana</h3>
+                        <span class="card-titulo__dica">XP de segunda a domingo</span>
+                    </div>
+                    <div id="ranking-lista"><div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div></div>
+                </div>
+
+                <div class="card perfil-card">
+                    <h3><i class="fa-solid fa-star"></i> Como ganhar XP</h3>
+                    <ul class="xp-regras">
+                        <li><span>Acertar uma questão pela 1ª vez</span><b>+10 a +20</b></li>
+                        <li><span>Acertar uma questão do ENEM pela 1ª vez</span><b>+20</b></li>
+                        <li><span>Responder uma questão (1x por dia cada)</span><b>+2</b></li>
+                        <li><span>Cumprir a meta diária</span><b>+20</b></li>
+                        <li><span>Finalizar um simulado</span><b>+30</b></li>
+                        <li><span>Completar 25 min no modo foco</span><b>+10</b></li>
+                        <li><span>Desbloquear uma conquista</span><b>+50</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
+<script src="/js/perfil.js"></script>
+</body>
+</html>

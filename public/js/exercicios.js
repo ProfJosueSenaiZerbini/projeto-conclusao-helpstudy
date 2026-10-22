@@ -6,13 +6,22 @@ let questoes = [];
 let indiceAtual = 0;
 let alternativaSelecionada = null;
 let respondida = false;
-let resultados = []; // { questaoId, correta }
+let resultados = []; // { questaoId, correta, marcada, respostaId }
 let tempoInicioQuestao = null;
 let cronometroInterval = null;
 let segundosTotais = 0;
+let acertosSeguidos = 0; // para o mascote comemorar
+let xpDaSessao = 0;
+let enviando = false;
+
+// Modo "caderno de erros": /exercicios?modo=erros (&materia=slug opcional)
+function modoErros() {
+    return new URLSearchParams(window.location.search).get('modo') === 'erros';
+}
 
 function obterSlugMateria() {
     const params = new URLSearchParams(window.location.search);
+    if (modoErros()) return params.get('materia') || '';
     return params.get('materia') || 'matematica';
 }
 
@@ -62,8 +71,9 @@ function renderizarQuestao() {
     const questao = questoes[indiceAtual];
     if (!questao) return;
 
-    document.getElementById('questao-numero').textContent = `Questão ${indiceAtual + 1} de ${questoes.length}`;
-    document.getElementById('questao-nivel').textContent = questao.nivel;
+    document.getElementById('questao-numero').textContent =
+        `Questão ${indiceAtual + 1} de ${questoes.length}` + (modoErros() && questao.materia_nome ? ` · ${questao.materia_nome}` : '');
+    document.getElementById('questao-nivel').textContent = Gamificacao.NOMES_NIVEL[questao.nivel] || questao.nivel;
     document.getElementById('questao-nivel').className =
         'badge ' + (questao.nivel === 'dificil' ? 'badge-danger' : questao.nivel === 'medio' ? 'badge-neutral' : 'badge-success');
     document.getElementById('questao-enunciado').textContent = questao.enunciado;
@@ -137,23 +147,30 @@ async function confirmarResposta() {
         return;
     }
 
+    if (enviando) return;
     const questao = questoes[indiceAtual];
     const tempoGasto = Math.round((Date.now() - tempoInicioQuestao) / 1000);
 
+    enviando = true;
+    const botaoConfirmar = document.getElementById('btn-confirmar');
+    botaoConfirmar.disabled = true;
     const resp = await API.chamar('/api/materias/responder', {
         method: 'POST',
         body: JSON.stringify({ questaoId: questao.id, alternativa: alternativaSelecionada, tempoGasto })
     });
+    enviando = false;
+    botaoConfirmar.disabled = false;
 
     if (!resp || !resp.sucesso) {
-        mostrarToast('Erro ao registrar resposta.', 'erro');
+        mostrarToast((resp && resp.mensagem) || 'Erro ao registrar resposta.', 'erro');
         return;
     }
 
     questao.correta_visivel = resp.respostaCorreta;
     questao.explicacao_visivel = resp.explicacao;
 
-    resultados.push({ questaoId: questao.id, correta: resp.correta, marcada: alternativaSelecionada });
+    resultados.push({ questaoId: questao.id, correta: resp.correta, marcada: alternativaSelecionada, respostaId: resp.respostaId });
+    reagirResposta(resp, questao);
 
     document.querySelectorAll('.alternativa').forEach((el) => {
         el.classList.add('desabilitada');
@@ -172,6 +189,36 @@ async function confirmarResposta() {
     document.getElementById('btn-confirmar').classList.add('hidden');
     document.getElementById('btn-proxima').classList.remove('hidden');
     renderizarNavegacao();
+}
+
+// XP, conquistas e reações do mascote (com base no que o servidor respondeu)
+function reagirResposta(resp, questao) {
+    const g = resp.gamificacao;
+    if (g) {
+        xpDaSessao += g.xpGanho || 0;
+        Gamificacao.processar(g);
+    }
+
+    const falou = g && ((g.conquistasNovas || []).length || (g.hoje && g.hoje.metaBatidaAgora));
+    const nivelMudou = resp.progresso && resp.progresso.nivelMudou;
+    const nomeNivel = resp.progresso && Gamificacao.NOMES_NIVEL[resp.progresso.nivel];
+    const materia = questao.materia_nome || document.getElementById('materia-nome').textContent;
+
+    if (resp.correta) {
+        acertosSeguidos++;
+    } else {
+        if (acertosSeguidos >= 3 && !falou) Gamificacao.Mascote.falar('Tudo bem errar! Leia a explicação com calma, ela ajuda a fixar. 💙');
+        acertosSeguidos = 0;
+    }
+
+    if (falou) return; // a meta/conquista já ganhou mensagem
+    if (nivelMudou === 'subiu') {
+        Gamificacao.Mascote.falar(`Você subiu para o nível ${nomeNivel} em ${materia}! As próximas questões vão ser mais desafiadoras. 🚀`, 'festa');
+    } else if (nivelMudou === 'desceu') {
+        Gamificacao.Mascote.falar(`Vamos reforçar a base: as próximas questões de ${materia} voltam para o nível ${nomeNivel}. Você consegue! 💪`, 'alerta');
+    } else if (resp.correta && (acertosSeguidos === 3 || acertosSeguidos === 5 || acertosSeguidos === 10)) {
+        Gamificacao.Mascote.falar(`${acertosSeguidos} acertos seguidos! Você está voando! 🔥`, 'festa');
+    }
 }
 
 function proximaQuestao() {
@@ -196,7 +243,10 @@ function finalizarExercicio() {
         total: questoes.length,
         corretas,
         tempo: segundosTotais,
-        materia: obterSlugMateria()
+        materia: obterSlugMateria(),
+        modo: modoErros() ? 'erros' : 'materia',
+        respostaIds: resultados.map((r) => r.respostaId).filter(Boolean),
+        xp: xpDaSessao
     };
     sessionStorage.setItem('helpstudy_ultimo_resultado', JSON.stringify(dados));
     window.location.href = '/resultado';
@@ -217,18 +267,30 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
 
 async function carregarExercicios() {
     const slug = obterSlugMateria();
-    const resp = await API.chamar(`/api/materias/${slug}/questoes`);
+    const rota = modoErros()
+        ? `/api/materias/erros/questoes${slug ? '?materia=' + encodeURIComponent(slug) : ''}`
+        : `/api/materias/${encodeURIComponent(slug)}/questoes`;
+    const resp = await API.chamar(rota);
 
     if (!resp || !resp.sucesso || resp.questoes.length === 0) {
-        document.getElementById('exercicio-conteudo').innerHTML =
-            '<div class="empty-state"><i class="fa-regular fa-face-frown"></i>Nenhuma questão disponível para esta matéria ainda.</div>';
+        const conteudo = document.querySelector('.exercicio-layout');
+        const vazioErros = resp && resp.sucesso && modoErros();
+        conteudo.innerHTML = vazioErros
+            ? `<div class="card empty-state" style="grid-column:1/-1"><i class="fa-solid fa-champagne-glasses"></i>
+                 Seu caderno de erros está vazio. Você acertou tudo que tinha errado! 🎉
+                 <div style="margin-top:14px"><a href="/dashboard" class="btn btn-primary btn-sm">Voltar ao início</a></div></div>`
+            : `<div class="card empty-state" style="grid-column:1/-1"><i class="fa-regular fa-face-frown"></i>
+                 ${API.escapar((resp && resp.mensagem) || 'Nenhuma questão disponível para esta matéria ainda.')}</div>`;
+        document.getElementById('materia-nome').textContent = vazioErros ? 'Caderno de erros' : 'Exercícios';
         return;
     }
 
     questoes = resp.questoes;
     document.getElementById('materia-nome').textContent = resp.materia.nome;
     document.getElementById('materia-icone-wrap').style.background = resp.materia.cor;
-    document.getElementById('total-questoes-label').textContent = `${questoes.length} questões`;
+    document.getElementById('total-questoes-label').textContent = modoErros()
+        ? `${questoes.length} ${questoes.length === 1 ? 'questão para refazer' : 'questões para refazer'}`
+        : `${questoes.length} questões · Nível adaptado: ${Gamificacao.NOMES_NIVEL[resp.nivelAtual] || 'Fácil'}`;
 
     tempoInicioQuestao = Date.now();
     renderizarQuestao();

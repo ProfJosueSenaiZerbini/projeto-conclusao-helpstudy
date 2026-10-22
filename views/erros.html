@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno de erros · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/erros.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
+            <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros" class="active"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/perfil"><i class="fa-solid fa-user"></i> Meu perfil</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Caderno de erros</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="card erros-intro">
+            <div class="erros-intro__icone"><i class="fa-solid fa-book-bookmark"></i></div>
+            <div class="erros-intro__texto">
+                <h1>Seu caderno de erros</h1>
+                <p>Aqui ficam as questões que você errou da última vez. Quando você acerta, ela sai do caderno sozinha.</p>
+            </div>
+            <a href="/exercicios?modo=erros" class="btn btn-primary hidden" id="btn-refazer-todas"><i class="fa-solid fa-rotate-right"></i> Refazer todas</a>
+        </div>
+
+        <div class="erros-abas" role="tablist" aria-label="Tipo de questão">
+            <button role="tab" class="ativo" aria-selected="true" data-aba="materias" id="aba-materias">Matérias <span class="erros-abas__num" id="num-materias">0</span></button>
+            <button role="tab" aria-selected="false" data-aba="enem" id="aba-enem">ENEM <span class="erros-abas__num" id="num-enem">0</span></button>
+        </div>
+
+        <section id="painel-materias" role="tabpanel" aria-labelledby="aba-materias">
+            <div class="erros-filtros" id="filtros-materias"></div>
+            <div class="erros-lista" id="lista-materias">
+                <div class="card empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+            </div>
+        </section>
+
+        <section id="painel-enem" role="tabpanel" aria-labelledby="aba-enem" class="hidden">
+            <div class="erros-lista" id="lista-enem"></div>
+        </section>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
+<script src="/js/erros.js"></script>
+</body>
+</html>

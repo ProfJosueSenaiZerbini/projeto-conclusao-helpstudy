@@ -23,6 +23,20 @@ const AREAS = {
     matematica: { nome: 'Matemática', icone: 'fa-square-root-variable', cor: '#4A6CF7' }
 };
 
+// Matérias do HelpStudy → área do ENEM (usado no plano de estudos)
+const MATERIA_PARA_AREA = {
+    matematica: 'matematica',
+    portugues: 'linguagens',
+    ingles: 'linguagens',
+    historia: 'ciencias-humanas',
+    geografia: 'ciencias-humanas',
+    filosofia: 'ciencias-humanas',
+    sociologia: 'ciencias-humanas',
+    quimica: 'ciencias-natureza',
+    fisica: 'ciencias-natureza',
+    biologia: 'ciencias-natureza'
+};
+
 const cache = new Map();
 let fila = Promise.resolve();
 let ultimaChamada = 0;
@@ -101,6 +115,7 @@ function comCache(chave, buscar) {
 
 const Enem = {
     AREAS,
+    MATERIA_PARA_AREA,
 
     // Lista de provas (anos) disponíveis
     listarProvas() {
@@ -133,6 +148,32 @@ const Enem = {
             if (q.language && q.language !== idioma) return false;
             return true;
         });
+    },
+
+    // Resolve o idioma estrangeiro como a página faz: o pedido ou o primeiro da prova
+    resolverIdioma(prova, idioma) {
+        if (!prova.languages || prova.languages.length === 0) return null;
+        return prova.languages.some((l) => l.value === idioma) ? idioma : prova.languages[0].value;
+    },
+
+    // Uma questão oficial (com gabarito), usada pelo servidor para corrigir
+    async questaoOficial(ano, numero, idioma) {
+        const provas = await this.listarProvas();
+        if (!provas.some((p) => p.year === ano)) {
+            const erro = new Error(`Não há prova do ENEM disponível para o ano ${ano}.`);
+            erro.status = 404;
+            throw erro;
+        }
+        const prova = await this.buscarProva(ano);
+        const lang = this.resolverIdioma(prova, idioma);
+        const item = this.filtrarQuestoes(prova, null, lang).find((q) => q.index === numero);
+        const [questao] = item ? await this.buscarQuestoesCompletas(ano, [item], lang) : [];
+        if (!questao) {
+            const erro = new Error(`A questão ${numero} não existe na prova de ${ano}.`);
+            erro.status = 404;
+            throw erro;
+        }
+        return questao;
     },
 
     // Busca o conteúdo completo de uma lista de questões { index, language }

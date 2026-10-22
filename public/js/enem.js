@@ -17,43 +17,27 @@ const estado = {
 
 // Questões exibidas na tela (chave -> questão), para corrigir as respostas
 const questoesNaTela = {};
+// Quando cada questão apareceu na tela (para medir o tempo de resposta)
+const exibidaEm = {};
 
 // ---------------------------------------------------------------------
-// Respostas do aluno (salvas no navegador, separadas por usuário)
+// Respostas do aluno: agora ficam no banco de dados (servidor).
+// Cada questão vem com "respostaAluno" (ou null) e o servidor é quem corrige.
 // ---------------------------------------------------------------------
-function chaveRespostas() {
-    const usuario = API.usuario();
-    return `helpstudy_enem_respostas_${(usuario && (usuario.id || usuario.email)) || 'anonimo'}`;
-}
-
-function lerRespostas() {
-    try {
-        return JSON.parse(localStorage.getItem(chaveRespostas())) || {};
-    } catch {
-        return {};
-    }
-}
-
-function salvarRespostas(respostas) {
-    try {
-        localStorage.setItem(chaveRespostas(), JSON.stringify(respostas));
-    } catch {
-        /* navegador sem armazenamento: o placar só não fica salvo */
-    }
-}
-
 function chaveQuestao(q) {
     return `${q.year}-${q.index}-${q.language || ''}`;
 }
 
-function atualizarPlacar() {
-    // "Ver resposta" não conta como questão respondida
-    const respostas = Object.values(lerRespostas()).filter((r) => !r.revelada);
-    const total = respostas.length;
-    const acertos = respostas.filter((r) => r.correta).length;
-    document.getElementById('placar-respondidas').textContent = total;
-    document.getElementById('placar-acertos').textContent = acertos;
-    document.getElementById('placar-percentual').textContent = total ? `${Math.round((acertos / total) * 100)}%` : '0%';
+function atualizarPlacar(placar) {
+    if (!placar) return;
+    document.getElementById('placar-respondidas').textContent = placar.respondidas;
+    document.getElementById('placar-acertos').textContent = placar.acertos;
+    document.getElementById('placar-percentual').textContent = `${placar.percentual}%`;
+}
+
+async function carregarPlacar() {
+    const resp = await chamarBackend('/api/enem/placar');
+    if (resp && resp.sucesso) atualizarPlacar(resp.placar);
 }
 
 // ---------------------------------------------------------------------
@@ -65,50 +49,6 @@ function mostrarToast(mensagem, tipo = '') {
     toast.className = `toast show ${tipo ? 'toast-' + tipo : ''}`;
     clearTimeout(mostrarToast.timer);
     mostrarToast.timer = setTimeout(() => toast.classList.remove('show'), 3200);
-}
-
-function escaparHtml(texto) {
-    return String(texto ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
-// Converte o Markdown simples das questões (imagens, links, negrito, itálico)
-// "emLinha" = true para textos curtos (alternativas), sem parágrafos
-function markdownParaHtml(texto, emLinha = false) {
-    if (!texto) return '';
-    let html = escaparHtml(texto.replace(/\r\n/g, '\n'));
-
-    // Imagens e links viram marcadores para o negrito/itálico não mexer nas URLs
-    const guardados = [];
-    const guardar = (trecho) => `\u0000${guardados.push(trecho) - 1}\u0000`;
-    html = html.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, (m, alt, url) =>
-        guardar(
-            url.includes('broken-image') // a própria API marca assim as imagens que ela não tem
-                ? '<span class="enem-imagem-indisponivel"><i class="fa-regular fa-image"></i> Imagem indisponível na fonte</span>'
-                : `<img src="${url}" alt="${alt || 'Imagem da questão'}" loading="lazy" onerror="this.style.display='none'">`
-        )
-    );
-    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (m, nome, url) =>
-        guardar(`<a href="${url}" target="_blank" rel="noopener">${nome}</a>`)
-    );
-    html = html.replace(/^#{1,6}\s+(.+)$/gm, '<strong>$1</strong>');
-    html = html.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/(^|[^\w])_([^_\n]+?)_(?=[^\w]|$)/g, '$1<em>$2</em>');
-    html = html.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
-    html = html.replace(/\u0000(\d+)\u0000/g, (m, i) => guardados[Number(i)]);
-
-    if (emLinha) return html.trim().replace(/\n+/g, '<br>');
-
-    return html
-        .split(/\n{2,}/)
-        .map((paragrafo) => paragrafo.trim())
-        .filter(Boolean)
-        .map((paragrafo) => `<p>${paragrafo.replace(/\n/g, '<br>')}</p>`)
-        .join('');
 }
 
 function infoArea(valor) {
@@ -137,9 +77,10 @@ function montarConsulta(extra = {}) {
 }
 
 // Chama o backend; se o servidor estiver fora do ar, devolve um erro amigável
-async function chamarBackend(rota) {
+async function chamarBackend(rota, opcoes = { method: 'GET' }) {
+    if (opcoes.method === 'POST' && !opcoes.body) opcoes = { ...opcoes, body: '{}' };
     try {
-        return await API.chamar(rota);
+        return await API.chamar(rota, opcoes);
     } catch {
         return { sucesso: false, mensagem: 'Erro de conexão com o servidor.' };
     }
@@ -213,7 +154,8 @@ function desenharFiltros() {
 function desenharQuestao(q) {
     const chave = chaveQuestao(q);
     questoesNaTela[chave] = q;
-    const resposta = lerRespostas()[chave];
+    if (!exibidaEm[chave]) exibidaEm[chave] = Date.now();
+    const resposta = q.respostaAluno;
     const area = infoArea(q.discipline);
     const idioma = q.language ? (estado.prova.idiomas.find((i) => i.valor === q.language) || {}).nome : null;
 
@@ -450,6 +392,12 @@ function registrarEventos() {
     });
 
     document.getElementById('btn-aleatoria').addEventListener('click', sortearQuestao);
+    document.getElementById('btn-simulado').addEventListener('click', () => {
+        const params = new URLSearchParams();
+        if (estado.ano) params.set('ano', estado.ano);
+        if (estado.area) params.set('area', estado.area);
+        window.location.href = `/simulado?${params}`;
+    });
 
     document.getElementById('paginacao').addEventListener('click', (e) => {
         const botao = e.target.closest('.enem-pagina[data-pagina]');
@@ -458,19 +406,31 @@ function registrarEventos() {
         carregarQuestoes().then(() => window.scrollTo({ top: document.querySelector('.enem-resultado-topo').offsetTop - 10 }));
     });
 
-    document.getElementById('btn-zerar').addEventListener('click', () => {
-        if (Object.keys(lerRespostas()).length === 0) {
+    document.getElementById('btn-zerar').addEventListener('click', async () => {
+        const botao = document.getElementById('btn-zerar');
+        botao.disabled = true;
+        const resp = await chamarBackend('/api/enem/zerar', { method: 'POST' });
+        botao.disabled = false;
+        if (!resp || !resp.sucesso) {
+            mostrarToast((resp && resp.mensagem) || 'Não foi possível zerar.', 'erro');
+            return;
+        }
+        if (!resp.zeradas) {
             mostrarToast('Você ainda não respondeu questões do ENEM.');
             return;
         }
-        salvarRespostas({});
-        atualizarPlacar();
+        // As respostas continuam no histórico (progresso), só somem desta página
+        Object.values(questoesNaTela).forEach((q) => {
+            q.respostaAluno = null;
+            delete q.correctAlternative;
+        });
+        atualizarPlacar(resp.placar);
         Object.keys(questoesNaTela).forEach(redesenharQuestao);
-        mostrarToast('Respostas do ENEM zeradas.', 'sucesso');
+        mostrarToast('Placar do ENEM zerado. Seu histórico continua no progresso.', 'sucesso');
     });
 
     // Cliques dentro das questões (selecionar, confirmar, ver resposta, refazer)
-    document.getElementById('lista-questoes').addEventListener('click', (e) => {
+    document.getElementById('lista-questoes').addEventListener('click', async (e) => {
         const card = e.target.closest('.enem-questao');
         if (!card) return;
         const chave = card.dataset.chave;
@@ -485,24 +445,54 @@ function registrarEventos() {
         }
 
         const acao = e.target.closest('[data-acao]');
-        if (!acao) return;
-        const respostas = lerRespostas();
+        if (!acao || acao.disabled) return;
+        card.querySelectorAll('[data-acao]').forEach((b) => (b.disabled = true));
+
+        const base = { ano: questao.year, numero: questao.index, idioma: questao.language || estado.idioma };
+        let resp;
 
         if (acao.dataset.acao === 'confirmar') {
             const selecionada = card.querySelector('.alternativa.selecionada');
-            if (!selecionada) return;
-            const letra = selecionada.dataset.letra;
-            const correta = letra === questao.correctAlternative;
-            respostas[chave] = { letra, correta, em: Date.now() };
-            mostrarToast(correta ? 'Resposta correta! 🎉' : `Não foi dessa vez. A correta é a ${questao.correctAlternative}.`, correta ? 'sucesso' : 'erro');
+            if (!selecionada) {
+                card.querySelectorAll('[data-acao]').forEach((b) => (b.disabled = false));
+                return;
+            }
+            const tempoGasto = Math.round((Date.now() - (exibidaEm[chave] || Date.now())) / 1000);
+            resp = await chamarBackend('/api/enem/responder', {
+                method: 'POST',
+                body: JSON.stringify({ ...base, letra: selecionada.dataset.letra, tempoGasto })
+            });
+            if (resp && resp.sucesso) {
+                mostrarToast(
+                    resp.correta ? 'Resposta correta! 🎉' : `Não foi dessa vez. A correta é a ${resp.respostaCorreta}.`,
+                    resp.correta ? 'sucesso' : 'erro'
+                );
+                Gamificacao.processar(resp.gamificacao);
+            }
         } else if (acao.dataset.acao === 'revelar') {
-            respostas[chave] = { letra: null, correta: false, revelada: true, em: Date.now() };
+            resp = await chamarBackend('/api/enem/responder', { method: 'POST', body: JSON.stringify({ ...base, revelar: true }) });
         } else if (acao.dataset.acao === 'refazer') {
-            delete respostas[chave];
+            resp = await chamarBackend('/api/enem/refazer', {
+                method: 'POST',
+                body: JSON.stringify({ ...base, idioma: questao.language || '' })
+            });
         }
 
-        salvarRespostas(respostas);
-        atualizarPlacar();
+        if (!resp || !resp.sucesso) {
+            mostrarToast((resp && resp.mensagem) || 'Não foi possível salvar. Tente de novo.', 'erro');
+            card.querySelectorAll('[data-acao]').forEach((b) => (b.disabled = false));
+            return;
+        }
+
+        if (acao.dataset.acao === 'refazer') {
+            questao.respostaAluno = null;
+            delete questao.correctAlternative;
+            exibidaEm[chave] = Date.now();
+        } else {
+            questao.respostaAluno = resp.respostaAluno;
+            questao.correctAlternative = resp.respostaCorreta;
+        }
+        atualizarPlacar(resp.placar);
         redesenharQuestao(chave);
     });
 }
@@ -511,7 +501,7 @@ function registrarEventos() {
 // Início
 // ---------------------------------------------------------------------
 async function iniciar() {
-    atualizarPlacar();
+    carregarPlacar();
 
     const params = new URLSearchParams(window.location.search);
     estado.area = params.get('area') || null;

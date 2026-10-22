@@ -2,6 +2,32 @@
 // Controller: ENEM (provas e questões da API enem.dev)
 // =====================================================================
 const Enem = require('../models/Enem');
+const RespostaEnem = require('../models/RespostaEnem');
+const Gamificacao = require('../models/Gamificacao');
+
+// Tira o gabarito da questão (o servidor é quem corrige)
+function semGabarito(q) {
+    const { correctAlternative, ...resto } = q;
+    return { ...resto, alternatives: (q.alternatives || []).map(({ isCorrect, ...alt }) => alt) };
+}
+
+// Junta a resposta salva do aluno em cada questão. O gabarito só vai para
+// o navegador nas questões que ele já respondeu ou pediu para ver.
+async function prepararParaAluno(usuarioId, ano, questoes) {
+    const estado = await RespostaEnem.estadoDoAno(usuarioId, ano);
+    return questoes.map((q) => {
+        const resposta = estado[RespostaEnem.chave(q.year, q.index, q.language)] || null;
+        return resposta ? { ...q, respostaAluno: resposta } : { ...semGabarito(q), respostaAluno: null };
+    });
+}
+
+function lerQuestaoDoCorpo(body) {
+    return {
+        ano: parseInt(body.ano, 10),
+        numero: parseInt(body.numero, 10),
+        idioma: body.idioma ? String(body.idioma) : null
+    };
+}
 
 // Resume a prova para o front (sem a lista completa de questões)
 function resumoProva(prova, idioma) {
@@ -106,7 +132,11 @@ const enemController = {
             const pagina = Math.min(Math.max(parseInt(req.query.pagina, 10) || 1, 1), totalPaginas);
 
             const itensDaPagina = filtradas.slice((pagina - 1) * limite, pagina * limite);
-            const questoes = await Enem.buscarQuestoesCompletas(ano, itensDaPagina, idioma);
+            const questoes = await prepararParaAluno(
+                req.usuarioId,
+                ano,
+                await Enem.buscarQuestoesCompletas(ano, itensDaPagina, idioma)
+            );
 
             return res.json({
                 sucesso: true,
@@ -129,10 +159,11 @@ const enemController = {
             if (!item) {
                 return res.status(404).json({ sucesso: false, mensagem: `A questão ${req.params.numero} não existe na prova de ${ano}.` });
             }
-            const [questao] = await Enem.buscarQuestoesCompletas(ano, [item], idioma);
-            if (!questao) {
+            const [completa] = await Enem.buscarQuestoesCompletas(ano, [item], idioma);
+            if (!completa) {
                 return res.status(404).json({ sucesso: false, mensagem: 'Questão não encontrada.' });
             }
+            const [questao] = await prepararParaAluno(req.usuarioId, ano, [completa]);
             return res.json({ sucesso: true, prova: resumoProva(prova, idioma), questao });
         } catch (err) {
             return responderErro(res, err, 'Erro ao buscar a questão.');
@@ -148,10 +179,99 @@ const enemController = {
                 return res.status(404).json({ sucesso: false, mensagem: 'Nenhuma questão encontrada com esses filtros.' });
             }
             const sorteada = filtradas[Math.floor(Math.random() * filtradas.length)];
-            const [questao] = await Enem.buscarQuestoesCompletas(ano, [sorteada], idioma);
+            const [completa] = await Enem.buscarQuestoesCompletas(ano, [sorteada], idioma);
+            const [questao] = await prepararParaAluno(req.usuarioId, ano, [completa]);
             return res.json({ sucesso: true, prova: resumoProva(prova, idioma), questao });
         } catch (err) {
             return responderErro(res, err, 'Erro ao sortear questão.');
+        }
+    },
+
+    // GET /api/enem/placar
+    async placar(req, res) {
+        try {
+            return res.json({ sucesso: true, placar: await RespostaEnem.placar(req.usuarioId) });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ sucesso: false, mensagem: 'Erro ao buscar o placar.' });
+        }
+    },
+
+    // POST /api/enem/responder  { ano, numero, idioma, letra | revelar: true, tempoGasto }
+    // O servidor busca a questão oficial e corrige (não confia no navegador).
+    async responder(req, res) {
+        try {
+            const { ano, numero, idioma } = lerQuestaoDoCorpo(req.body);
+            const revelar = req.body.revelar === true;
+            const letra = revelar ? null : String(req.body.letra || '').toUpperCase();
+            if (!ano || !numero || (!revelar && !letra)) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Dados incompletos.' });
+            }
+
+            const questao = await Enem.questaoOficial(ano, numero, idioma);
+            if (!revelar && !(questao.alternatives || []).some((a) => a.letter === letra)) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Alternativa inválida.' });
+            }
+
+            const correta = !revelar && letra === questao.correctAlternative;
+            await RespostaEnem.salvar({
+                usuarioId: req.usuarioId,
+                ano,
+                numero: questao.index,
+                idioma: questao.language || '',
+                area: questao.discipline,
+                letra,
+                correta,
+                revelada: revelar,
+                tempoGasto: Math.min(Math.max(parseInt(req.body.tempoGasto, 10) || 0, 0), 3600)
+            });
+
+            const [gamificacao, placar] = await Promise.all([
+                revelar ? null : Gamificacao.processar(req.usuarioId),
+                RespostaEnem.placar(req.usuarioId)
+            ]);
+
+            return res.json({
+                sucesso: true,
+                correta,
+                respostaCorreta: questao.correctAlternative,
+                respostaAluno: { letra, correta, revelada: revelar },
+                placar,
+                gamificacao
+            });
+        } catch (err) {
+            // Erro do banco (sem status) não é culpa da API do ENEM
+            if (!err.status && err.code) {
+                console.error(err);
+                return res.status(500).json({ sucesso: false, mensagem: 'Erro ao registrar a resposta.' });
+            }
+            return responderErro(res, err, 'Erro ao registrar a resposta.');
+        }
+    },
+
+    // POST /api/enem/refazer  { ano, numero, idioma } (idioma da própria questão)
+    async refazer(req, res) {
+        try {
+            const { ano, numero, idioma } = lerQuestaoDoCorpo(req.body);
+            if (!ano || !numero) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Dados incompletos.' });
+            }
+            await RespostaEnem.arquivarQuestao(req.usuarioId, ano, numero, idioma);
+            return res.json({ sucesso: true, placar: await RespostaEnem.placar(req.usuarioId) });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ sucesso: false, mensagem: 'Erro ao refazer a questão.' });
+        }
+    },
+
+    // POST /api/enem/zerar → zera o placar da página (o histórico fica salvo)
+    async zerar(req, res) {
+        try {
+            const zeradas = await RespostaEnem.arquivarTudo(req.usuarioId);
+            return res.json({ sucesso: true, zeradas, placar: await RespostaEnem.placar(req.usuarioId) });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ sucesso: false, mensagem: 'Erro ao zerar o placar.' });
         }
     }
 };

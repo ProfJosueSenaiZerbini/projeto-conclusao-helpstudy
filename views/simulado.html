@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado ENEM · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/enem.css">
+<link rel="stylesheet" href="/css/exercicios.css">
+<link rel="stylesheet" href="/css/resultado.css">
+<link rel="stylesheet" href="/css/simulado.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
+            <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado" class="active"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/perfil"><i class="fa-solid fa-user"></i> Meu perfil</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Simulado ENEM</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1) Configurar / histórico -->
+        <section id="tela-config">
+            <div class="card simulado-intro">
+                <div class="simulado-intro__icone"><i class="fa-solid fa-stopwatch"></i></div>
+                <div>
+                    <h1>Simulado do ENEM</h1>
+                    <p>Questões reais sorteadas, com cronômetro de 3 minutos por questão (como no ENEM). A correção aparece só no final.</p>
+                </div>
+            </div>
+
+            <div class="card simulado-andamento hidden" id="simulado-andamento"></div>
+
+            <form class="card simulado-form" id="form-simulado">
+                <label class="enem-campo">
+                    <span>Ano da prova</span>
+                    <select id="sim-ano" disabled><option>Carregando...</option></select>
+                </label>
+                <label class="enem-campo">
+                    <span>Área do conhecimento</span>
+                    <select id="sim-area" disabled><option value="">Todas as áreas</option></select>
+                </label>
+                <label class="enem-campo" id="campo-sim-idioma">
+                    <span>Língua estrangeira</span>
+                    <select id="sim-idioma" disabled></select>
+                </label>
+                <div class="enem-campo">
+                    <span>Quantidade de questões</span>
+                    <div class="sim-quantidades" role="radiogroup" aria-label="Quantidade de questões">
+                        <label><input type="radio" name="quantidade" value="5"><span>5<small>15 min</small></span></label>
+                        <label><input type="radio" name="quantidade" value="10" checked><span>10<small>30 min</small></span></label>
+                        <label><input type="radio" name="quantidade" value="20"><span>20<small>1 h</small></span></label>
+                        <label><input type="radio" name="quantidade" value="45"><span>45<small>2h15</small></span></label>
+                    </div>
+                </div>
+                <div class="simulado-form__acoes">
+                    <button type="submit" class="btn btn-primary" id="btn-comecar" disabled><i class="fa-solid fa-play"></i> Começar simulado</button>
+                </div>
+            </form>
+
+            <div class="section-heading" style="margin-top:28px;">
+                <h2>Seus simulados</h2>
+            </div>
+            <div id="historico-simulados">
+                <div class="card empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+            </div>
+        </section>
+
+        <!-- 2) Fazendo a prova -->
+        <section id="tela-prova" class="hidden">
+            <div class="simulado-barra card">
+                <div class="simulado-barra__info">
+                    <strong id="prova-titulo">Simulado</strong>
+                    <span id="prova-progresso">0 de 0 respondidas</span>
+                </div>
+                <div class="progress-bar simulado-barra__progresso"><div class="progress-bar__fill" id="prova-barra" style="width:0%"></div></div>
+                <div class="timer-chip" id="prova-timer" aria-live="off"><i class="fa-regular fa-clock"></i> <span id="prova-relogio">00:00</span></div>
+                <button class="btn btn-primary btn-sm" id="btn-finalizar"><i class="fa-solid fa-flag-checkered"></i> Finalizar</button>
+            </div>
+
+            <div class="exercicio-layout">
+                <div class="card questao-card simulado-questao" id="prova-questao"></div>
+                <aside class="card nav-questoes">
+                    <h4>Questões</h4>
+                    <div class="nav-questoes__grid" id="prova-nav"></div>
+                    <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.8;">
+                        <div><span class="legenda-quadrado respondida"></span>Respondida</div>
+                        <div><span class="legenda-quadrado"></span>Em branco</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- 3) Resultado -->
+        <section id="tela-resultado" class="hidden"></section>
+
+        <!-- Confirmação de finalizar -->
+        <div class="modal" id="modal-finalizar" role="dialog" aria-modal="true" aria-labelledby="modal-finalizar-titulo" hidden>
+            <div class="modal__caixa" style="width:min(420px,100%);text-align:center;">
+                <h2 id="modal-finalizar-titulo" style="font-size:1.15rem;margin-bottom:8px;">Finalizar o simulado?</h2>
+                <p class="text-muted" id="modal-finalizar-texto" style="margin-bottom:20px;"></p>
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                    <button class="btn btn-ghost" data-modal-cancelar>Continuar respondendo</button>
+                    <button class="btn btn-primary" data-modal-confirmar>Finalizar e ver resultado</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
+<script src="/js/enem-texto.js"></script>
+<script src="/js/simulado.js"></script>
+</body>
+</html>

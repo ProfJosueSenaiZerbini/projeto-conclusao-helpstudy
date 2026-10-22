@@ -86,3 +86,210 @@
         flex-wrap: wrap;
     }
 }
+
+/* =====================================================================
+   Melhorias do plano de estudos
+===================================================================== */
+.plano-topo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+.plano-resumo,
+.meta-card {
+    padding: 22px 24px;
+    animation: surgir .35s ease both;
+}
+
+.plano-resumo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+}
+
+.plano-resumo__rotulo {
+    display: block;
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.plano-resumo__texto strong { display: block; font-size: 1.35rem; margin-bottom: 2px; }
+.plano-resumo__texto .text-muted { font-size: .84rem; }
+.plano-resumo__barra { height: 12px; }
+
+.meta-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.meta-card__anel {
+    position: relative;
+    width: 88px; height: 88px;
+    flex-shrink: 0;
+}
+
+.meta-card__numero {
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: .95rem;
+}
+
+.meta-card__numero i { color: var(--success); font-size: 1.4rem; }
+.meta-card__texto { flex: 1; min-width: 0; }
+.meta-card__texto strong { display: block; font-size: 1rem; margin-bottom: 10px; }
+
+.meta-form label { display: block; font-size: .76rem; color: var(--text-muted); margin-bottom: 4px; }
+.meta-form__linha { display: flex; gap: 8px; }
+
+.meta-form input {
+    width: 90px;
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.meta-form input:focus { outline: none; border-color: var(--brand); }
+
+/* ---------- Tarefas ---------- */
+.plano-item { transition: opacity .2s ease, transform .2s ease; animation: surgir .35s ease both; }
+
+.plano-check {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    color: transparent;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: .85rem;
+    transition: background .15s, border-color .15s, color .15s, transform .15s;
+}
+
+.plano-check:hover { border-color: var(--success); color: var(--success); }
+.plano-check:active { transform: scale(.9); }
+
+.plano-item.concluido .plano-check {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+    animation: marcar .3s ease;
+}
+
+@keyframes marcar {
+    50% { transform: scale(1.2); }
+}
+
+.plano-item.concluido { opacity: .7; }
+.plano-item.concluido .plano-item__text strong { text-decoration: line-through; color: var(--text-muted); }
+
+.plano-item__barra { height: 6px; margin-top: 8px; max-width: 320px; }
+
+.plano-secao { margin-top: 30px; }
+
+/* ---------- Semana ---------- */
+.semana-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+}
+
+.semana-dia {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    min-width: 0;
+    border: 2px solid transparent;
+    transition: transform .15s ease;
+}
+
+.semana-dia:hover { transform: translateY(-2px); }
+.semana-dia.hoje { border-color: var(--brand); }
+
+.semana-dia__topo { display: flex; justify-content: space-between; align-items: baseline; }
+.semana-dia__topo strong { font-size: .88rem; }
+.semana-dia__topo span { font-size: .74rem; color: var(--text-muted); }
+
+.semana-dia__materia {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--cor) 14%, transparent);
+    color: var(--text);
+    font-size: .8rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.semana-dia__materia i { color: var(--cor); }
+.semana-dia__materia:hover { background: color-mix(in srgb, var(--cor) 24%, transparent); }
+.semana-dia__extra { font-size: .72rem; color: var(--text-muted); }
+a.semana-dia__extra:hover { color: var(--brand); text-decoration: underline; }
+
+.semana-dia__status {
+    margin-top: auto;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--text-soft);
+}
+
+.semana-dia__status.ok { color: var(--success); }
+.semana-dia__status.hoje { color: var(--brand); }
+.semana-dia__status.perdido { color: var(--danger); opacity: .8; }
+
+/* ---------- Sugestões do ENEM ---------- */
+.sugestoes-enem { display: flex; flex-direction: column; gap: 14px; }
+
+.sugestao-enem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+}
+
+.sugestao-enem__icone {
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.sugestao-enem__texto { flex: 1; min-width: 0; }
+.sugestao-enem__texto strong { display: block; margin-bottom: 3px; }
+.sugestao-enem__texto span { font-size: .84rem; color: var(--text-muted); }
+.sugestao-enem__acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 1200px) {
+    .semana-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .plano-topo { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+    .semana-grid { grid-template-columns: repeat(2, 1fr); }
+    .sugestao-enem { flex-wrap: wrap; }
+    .sugestao-enem__acoes { width: 100%; }
+    .sugestao-enem__acoes .btn { flex: 1; }
+    .plano-item .btn { width: 100%; }
+    .plano-intro .btn { width: 100%; }
+}

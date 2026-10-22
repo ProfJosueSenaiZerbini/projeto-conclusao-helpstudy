@@ -141,8 +141,13 @@ async function carregarDashboard() {
                 <span>Progresso geral</span>
             </div>`;
 
-        document.getElementById('stat-respondidas').textContent = respProgresso.geral.total;
-        document.getElementById('stat-corretas').textContent = respProgresso.geral.corretas;
+        // Inclui as questões do ENEM (quando o servidor manda o resumo)
+        const resumo = respProgresso.resumo || respProgresso.geral;
+        document.getElementById('stat-respondidas').textContent = resumo.total;
+        document.getElementById('stat-corretas').textContent = resumo.corretas;
+        if (respProgresso.resumo) {
+            document.getElementById('stat-ofensiva').textContent = `${respProgresso.resumo.ofensiva} 🔥`;
+        }
 
         desenharBarrasDesempenho(respMaterias && respMaterias.sucesso ? respMaterias.materias : [], respProgresso.porMateria);
         desenharRecentes(respProgresso.historico);
@@ -154,7 +159,9 @@ async function carregarDashboard() {
         if (respPlano.plano.length === 0) {
             painelPlano.innerHTML = `<div class="empty-state"><i class="fa-regular fa-face-smile"></i>Responda algumas questões para gerar seu plano.</div>`;
         } else {
-            painelPlano.innerHTML = respPlano.plano
+            // Mostra primeiro o que ainda falta fazer
+            const pendentes = respPlano.plano.filter((p) => !p.concluido);
+            painelPlano.innerHTML = (pendentes.length ? pendentes : respPlano.plano)
                 .slice(0, 4)
                 .map(
                     (p) => `
@@ -174,4 +181,37 @@ async function carregarDashboard() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', carregarDashboard);
+// Ranking da semana (top 5 + sua posição)
+async function carregarRanking() {
+    const wrap = document.getElementById('mini-ranking');
+    if (!wrap) return;
+    const r = await API.chamar('/api/gamificacao/ranking');
+    if (!r || !r.sucesso) {
+        wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i>Ranking indisponível.</div>';
+        return;
+    }
+    if (!r.top.length) {
+        wrap.innerHTML = '<div class="empty-state"><i class="fa-solid fa-ranking-star"></i>Ninguém pontuou esta semana. Seja o primeiro!</div>';
+        return;
+    }
+    const medalha = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : p);
+    const linha = (l) => `
+        <div class="mini-ranking__linha ${l.voce ? 'voce' : ''}">
+            <span class="mini-ranking__pos">${medalha(l.posicao)}</span>
+            <span class="mini-ranking__nome">${API.escapar(l.avatar ? l.avatar + ' ' : '')}${API.escapar(l.nome)}${l.voce ? ' <small>(você)</small>' : ''}</span>
+            <b>${l.xp} XP</b>
+        </div>`;
+    let html = r.top.slice(0, 5).map(linha).join('');
+    if (r.voce && r.voce.posicao && r.voce.posicao > 5) html += linha(r.voce);
+    wrap.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    carregarDashboard();
+    carregarRanking();
+});
+
+// O mascote dá uma dica com base na ofensiva e na meta de hoje
+document.addEventListener('gamificacao:resumo', () => {
+    setTimeout(() => Gamificacao.Mascote.dica(), 1200);
+});

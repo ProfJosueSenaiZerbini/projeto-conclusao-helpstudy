@@ -12,4 +12,10 @@ router.get('/provas/:ano/questoes', autenticar, enemController.listarQuestoes);
 router.get('/provas/:ano/questoes/:numero', autenticar, enemController.buscarQuestao);
 router.get('/provas/:ano/aleatoria', autenticar, enemController.questaoAleatoria);
 
+// Respostas do aluno (salvas no banco)
+router.get('/placar', autenticar, enemController.placar);
+router.post('/responder', autenticar, enemController.responder);
+router.post('/refazer', autenticar, enemController.refazer);
+router.post('/zerar', autenticar, enemController.zerar);
+
 module.exports = router;

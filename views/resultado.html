@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/resultado.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
 <link rel="stylesheet" href="/css/darkmode.css">
 </head>
 <body>
@@ -22,8 +23,11 @@
         <nav class="sidebar__nav">
             <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
             <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
             <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
             <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/perfil"><i class="fa-solid fa-user"></i> Meu perfil</a>
         </nav>
         <div class="sidebar__footer">
             <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
@@ -50,6 +54,7 @@
             <div class="resultado-hero__emoji" id="resultado-emoji">🎉</div>
             <h1 id="resultado-titulo">Parabéns, <span data-user-name>Aluno</span>!</h1>
             <p id="resultado-texto">Você concluiu a lista de exercícios.</p>
+            <span class="resultado-xp hidden" id="resultado-xp"></span>
         </section>
 
         <div class="resultado-stats">
@@ -77,6 +82,7 @@
 
         <div class="card panel">
             <h3>Revisão das questões</h3>
+            <p class="text-muted" style="font-size:.82rem;margin-top:4px;">Clique em uma questão para ver as alternativas e a explicação.</p>
             <div id="lista-revisao" style="margin-top:14px;">
                 <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
             </div>
@@ -92,6 +98,7 @@
 
 <script src="/js/darkmode.js"></script>
 <script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
 <script src="/js/resultado.js"></script>
 </body>
 </html>

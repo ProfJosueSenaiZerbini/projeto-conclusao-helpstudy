@@ -20,17 +20,31 @@ const Usuario = {
 
     async buscarPorId(id) {
         const [rows] = await db.query(
-            'SELECT id, nome, email, serie, avatar, criado_em FROM usuarios WHERE id = ?',
+            `SELECT id, nome, email, serie, avatar, apelido, meta_diaria, ranking_publico, criado_em
+             FROM usuarios WHERE id = ?`,
             [id]
         );
         return rows[0];
     },
 
-    async atualizarPerfil(id, { nome, serie, avatar }) {
+    async atualizarPerfil(id, { nome, serie, avatar, apelido, rankingPublico }) {
         await db.query(
-            'UPDATE usuarios SET nome = ?, serie = ?, avatar = ? WHERE id = ?',
-            [nome, serie, avatar, id]
+            'UPDATE usuarios SET nome = ?, serie = ?, avatar = ?, apelido = ?, ranking_publico = ? WHERE id = ?',
+            [nome, serie, avatar, apelido, rankingPublico ? 1 : 0, id]
         );
+    },
+
+    async buscarSenha(id) {
+        const [rows] = await db.query('SELECT senha FROM usuarios WHERE id = ?', [id]);
+        return rows[0] ? rows[0].senha : null;
+    },
+
+    async atualizarSenha(id, senhaHash) {
+        await db.query('UPDATE usuarios SET senha = ? WHERE id = ?', [senhaHash, id]);
+    },
+
+    async atualizarMeta(id, meta) {
+        await db.query('UPDATE usuarios SET meta_diaria = ? WHERE id = ?', [meta, id]);
     }
 };
 

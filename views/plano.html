@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/plano.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
 <link rel="stylesheet" href="/css/darkmode.css">
 </head>
 <body>
@@ -22,8 +23,11 @@
         <nav class="sidebar__nav">
             <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
             <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
             <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
             <a href="/plano" class="active"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/perfil"><i class="fa-solid fa-user"></i> Meu perfil</a>
         </nav>
         <div class="sidebar__footer">
             <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
@@ -57,14 +61,57 @@
             <button class="btn btn-outline" id="btn-regerar"><i class="fa-solid fa-arrows-rotate"></i> Atualizar plano</button>
         </div>
 
+        <!-- Resumo do plano + meta diária -->
+        <div class="plano-topo">
+            <div class="card plano-resumo">
+                <div class="plano-resumo__texto">
+                    <span class="plano-resumo__rotulo">Tarefas do plano</span>
+                    <strong id="plano-contagem">— de —</strong>
+                    <span class="text-muted" id="plano-contagem-texto">Carregando...</span>
+                </div>
+                <div class="progress-bar plano-resumo__barra"><div class="progress-bar__fill" id="plano-barra" style="width:0%"></div></div>
+            </div>
+
+            <div class="card meta-card">
+                <div class="meta-card__anel" id="meta-anel" aria-hidden="true"></div>
+                <div class="meta-card__texto">
+                    <span class="plano-resumo__rotulo">Meta diária</span>
+                    <strong id="meta-texto">—</strong>
+                    <form class="meta-form" id="form-meta">
+                        <label for="input-meta">Questões por dia</label>
+                        <div class="meta-form__linha">
+                            <input type="number" id="input-meta" min="1" max="200" required>
+                            <button type="submit" class="btn btn-outline btn-sm">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-heading">
+            <h2>Suas tarefas</h2>
+            <span class="chip-label">Marque quando terminar</span>
+        </div>
         <div class="plano-lista" id="plano-lista">
             <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando seu plano...</div>
         </div>
+
+        <div class="section-heading plano-secao">
+            <h2>Sua semana</h2>
+            <span class="chip-label">Prioridade alta aparece mais vezes</span>
+        </div>
+        <div class="semana-grid" id="semana-grid"></div>
+
+        <div class="section-heading plano-secao">
+            <h2>Sugestões do ENEM</h2>
+        </div>
+        <div class="sugestoes-enem" id="sugestoes-enem"></div>
     </main>
 </div>
 
 <script src="/js/darkmode.js"></script>
 <script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
 <script src="/js/plano.js"></script>
 </body>
 </html>

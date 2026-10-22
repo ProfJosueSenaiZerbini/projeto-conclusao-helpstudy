@@ -1,3 +1,7 @@
 node_modules/
+
+# Variáveis de ambiente (senhas e chaves) - nunca enviar ao GitHub
+.env
 .env.local
+
 *.log

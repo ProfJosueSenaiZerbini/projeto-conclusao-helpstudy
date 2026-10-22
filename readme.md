@@ -34,7 +34,8 @@ help-study/
 │
 ├── package.json
 ├── server.js
-├── .env
+├── .env                      # suas senhas/chaves (não vai para o GitHub)
+├── .env.example              # modelo do .env
 │
 ├── config/
 │   └── db.js                 # conexão com o MySQL (pool)
@@ -114,7 +115,8 @@ mysql -u root -p < database/helpstudy.sql
 ```
 
 ### 4. Configurar variáveis de ambiente
-Edite o arquivo `.env` na raiz do projeto com os dados do seu MySQL:
+Copie o arquivo `.env.example`, renomeie a cópia para `.env` e preencha com os dados do seu MySQL.
+O `.env` está no `.gitignore` e **não deve ser enviado ao GitHub**, pois guarda senhas e a chave do JWT.
 ```env
 DB_HOST=localhost
 DB_PORT=3306
@@ -136,6 +138,8 @@ npm run dev
 
 Acesse **http://localhost:3000** no navegador. Você será redirecionado para a tela de login.
 
+> **Atualização automática do banco:** ao subir, o servidor roda `config/migracoes.js`, que **só adiciona** o que estiver faltando (tabelas, colunas e conquistas novas). Nada é apagado, então quem já tem o banco com dados não precisa rodar o script SQL de novo. No terminal aparece `✅ Banco de dados atualizado (migrações conferidas)`.
+
 ---
 
 ##  Modelo de dados (tabelas)
@@ -148,7 +152,13 @@ Acesse **http://localhost:3000** no navegador. Você será redirecionado para a 
 | `respostas` | Registro de cada resposta dada por um aluno (certo/errado, tempo gasto) |
 | `progresso` | Agregado por aluno + matéria (questões respondidas, % de acerto, nível de dificuldade sugerido) |
 | `plano_estudos` | Recomendações geradas automaticamente com base no desempenho do aluno |
-| `conquistas` / `usuario_conquistas` | Sistema de gamificação (badges) |
+| `conquistas` / `usuario_conquistas` | Sistema de gamificação (badges) — 11 conquistas, liberadas automaticamente |
+| `xp_eventos` | Pontos de XP. A chave única (aluno, origem, referência) impede ganhar o mesmo ponto duas vezes |
+| `respostas_enem` | Respostas das questões do ENEM (prática e simulados), corrigidas pelo servidor |
+| `simulados` | Simulados do ENEM: questões sorteadas, cronômetro, respostas, nota e histórico |
+| `sessoes_foco` | Sessões de 25 minutos do modo foco (Pomodoro) |
+
+Colunas novas: `usuarios.apelido`, `usuarios.meta_diaria`, `usuarios.ranking_publico` e `plano_estudos.lote`.
 
 ---
 
@@ -166,7 +176,22 @@ Acesse **http://localhost:3000** no navegador. Você será redirecionado para a 
 | GET  | `/api/progresso` | Retorna progresso geral, por matéria, evolução (7 dias) e histórico |
 | GET  | `/api/progresso/plano` | Retorna o plano de estudos atual do aluno |
 | POST | `/api/progresso/plano/gerar` | Recalcula o plano de estudos com base no desempenho |
-| GET  | `/api/progresso/conquistas` | Lista as conquistas já obtidas pelo aluno |
+| GET  | `/api/progresso/conquistas` | Lista todas as conquistas (obtidas e bloqueadas, com progresso) |
+| PUT  | `/api/auth/perfil` | Edita nome, apelido, série, avatar e se aparece no ranking |
+| PUT  | `/api/auth/senha` | Troca a senha (exige a senha atual) |
+| GET  | `/api/materias/erros/questoes` | Questões do caderno de erros para refazer (sem gabarito) |
+| GET  | `/api/progresso/evolucao?periodo=7\|30\|tudo` | Evolução por dia no período |
+| GET  | `/api/progresso/atividade` | Atividade dos últimos 3 meses (calendário) |
+| GET  | `/api/progresso/materias/:slug` | Detalhes de uma matéria (acertos por dificuldade, últimas respostas) |
+| GET  | `/api/progresso/revisao?respostas=1,2,3` | Revisão de uma atividade (resposta marcada, gabarito e explicação) |
+| GET  | `/api/progresso/erros` | Caderno de erros (matérias e ENEM) |
+| PATCH | `/api/progresso/plano/:id` | Marca/desmarca uma tarefa do plano como concluída |
+| GET  | `/api/gamificacao/resumo` | Ofensiva, nível/XP e meta do dia |
+| GET  | `/api/gamificacao/ranking` | Ranking semanal por XP (só apelido ou primeiro nome) |
+| PUT  | `/api/gamificacao/meta` | Define a meta diária de questões |
+| POST | `/api/gamificacao/foco/iniciar` e `/foco/:id/concluir` | Modo foco (o servidor confere os 25 minutos) |
+| GET/POST | `/api/enem/placar`, `/api/enem/responder`, `/api/enem/refazer`, `/api/enem/zerar` | Respostas do ENEM salvas no banco |
+| GET/POST | `/api/simulados`, `/api/simulados/:id`, `/:id/responder`, `/:id/finalizar` | Simulados do ENEM |
 
 Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamente pelo front-end via cookie `httpOnly` e também salvo no `localStorage` para uso no header `Authorization: Bearer <token>`.
 
@@ -175,7 +200,7 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 ##  Como funciona a lógica de "dificuldades de aprendizagem"
 
 1. O aluno responde questões de uma matéria; cada resposta é salva em `respostas`.
-2. A cada resposta, `progresso` é recalculado (% de acerto e nível sugerido: fácil/médio/difícil).
+2. A cada resposta, `progresso` é recalculado. **Dificuldade adaptativa:** a cada 5 respostas na matéria, o sistema olha as últimas 5 — acertou 4 ou mais, sobe um nível; acertou 2 ou menos, desce um nível. Na próxima sessão as questões vêm primeiro do nível do aluno (e as que ele ainda não acertou antes das outras).
 3. Ao acessar o **Plano de Estudos**, o sistema ordena as matérias pelo pior desempenho (ou nunca estudadas) e recomenda até 4 delas, com prioridade **alta**, **média** ou **baixa**.
 4. As telas de **Progresso** mostram gráficos (Chart.js) com a evolução dos últimos 7 dias e o desempenho por matéria, ajudando o aluno (e um professor/responsável) a visualizar onde reforçar os estudos.
 
@@ -190,9 +215,18 @@ Todas as rotas (exceto cadastro/login) exigem o token JWT, enviado automaticamen
 
 ---
 
+##  Gamificação e recursos para o aluno
+
+- **XP e níveis:** acertar uma questão pela 1ª vez (+10/+15/+20 conforme a dificuldade), ENEM (+20), responder (+2, 1x por questão por dia), meta diária (+20), simulado (+30), modo foco (+10), conquista (+50). Tudo calculado no servidor.
+- **Ofensiva 🔥:** dias seguidos estudando, mostrada no topo de todas as páginas.
+- **Meta diária**, **ranking semanal**, **modo foco (Pomodoro de 25 min)**, **caderno de erros**, **simulado do ENEM** e **revisão das questões** após cada atividade.
+- **Mascote:** o polvo da logo dá dicas e comemora eventos reais (acertos seguidos, meta, conquistas, mudança de nível). A imagem fica em `public/images/mascote.png`; se o arquivo não existir, aparece o emoji 🐙.
+
+---
+
 ##  Próximos passos sugeridos
 - Upload de imagens nas questões (a coluna `imagem` já existe em `questoes`).
-- Adaptação automática de dificuldade em tempo real (question by question), não só por matéria.
+- Cadastrar mais questões por matéria: com mais questões, a dificuldade adaptativa fica ainda mais perceptível.
 
 
 ---

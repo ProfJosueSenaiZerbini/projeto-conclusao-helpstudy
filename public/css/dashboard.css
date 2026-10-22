@@ -575,3 +575,29 @@ html.dark-mode .barra-col__preenchido { background: #2F3C7A; }
 }
 
 .enem-atalho__areas span:first-child { margin-left: 0; }
+
+/* ---------- Ranking da semana (coluna lateral) ---------- */
+.mini-ranking__linha {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    font-size: .86rem;
+}
+
+.mini-ranking__linha + .mini-ranking__linha { margin-top: 2px; }
+.mini-ranking__linha.voce { background: var(--brand-light); }
+.mini-ranking__pos { text-align: center; font-weight: 700; color: var(--text-muted); }
+.mini-ranking__nome { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-ranking__nome small { font-weight: 400; color: var(--text-muted); }
+.mini-ranking__linha b { font-size: .8rem; color: var(--brand-dark); }
+html.dark-mode .mini-ranking__linha b { color: #DDE3FA; }
+
+/* Três números no cartão de boas-vindas: dividem o espaço no celular */
+@media (max-width: 600px) {
+    .greeting-card__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .greeting-card__stat { min-width: 0; padding: 10px 12px; }
+    .greeting-card__stat span { font-size: .66rem; }
+}

@@ -25,8 +25,18 @@ const pool = mysql.createPool({
         console.log('✅ Conectado ao banco de dados MySQL (helpstudy)');
         connection.release();
     } catch (err) {
-        console.error('❌ Erro ao conectar ao banco de dados:', err.message);
-        console.error('   Verifique se o MySQL está rodando e se o arquivo .env está correto.');
+        console.error('❌ Erro ao conectar ao banco de dados:', err.code || '', err.message || '');
+
+        // Explica o erro mais comum de cada código
+        if (err.code === 'ECONNREFUSED') {
+            console.error('   O MySQL não está rodando. Inicie o serviço do MySQL (XAMPP, Workbench ou "services.msc") e tente de novo.');
+        } else if (err.code === 'ER_ACCESS_DENIED_ERROR') {
+            console.error('   Usuário ou senha do MySQL incorretos. Confira DB_USER e DB_PASSWORD no arquivo .env.');
+        } else if (err.code === 'ER_BAD_DB_ERROR') {
+            console.error(`   O banco "${process.env.DB_NAME}" não existe. Rode o script database/helpstudy.sql no MySQL.`);
+        } else {
+            console.error('   Verifique se o MySQL está rodando e se o arquivo .env está correto.');
+        }
     }
 })();
 
