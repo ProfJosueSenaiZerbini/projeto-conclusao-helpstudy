@@ -1,10 +1,13 @@
 // =====================================================================
-// Controller: Autenticação (cadastro, login, logout, perfil)
+// Controller: Autenticação (cadastro, login, logout, perfil, esqueci a senha)
 // =====================================================================
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const crypto = require('crypto');
 const Usuario = require('../models/Usuario');
+const RecuperacaoSenha = require('../models/RecuperacaoSenha');
+const { enviarCodigoRecuperacao } = require('../config/email');
 
 // Avatares que o aluno pode escolher no perfil
 const AVATARES = ['🐙', '🦊', '🐼', '🦉', '🐯', '🐸', '🐨', '🦁', '🐧', '🐢', '🦄', '🐝'];
@@ -167,6 +170,86 @@ const authController = {
         } catch (err) {
             console.error(err);
             return res.status(500).json({ sucesso: false, mensagem: 'Erro ao alterar a senha.' });
+        }
+    },
+
+    // POST /api/auth/esqueci-senha  { email }
+    // Gera um código de 6 dígitos e manda para o e-mail do aluno
+    async esqueciSenha(req, res) {
+        // Mesma resposta exista ou não o e-mail, para ninguém descobrir quem tem conta
+        const respostaPadrao = {
+            sucesso: true,
+            mensagem: 'Se o e-mail estiver cadastrado, você vai receber um código em instantes.'
+        };
+
+        try {
+            const email = String(req.body.email || '').toLowerCase().trim();
+            if (!email) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Informe seu e-mail.' });
+            }
+
+            const usuario = await Usuario.buscarPorEmail(email);
+            if (!usuario) return res.json(respostaPadrao);
+
+            if (await RecuperacaoSenha.pediuRecentemente(usuario.id)) {
+                return res.status(429).json({
+                    sucesso: false,
+                    mensagem: 'Você acabou de pedir um código. Aguarde 1 minuto para pedir outro.'
+                });
+            }
+
+            const codigo = String(crypto.randomInt(0, 1000000)).padStart(6, '0');
+            await RecuperacaoSenha.criar(usuario.id, await bcrypt.hash(codigo, 10));
+            await enviarCodigoRecuperacao(usuario.email, usuario.nome, codigo);
+
+            return res.json(respostaPadrao);
+        } catch (err) {
+            console.error('❌ Erro no "esqueci a senha":', err.message);
+            return res.status(500).json({ sucesso: false, mensagem: 'Não foi possível enviar o código. Tente novamente.' });
+        }
+    },
+
+    // POST /api/auth/redefinir-senha  { email, codigo, novaSenha }
+    async redefinirSenha(req, res) {
+        try {
+            const email = String(req.body.email || '').toLowerCase().trim();
+            const codigo = String(req.body.codigo || '').trim();
+            const novaSenha = String(req.body.novaSenha || '');
+
+            if (!email || !codigo || !novaSenha) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Preencha o código e a nova senha.' });
+            }
+            if (novaSenha.length < 6) {
+                return res.status(400).json({ sucesso: false, mensagem: 'A nova senha deve ter pelo menos 6 caracteres.' });
+            }
+
+            const erroCodigo = { sucesso: false, mensagem: 'Código inválido ou expirado.' };
+
+            const usuario = await Usuario.buscarPorEmail(email);
+            if (!usuario) return res.status(400).json(erroCodigo);
+
+            const pedido = await RecuperacaoSenha.buscarValido(usuario.id);
+            if (!pedido) return res.status(400).json(erroCodigo);
+
+            // Depois de 5 erros o código é cancelado
+            if (pedido.tentativas >= 5) {
+                await RecuperacaoSenha.marcarUsado(pedido.id);
+                return res.status(400).json({ sucesso: false, mensagem: 'Muitas tentativas. Peça um novo código.' });
+            }
+
+            const confere = await bcrypt.compare(codigo, pedido.codigo_hash);
+            if (!confere) {
+                await RecuperacaoSenha.registrarTentativa(pedido.id);
+                return res.status(400).json(erroCodigo);
+            }
+
+            await Usuario.atualizarSenha(usuario.id, await bcrypt.hash(novaSenha, 10));
+            await RecuperacaoSenha.marcarUsado(pedido.id);
+
+            return res.json({ sucesso: true, mensagem: 'Senha redefinida com sucesso!' });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ sucesso: false, mensagem: 'Erro ao redefinir a senha.' });
         }
     }
 };

@@ -56,6 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarToast('Conta criada! Digite sua senha para entrar.', 'sucesso');
         }
 
+        // Veio do "Esqueci a senha": preenche o e-mail e avisa que a senha mudou
+        if (params.get('senha') === 'ok') {
+            const emailRecuperado = params.get('email');
+            if (emailRecuperado) document.getElementById('email').value = emailRecuperado;
+            document.getElementById('senha').focus();
+            mostrarToast('Senha redefinida! Entre com a nova senha.', 'sucesso');
+        }
+
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();

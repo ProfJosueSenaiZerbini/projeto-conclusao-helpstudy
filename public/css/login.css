@@ -126,7 +126,8 @@
     margin-bottom: 6px;
 }
 
-.auth-form > p.text-muted {
+.auth-form > p.text-muted,
+.auth-passo > p.text-muted {
     margin-bottom: 30px;
     font-size: 0.95rem;
 }
@@ -265,6 +266,12 @@
 }
 
 .link-esqueci:hover { text-decoration: underline; }
+
+/* "Esqueci a senha" abaixo do campo de senha */
+.esqueci-row {
+    text-align: right;
+    margin-top: 8px;
+}
 
 /* ---------- Botão principal ---------- */
 .btn-auth {

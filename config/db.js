@@ -4,8 +4,6 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-console.log('DB_NAME lido do .env:', process.env.DB_NAME);
-
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
@@ -22,7 +20,6 @@ const pool = mysql.createPool({
 (async () => {
     try {
         const connection = await pool.getConnection();
-        console.log('✅ Conectado ao banco de dados MySQL (helpstudy)');
         connection.release();
     } catch (err) {
         console.error('❌ Erro ao conectar ao banco de dados:', err.code || '', err.message || '');

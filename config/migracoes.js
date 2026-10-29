@@ -76,6 +76,18 @@ const TABELAS = [
         iniciado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
         concluido_em DATETIME DEFAULT NULL,
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+
+    // Códigos de recuperação de senha ("Esqueci a senha")
+    `CREATE TABLE IF NOT EXISTS recuperacao_senha (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT NOT NULL,
+        codigo_hash VARCHAR(255) NOT NULL,
+        expira_em DATETIME NOT NULL,
+        usado TINYINT(1) NOT NULL DEFAULT 0,
+        tentativas INT NOT NULL DEFAULT 0,
+        criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
     ) ENGINE=InnoDB`
 ];
 
@@ -103,7 +115,6 @@ async function executarMigracoes() {
     for (const { tabela, coluna, definicao } of COLUNAS) {
         if (!(await colunaExiste(tabela, coluna))) {
             await db.query(`ALTER TABLE ${tabela} ADD COLUMN ${coluna} ${definicao}`);
-            console.log(`   + coluna ${tabela}.${coluna}`);
         }
     }
 
@@ -114,8 +125,6 @@ async function executarMigracoes() {
     for (const conquista of CONQUISTAS) {
         await db.query('INSERT IGNORE INTO conquistas (codigo, titulo, descricao, icone) VALUES (?, ?, ?, ?)', conquista);
     }
-
-    console.log('✅ Banco de dados atualizado (migrações conferidas)');
 }
 
 module.exports = executarMigracoes;

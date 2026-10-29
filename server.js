@@ -38,6 +38,7 @@ const views = path.join(__dirname, 'views');
 app.get('/', (req, res) => res.sendFile(path.join(views, 'login.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(views, 'login.html')));
 app.get('/cadastro', (req, res) => res.sendFile(path.join(views, 'cadastro.html')));
+app.get('/esqueci-senha', (req, res) => res.sendFile(path.join(views, 'esqueci-senha.html')));
 app.get('/dashboard', (req, res) => res.sendFile(path.join(views, 'dashboard.html')));
 app.get('/exercicios', (req, res) => res.sendFile(path.join(views, 'exercicios.html')));
 app.get('/resultado', (req, res) => res.sendFile(path.join(views, 'resultado.html')));
