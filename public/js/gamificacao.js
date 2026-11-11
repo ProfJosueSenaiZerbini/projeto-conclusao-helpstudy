@@ -177,7 +177,7 @@ const Gamificacao = (() => {
 
     // -----------------------------------------------------------------
     // Mascote (polvo da logo)
-    // A imagem fica em /images/mascote.png. Se não existir, usa o emoji 🐙.
+    // A imagem fica em /images/polvo.webp. Se não existir, usa o emoji 🐙.
     // -----------------------------------------------------------------
     const Mascote = (() => {
         const CHAVE = 'helpstudy_mascote_oculto';
@@ -202,7 +202,7 @@ const Gamificacao = (() => {
                     <button class="mascote__fechar" aria-label="Fechar mensagem"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <button class="mascote__corpo" aria-label="Mascote HelpStudy">
-                    <img src="/images/mascote.png" alt="" width="64" height="64">
+                    <img src="/images/polvo.webp" alt="" width="64" height="64">
                 </button>`;
             const img = el.querySelector('img');
             img.addEventListener('error', () => {

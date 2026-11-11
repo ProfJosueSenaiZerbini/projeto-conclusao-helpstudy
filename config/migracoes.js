@@ -5,6 +5,7 @@
 // então pode rodar quantas vezes quiser sem perder nada.
 // =====================================================================
 const db = require('./db');
+const { FLASHCARDS, GLOSSARIO } = require('../database/conteudosIniciais');
 
 // Colunas novas em tabelas que já existiam
 const COLUNAS = [
@@ -88,6 +89,46 @@ const TABELAS = [
         tentativas INT NOT NULL DEFAULT 0,
         criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+
+    // Flashcards (cartões de pergunta e resposta) e o que cada aluno já sabe
+    `CREATE TABLE IF NOT EXISTS flashcards (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        materia_id INT NOT NULL,
+        frente VARCHAR(255) NOT NULL,
+        verso TEXT NOT NULL,
+        FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS flashcards_progresso (
+        usuario_id INT NOT NULL,
+        flashcard_id INT NOT NULL,
+        status ENUM('sei', 'revisar') NOT NULL,
+        atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (usuario_id, flashcard_id),
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+        FOREIGN KEY (flashcard_id) REFERENCES flashcards(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+
+    // Glossário (termos difíceis de cada matéria)
+    `CREATE TABLE IF NOT EXISTS glossario (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        materia_id INT NOT NULL,
+        termo VARCHAR(100) NOT NULL,
+        definicao TEXT NOT NULL,
+        exemplo VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+
+    // Redações escritas pelos alunos
+    `CREATE TABLE IF NOT EXISTS redacoes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT NOT NULL,
+        tema VARCHAR(255) NOT NULL,
+        texto TEXT NOT NULL,
+        checklist VARCHAR(10) NOT NULL DEFAULT '',
+        criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+        atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
     ) ENGINE=InnoDB`
 ];
 
@@ -111,6 +152,35 @@ async function colunaExiste(tabela, coluna) {
     return rows.length > 0;
 }
 
+// Coloca os flashcards e o glossário do arquivo database/conteudosIniciais.js no banco.
+// Só insere o que ainda não existe, então dá para adicionar cartões novos no arquivo
+// a qualquer momento sem duplicar os antigos.
+async function inserirConteudosIniciais() {
+    const [flashExistentes] = await db.query(
+        'SELECT m.slug, f.frente FROM flashcards f JOIN materias m ON m.id = f.materia_id'
+    );
+    const jaTemFlash = new Set(flashExistentes.map((f) => `${f.slug}|${f.frente}`));
+    for (const [slug, frente, verso] of FLASHCARDS) {
+        if (jaTemFlash.has(`${slug}|${frente}`)) continue;
+        await db.query(
+            'INSERT INTO flashcards (materia_id, frente, verso) SELECT id, ?, ? FROM materias WHERE slug = ?',
+            [frente, verso, slug]
+        );
+    }
+
+    const [glosExistentes] = await db.query(
+        'SELECT m.slug, g.termo FROM glossario g JOIN materias m ON m.id = g.materia_id'
+    );
+    const jaTemTermo = new Set(glosExistentes.map((g) => `${g.slug}|${g.termo}`));
+    for (const [slug, termo, definicao, exemplo] of GLOSSARIO) {
+        if (jaTemTermo.has(`${slug}|${termo}`)) continue;
+        await db.query(
+            'INSERT INTO glossario (materia_id, termo, definicao, exemplo) SELECT id, ?, ?, ? FROM materias WHERE slug = ?',
+            [termo, definicao, exemplo, slug]
+        );
+    }
+}
+
 async function executarMigracoes() {
     for (const { tabela, coluna, definicao } of COLUNAS) {
         if (!(await colunaExiste(tabela, coluna))) {
@@ -125,6 +195,8 @@ async function executarMigracoes() {
     for (const conquista of CONQUISTAS) {
         await db.query('INSERT IGNORE INTO conquistas (codigo, titulo, descricao, icone) VALUES (?, ?, ?, ?)', conquista);
     }
+
+    await inserirConteudosIniciais();
 }
 
 module.exports = executarMigracoes;

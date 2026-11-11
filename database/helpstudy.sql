@@ -1366,6 +1366,47 @@ CREATE TABLE IF NOT EXISTS recuperacao_senha (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Flashcards e glossário (o conteúdo é inserido automaticamente pelo
+-- servidor ao iniciar, a partir de database/conteudosIniciais.js)
+CREATE TABLE IF NOT EXISTS flashcards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    materia_id INT NOT NULL,
+    frente VARCHAR(255) NOT NULL,
+    verso TEXT NOT NULL,
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS flashcards_progresso (
+    usuario_id INT NOT NULL,
+    flashcard_id INT NOT NULL,
+    status ENUM('sei', 'revisar') NOT NULL,
+    atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (usuario_id, flashcard_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (flashcard_id) REFERENCES flashcards(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS glossario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    materia_id INT NOT NULL,
+    termo VARCHAR(100) NOT NULL,
+    definicao TEXT NOT NULL,
+    exemplo VARCHAR(255) DEFAULT NULL,
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Redações escritas pelos alunos
+CREATE TABLE IF NOT EXISTS redacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tema VARCHAR(255) NOT NULL,
+    texto TEXT NOT NULL,
+    checklist VARCHAR(10) NOT NULL DEFAULT '',
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 
 -- =====================================================================
 -- 14. CONQUISTAS NOVAS

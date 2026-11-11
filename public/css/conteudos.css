@@ -1,0 +1,396 @@
+/* =====================================================================
+   HelpStudy — Flashcards e Glossário
+   Usa as mesmas variáveis de cor do style.css (funciona no modo escuro).
+===================================================================== */
+
+/* ---------- Cabeçalho das páginas ---------- */
+.conteudo-intro {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.conteudo-intro__icone {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: var(--brand-gradient);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.conteudo-intro__icone--glossario { background: linear-gradient(135deg, #2ECC8F 0%, #16A085 100%); }
+
+.conteudo-intro__texto { flex: 1; min-width: 220px; }
+.conteudo-intro h1 { font-size: 1.15rem; margin-bottom: 4px; }
+.conteudo-intro p { font-size: .86rem; color: var(--text-muted); }
+
+/* ---------- Filtro por matéria ---------- */
+.conteudo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.conteudo-filtros:empty { display: none; }
+
+.conteudo-filtro {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    font-size: .82rem;
+    font-weight: 600;
+    transition: border-color .15s, background .15s;
+}
+
+.conteudo-filtro i { color: var(--cor, var(--brand)); }
+.conteudo-filtro b { font-size: .74rem; color: var(--text-muted); }
+.conteudo-filtro:hover { border-color: var(--cor, var(--brand)); }
+.conteudo-filtro.ativo {
+    border-color: var(--cor, var(--brand));
+    background: color-mix(in srgb, var(--cor, var(--brand)) 14%, var(--surface));
+}
+
+.materia-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 11px;
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--cor, var(--brand)) 15%, var(--surface));
+    color: var(--cor, var(--brand));
+    font-size: .74rem;
+    font-weight: 700;
+}
+
+html.dark-mode .materia-tag { color: color-mix(in srgb, var(--cor, var(--brand)) 55%, #fff); }
+
+/* =====================================================================
+   FLASHCARDS
+===================================================================== */
+.flash-placar {
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.flash-placar strong { font-size: 1.1rem; }
+.flash-placar span { font-size: .78rem; color: var(--text-muted); margin-bottom: 4px; }
+.flash-placar .progress-bar__fill { background: var(--success); }
+
+.flash-opcoes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.flash-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .86rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.flash-check input { width: 16px; height: 16px; accent-color: var(--brand); }
+
+/* Cartão que vira (frente e verso) */
+.flash-cena {
+    perspective: 1200px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.flash-cartao {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 300px;
+    transform-style: preserve-3d;
+    /* o final "passa um pouco" do ponto e volta, dando um quique */
+    transition: transform .7s cubic-bezier(.45, 1.45, .55, 1);
+    cursor: pointer;
+    text-align: center;
+}
+
+.flash-cartao.virado { transform: rotateY(180deg); }
+
+.flash-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 34px 30px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+    border-top: 6px solid var(--cor, var(--brand));
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: box-shadow .35s ease;
+}
+
+/* ---------- Animações dos flashcards ---------- */
+
+/* Ao virar: o cartão sobe, cresce um pouco e volta */
+.flash-cena.pulando { animation: flash-pulo .7s ease; }
+.flash-cena.pulando .flash-face { box-shadow: 0 26px 50px rgba(8, 17, 47, 0.22); }
+
+@keyframes flash-pulo {
+    0% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-18px) scale(1.04); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Próximo / anterior: o cartão entra deslizando */
+.flash-cena.entrar-proximo { animation: flash-entra-direita .42s cubic-bezier(.2, .8, .3, 1.15); }
+.flash-cena.entrar-anterior { animation: flash-entra-esquerda .42s cubic-bezier(.2, .8, .3, 1.15); }
+
+@keyframes flash-entra-direita {
+    from { opacity: 0; transform: translateX(70px) rotate(4deg); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes flash-entra-esquerda {
+    from { opacity: 0; transform: translateX(-70px) rotate(-4deg); }
+    to { opacity: 1; transform: none; }
+}
+
+/* "Já sei": o cartão sai voando com um brilho verde */
+.flash-cena.saindo-sei { animation: flash-sai-sei .38s ease-in forwards; }
+.flash-cena.saindo-sei .flash-face { box-shadow: 0 0 0 4px var(--success), 0 20px 40px rgba(16, 185, 129, 0.3); }
+
+@keyframes flash-sai-sei {
+    0% { transform: none; opacity: 1; }
+    30% { transform: translateY(-10px) scale(1.03); opacity: 1; }
+    100% { transform: translate(120px, -60px) rotate(12deg) scale(.9); opacity: 0; }
+}
+
+/* "Revisar": o cartão balança, como quem diz "ainda não" */
+.flash-cena.saindo-revisar { animation: flash-balanca .45s ease; }
+.flash-cena.saindo-revisar .flash-face { box-shadow: 0 0 0 4px var(--danger); }
+
+@keyframes flash-balanca {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-14px) rotate(-2deg); }
+    40% { transform: translateX(12px) rotate(2deg); }
+    60% { transform: translateX(-8px) rotate(-1deg); }
+    80% { transform: translateX(5px); }
+}
+
+/* O style.css desliga as animações do site quando o Windows está configurado
+   para "reduzir movimento" (comum nos PCs da escola). Aqui os flashcards
+   continuam animados mesmo assim, porque a virada faz parte do uso. */
+@media (prefers-reduced-motion: reduce) {
+    .flash-cartao { transition-duration: .7s !important; }
+    .flash-face { transition-duration: .35s !important; }
+    .flash-cena.pulando { animation-duration: .7s !important; }
+    .flash-cena.entrar-proximo,
+    .flash-cena.entrar-anterior { animation-duration: .42s !important; }
+    .flash-cena.saindo-sei { animation-duration: .38s !important; }
+    .flash-cena.saindo-revisar { animation-duration: .45s !important; }
+}
+
+.flash-face--verso {
+    transform: rotateY(180deg);
+    background: color-mix(in srgb, var(--cor, var(--brand)) 9%, var(--surface));
+}
+
+.flash-face__texto {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--text);
+}
+
+.flash-face--verso .flash-face__texto { font-size: 1.1rem; font-weight: 600; }
+
+.flash-face__dica {
+    font-size: .78rem;
+    color: var(--text-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.flash-status {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+}
+
+/* Navegação e respostas */
+.flash-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 20px auto 0;
+}
+
+.flash-nav__seta {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+}
+
+.flash-nav__seta:hover:not(:disabled) { background: var(--brand); color: #fff; }
+.flash-nav__seta:disabled { opacity: .35; cursor: not-allowed; }
+
+.flash-nav__contador {
+    min-width: 70px;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.flash-respostas {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-revisar { background: var(--danger-bg); color: var(--danger); }
+.btn-revisar:hover { background: var(--danger); color: #fff; }
+.btn-sei { background: var(--success-bg); color: var(--success); }
+.btn-sei:hover { background: var(--success); color: #fff; }
+
+.flash-atalhos {
+    margin-top: 22px;
+    text-align: center;
+    font-size: .76rem;
+    color: var(--text-soft);
+}
+
+.flash-atalhos kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-family: inherit;
+    font-size: .72rem;
+    color: var(--text-muted);
+}
+
+/* =====================================================================
+   GLOSSÁRIO
+===================================================================== */
+.glossario-busca {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.glossario-busca i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-soft);
+}
+
+.glossario-busca input {
+    width: 100%;
+    padding: 15px 18px 15px 46px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: .92rem;
+    font-family: inherit;
+    transition: border-color .15s;
+}
+
+.glossario-busca input:focus { outline: none; border-color: var(--brand); }
+
+.glossario-total {
+    font-size: .8rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.glossario-letra {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--brand);
+    margin: 22px 0 10px 4px;
+}
+
+.glossario-letra:first-child { margin-top: 0; }
+
+.glossario-grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+}
+
+.termo-card {
+    padding: 18px 20px;
+    border-left: 5px solid var(--cor, var(--brand));
+    animation: surgir .35s ease both;
+}
+
+.termo-card__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.termo-card h3 { font-size: 1.02rem; }
+.termo-card p { font-size: .88rem; line-height: 1.55; color: var(--text); }
+
+.termo-card__exemplo {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-soft);
+    font-size: .82rem;
+    color: var(--text-muted);
+}
+
+.termo-card__exemplo b { color: var(--text); }
+
+.termo-card mark {
+    background: color-mix(in srgb, var(--warning) 35%, transparent);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 1px;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 640px) {
+    .conteudo-intro { padding: 20px; }
+    .flash-placar { width: 100%; }
+    .flash-cartao { min-height: 280px; }
+    .flash-face { padding: 28px 20px; }
+    .flash-face__texto { font-size: 1.1rem; }
+    .flash-respostas .btn { flex: 1; }
+    .flash-atalhos { display: none; }
+    .glossario-grade { grid-template-columns: 1fr; }
+}

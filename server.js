@@ -14,6 +14,8 @@ const progressoRoutes = require('./routes/progresso');
 const enemRoutes = require('./routes/enem');
 const gamificacaoRoutes = require('./routes/gamificacao');
 const simuladoRoutes = require('./routes/simulados');
+const conteudoRoutes = require('./routes/conteudos');
+const redacaoRoutes = require('./routes/redacoes');
 const executarMigracoes = require('./config/migracoes');
 
 const app = express();
@@ -32,6 +34,8 @@ app.use('/api/progresso', progressoRoutes);
 app.use('/api/enem', enemRoutes);
 app.use('/api/gamificacao', gamificacaoRoutes);
 app.use('/api/simulados', simuladoRoutes);
+app.use('/api/conteudos', conteudoRoutes);
+app.use('/api/redacoes', redacaoRoutes);
 
 // ---------- Rotas de páginas (views) ----------
 const views = path.join(__dirname, 'views');
@@ -47,6 +51,11 @@ app.get('/plano', (req, res) => res.sendFile(path.join(views, 'plano.html')));
 app.get('/enem', (req, res) => res.sendFile(path.join(views, 'enem.html')));
 app.get('/simulado', (req, res) => res.sendFile(path.join(views, 'simulado.html')));
 app.get('/erros', (req, res) => res.sendFile(path.join(views, 'erros.html')));
+app.get('/flashcards', (req, res) => res.sendFile(path.join(views, 'flashcards.html')));
+app.get('/glossario', (req, res) => res.sendFile(path.join(views, 'glossario.html')));
+app.get('/redacao', (req, res) => res.sendFile(path.join(views, 'redacao.html')));
+app.get('/tabela-periodica', (req, res) => res.sendFile(path.join(views, 'tabela-periodica.html')));
+app.get('/formulas', (req, res) => res.sendFile(path.join(views, 'formulas.html')));
 app.get('/perfil', (req, res) => res.sendFile(path.join(views, 'perfil.html')));
 
 // ---------- 404 ----------

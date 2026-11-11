@@ -201,7 +201,6 @@ html.dark-mode .gami-popup__rotulo { color: #DDE3FA; }
     box-shadow: var(--shadow-pop);
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
-    animation: boiar 3.2s ease-in-out infinite;
     transition: transform .15s ease;
 }
 
@@ -214,8 +213,8 @@ html.dark-mode .gami-popup__rotulo { color: #DDE3FA; }
     50% { translate: 0 -5px; }
 }
 
-.mascote[data-humor="festa"] .mascote__corpo { animation: pular .6s ease 3, boiar 3.2s ease-in-out .6s infinite; }
-.mascote[data-humor="alerta"] .mascote__corpo { animation: balancar .5s ease 2, boiar 3.2s ease-in-out 1s infinite; }
+.mascote[data-humor="festa"] .mascote__corpo { animation: pular .6s ease 3; }
+.mascote[data-humor="alerta"] .mascote__corpo { animation: balancar .5s ease 2; }
 
 @keyframes pular {
     0%, 100% { translate: 0 0; }

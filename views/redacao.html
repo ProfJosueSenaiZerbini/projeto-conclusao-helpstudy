@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redação · HelpStudy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/conteudos.css">
+<link rel="stylesheet" href="/css/ferramentas.css">
+<link rel="stylesheet" href="/css/gamificacao.css">
+<link rel="stylesheet" href="/css/darkmode.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar__logo">
+            <span class="icon-mark"><i class="fa-solid fa-graduation-cap"></i></span>
+            HelpStudy
+        </div>
+        <nav class="sidebar__nav">
+            <a href="/dashboard"><i class="fa-solid fa-table-cells-large"></i> Início</a>
+            <a href="/enem"><i class="fa-solid fa-file-pen"></i> Questões do ENEM</a>
+            <a href="/simulado"><i class="fa-solid fa-stopwatch"></i> Simulado ENEM</a>
+            <a href="/progresso"><i class="fa-solid fa-chart-line"></i> Meu progresso</a>
+            <a href="/plano"><i class="fa-solid fa-list-check"></i> Plano de estudos</a>
+            <a href="/erros"><i class="fa-solid fa-book-bookmark"></i> Caderno de erros</a>
+            <a href="/flashcards"><i class="fa-solid fa-clone"></i> Flashcards</a>
+            <a href="/glossario"><i class="fa-solid fa-spell-check"></i> Glossário</a>
+            <a href="/redacao" class="active"><i class="fa-solid fa-pen-nib"></i> Redação</a>
+            <a href="/tabela-periodica"><i class="fa-solid fa-table-cells"></i> Tabela periódica</a>
+            <a href="/formulas"><i class="fa-solid fa-calculator"></i> Fórmulas rápidas</a>
+            <a href="/perfil"><i class="fa-solid fa-user"></i> Meu perfil</a>
+        </nav>
+        <div class="sidebar__footer">
+            <a href="#" data-logout><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="theme-toggle menu-btn" data-menu-toggle aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+                <h2 class="topbar__title">Redação</h2>
+            </div>
+            <div class="topbar__right">
+                <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema"><i class="fa-solid fa-moon"></i></button>
+                <span class="topbar__sep"></span>
+                <div class="user-chip">
+                    <span class="user-chip__avatar" data-user-initials>?</span>
+                    <span data-user-name>Aluno</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="card conteudo-intro">
+            <div class="conteudo-intro__icone conteudo-intro__icone--redacao"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="conteudo-intro__texto">
+                <h1>Redação do ENEM</h1>
+                <p>Escolha um tema, escreva seu texto e use o checklist das 5 competências para revisar. Suas redações ficam salvas na sua conta.</p>
+            </div>
+        </div>
+
+        <div class="redacao-grade">
+            <section class="card redacao-editor">
+                <label class="redacao-label" for="tema-select">Tema</label>
+                <select id="tema-select" class="redacao-select"></select>
+                <input type="text" id="tema-livre" class="redacao-input hidden" maxlength="255" placeholder="Escreva o tema da sua redação">
+
+                <div class="redacao-topo">
+                    <label class="redacao-label" for="texto">Seu texto</label>
+                    <div class="redacao-contadores" aria-live="polite">
+                        <span class="redacao-chip" id="cont-linhas" title="Estimativa considerando cerca de 70 letras por linha da folha do ENEM">≈ 0 / 30 linhas</span>
+                        <span class="redacao-chip" id="cont-paragrafos">0 parágrafos</span>
+                        <span class="redacao-chip" id="cont-palavras">0 palavras</span>
+                    </div>
+                </div>
+                <textarea id="texto" class="redacao-folha" maxlength="6000" placeholder="Comece pela introdução: apresente o tema e a sua opinião (tese)..."></textarea>
+                <p class="redacao-aviso hidden" id="aviso-linhas"></p>
+
+                <div class="redacao-acoes">
+                    <span class="redacao-status" id="status"></span>
+                    <button class="btn btn-ghost btn-sm" id="btn-nova"><i class="fa-solid fa-file-circle-plus"></i> Nova redação</button>
+                    <button class="btn btn-primary" id="btn-salvar"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                </div>
+            </section>
+
+            <aside class="redacao-lado">
+                <div class="card redacao-dicas">
+                    <h3><i class="fa-solid fa-list-ol"></i> Estrutura ideal</h3>
+                    <ol>
+                        <li><b>Introdução:</b> apresente o tema e a sua tese (opinião).</li>
+                        <li><b>Desenvolvimento 1:</b> primeiro argumento, com repertório.</li>
+                        <li><b>Desenvolvimento 2:</b> segundo argumento, com repertório.</li>
+                        <li><b>Conclusão:</b> proposta de intervenção para resolver o problema.</li>
+                    </ol>
+                </div>
+
+                <div class="card redacao-dicas">
+                    <h3><i class="fa-solid fa-square-check"></i> Checklist das competências</h3>
+                    <p class="redacao-dicas__sub">Cada competência vale até 200 pontos (total de 1000).</p>
+                    <div id="checklist"></div>
+                    <p class="redacao-dicas__proposta"><b>Proposta completa:</b> agente (quem) · ação (o quê) · meio (como) · finalidade (para quê) · detalhamento.</p>
+                </div>
+            </aside>
+        </div>
+
+        <h2 class="secao-titulo">Minhas redações</h2>
+        <section id="lista-redacoes">
+            <div class="card empty-state"><i class="fa-solid fa-spinner fa-spin"></i>Carregando...</div>
+        </section>
+    </main>
+</div>
+
+<script src="/js/darkmode.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/gamificacao.js"></script>
+<script src="/js/redacao.js"></script>
+</body>
+</html>
