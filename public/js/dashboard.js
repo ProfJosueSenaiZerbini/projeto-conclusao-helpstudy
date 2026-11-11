@@ -113,7 +113,7 @@ async function carregarDashboard() {
         gridMaterias.innerHTML = respMaterias.materias
             .map(
                 (m) => `
-            <a class="card materia-card" href="/exercicios?materia=${m.slug}">
+            <a class="card materia-card" href="/estudar?materia=${m.slug}">
                 <div class="materia-card__icon" style="background:${m.cor}">
                     <i class="${iconeClasse(m.icone)}"></i>
                 </div>

@@ -6,6 +6,7 @@
 // =====================================================================
 const db = require('./db');
 const { FLASHCARDS, GLOSSARIO } = require('../database/conteudosIniciais');
+const { AULAS } = require('../database/aulas');
 
 // Colunas novas em tabelas que já existiam
 const COLUNAS = [
@@ -129,6 +130,27 @@ const TABELAS = [
         criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
         atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+
+    // Aulas de estudo de cada matéria e as aulas que cada aluno já concluiu
+    `CREATE TABLE IF NOT EXISTS aulas (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        materia_id INT NOT NULL,
+        ordem INT NOT NULL DEFAULT 1,
+        titulo VARCHAR(150) NOT NULL,
+        descricao VARCHAR(255) DEFAULT NULL,
+        minutos INT NOT NULL DEFAULT 5,
+        conteudo MEDIUMTEXT NOT NULL,
+        UNIQUE KEY uk_aula_materia_titulo (materia_id, titulo),
+        FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB`,
+    `CREATE TABLE IF NOT EXISTS aulas_progresso (
+        usuario_id INT NOT NULL,
+        aula_id INT NOT NULL,
+        concluida_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (usuario_id, aula_id),
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+        FOREIGN KEY (aula_id) REFERENCES aulas(id) ON DELETE CASCADE
     ) ENGINE=InnoDB`
 ];
 
@@ -181,6 +203,21 @@ async function inserirConteudosIniciais() {
     }
 }
 
+// Coloca as aulas da pasta database/aulas no banco. Aula nova é inserida e
+// aula que mudou no arquivo é atualizada, então dá para melhorar o texto
+// a qualquer momento (o progresso dos alunos é mantido).
+async function inserirAulas() {
+    for (const aula of AULAS) {
+        await db.query(
+            `INSERT INTO aulas (materia_id, ordem, titulo, descricao, minutos, conteudo)
+             SELECT id, ?, ?, ?, ?, ? FROM materias WHERE slug = ?
+             ON DUPLICATE KEY UPDATE ordem = VALUES(ordem), descricao = VALUES(descricao),
+                                     minutos = VALUES(minutos), conteudo = VALUES(conteudo)`,
+            [aula.ordem, aula.titulo, aula.descricao, aula.minutos, JSON.stringify(aula.conteudo), aula.slug]
+        );
+    }
+}
+
 async function executarMigracoes() {
     for (const { tabela, coluna, definicao } of COLUNAS) {
         if (!(await colunaExiste(tabela, coluna))) {
@@ -197,6 +234,7 @@ async function executarMigracoes() {
     }
 
     await inserirConteudosIniciais();
+    await inserirAulas();
 }
 
 module.exports = executarMigracoes;

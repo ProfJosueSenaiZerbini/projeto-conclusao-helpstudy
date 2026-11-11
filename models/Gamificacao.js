@@ -18,6 +18,7 @@ const XP = {
     simulado: 30, // finalizar um simulado
     meta: 20, // cumprir a meta diária
     foco: 10, // completar uma sessão de 25 min no modo foco
+    aula: 15, // concluir uma aula de estudo (1x por aula)
     conquista: 50 // desbloquear uma conquista
 };
 
@@ -178,6 +179,14 @@ async function sincronizarXp(usuarioId) {
          SELECT ?, 'foco', CONCAT('f', id), ?, concluido_em
          FROM sessoes_foco WHERE usuario_id = ? AND concluido_em IS NOT NULL`,
         [usuarioId, XP.foco, usuarioId]
+    );
+
+    // Aulas de estudo concluídas
+    await db.query(
+        `${ins}
+         SELECT ?, 'aula', CONCAT('a', aula_id), ?, concluida_em
+         FROM aulas_progresso WHERE usuario_id = ?`,
+        [usuarioId, XP.aula, usuarioId]
     );
 }
 

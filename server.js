@@ -16,6 +16,7 @@ const gamificacaoRoutes = require('./routes/gamificacao');
 const simuladoRoutes = require('./routes/simulados');
 const conteudoRoutes = require('./routes/conteudos');
 const redacaoRoutes = require('./routes/redacoes');
+const aulaRoutes = require('./routes/aulas');
 const executarMigracoes = require('./config/migracoes');
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/api/gamificacao', gamificacaoRoutes);
 app.use('/api/simulados', simuladoRoutes);
 app.use('/api/conteudos', conteudoRoutes);
 app.use('/api/redacoes', redacaoRoutes);
+app.use('/api/aulas', aulaRoutes);
 
 // ---------- Rotas de páginas (views) ----------
 const views = path.join(__dirname, 'views');
@@ -56,6 +58,8 @@ app.get('/glossario', (req, res) => res.sendFile(path.join(views, 'glossario.htm
 app.get('/redacao', (req, res) => res.sendFile(path.join(views, 'redacao.html')));
 app.get('/tabela-periodica', (req, res) => res.sendFile(path.join(views, 'tabela-periodica.html')));
 app.get('/formulas', (req, res) => res.sendFile(path.join(views, 'formulas.html')));
+app.get('/estudar', (req, res) => res.sendFile(path.join(views, 'estudar.html')));
+app.get('/aula', (req, res) => res.sendFile(path.join(views, 'aula.html')));
 app.get('/perfil', (req, res) => res.sendFile(path.join(views, 'perfil.html')));
 
 // ---------- 404 ----------

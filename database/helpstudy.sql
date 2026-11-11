@@ -1407,6 +1407,29 @@ CREATE TABLE IF NOT EXISTS redacoes (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Aulas de estudo (o conteúdo é inserido automaticamente pelo servidor
+-- ao iniciar, a partir da pasta database/aulas)
+CREATE TABLE IF NOT EXISTS aulas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    materia_id INT NOT NULL,
+    ordem INT NOT NULL DEFAULT 1,
+    titulo VARCHAR(150) NOT NULL,
+    descricao VARCHAR(255) DEFAULT NULL,
+    minutos INT NOT NULL DEFAULT 5,
+    conteudo MEDIUMTEXT NOT NULL,
+    UNIQUE KEY uk_aula_materia_titulo (materia_id, titulo),
+    FOREIGN KEY (materia_id) REFERENCES materias(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS aulas_progresso (
+    usuario_id INT NOT NULL,
+    aula_id INT NOT NULL,
+    concluida_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (usuario_id, aula_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (aula_id) REFERENCES aulas(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 
 -- =====================================================================
 -- 14. CONQUISTAS NOVAS
