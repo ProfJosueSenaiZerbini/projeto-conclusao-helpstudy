@@ -66,7 +66,8 @@ html.dark-mode .perfil-nivel__titulo { color: #DDE3FA; }
 
 .perfil-campo small { font-weight: 400; color: var(--text-muted); }
 
-.perfil-campo input {
+.perfil-campo input,
+.perfil-campo select {
     width: 100%;
     padding: 11px 14px;
     border-radius: var(--radius-md);
@@ -77,7 +78,8 @@ html.dark-mode .perfil-nivel__titulo { color: #DDE3FA; }
     transition: border-color .15s, box-shadow .15s;
 }
 
-.perfil-campo input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+.perfil-campo input:focus,
+.perfil-campo select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
 
 .avatar-opcoes {
     display: flex;

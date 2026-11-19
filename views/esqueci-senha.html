@@ -120,18 +120,18 @@
                     <div class="field" id="field-senha">
                         <label for="senha">Nova senha</label>
                         <div class="field-input">
-                            <input type="password" id="senha" name="senha" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" required>
+                            <input type="password" id="senha" name="senha" placeholder="De 6 a 20 caracteres" autocomplete="new-password" maxlength="20" required>
                             <button type="button" class="toggle-senha" tabindex="-1" aria-label="Mostrar senha">
                                 <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
-                        <span class="field-error">A senha deve ter pelo menos 6 caracteres.</span>
+                        <span class="field-error">A senha deve ter entre 6 e 20 caracteres.</span>
                     </div>
 
                     <div class="field" id="field-confirmar-senha">
                         <label for="confirmar-senha">Confirmar nova senha</label>
                         <div class="field-input">
-                            <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Digite a senha de novo" autocomplete="new-password" required>
+                            <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Digite a senha de novo" autocomplete="new-password" maxlength="20" required>
                             <button type="button" class="toggle-senha" tabindex="-1" aria-label="Mostrar senha">
                                 <i class="fa-solid fa-eye"></i>
                             </button>

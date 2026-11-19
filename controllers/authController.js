@@ -8,9 +8,72 @@ const crypto = require('crypto');
 const Usuario = require('../models/Usuario');
 const RecuperacaoSenha = require('../models/RecuperacaoSenha');
 const { enviarCodigoRecuperacao } = require('../config/email');
+const limiteLogin = require('../middleware/limiteLogin');
 
 // Avatares que o aluno pode escolher no perfil
 const AVATARES = ['🐙', '🦊', '🐼', '🦉', '🐯', '🐸', '🐨', '🦁', '🐧', '🐢', '🦄', '🐝'];
+
+// ---------- Regras dos campos (mesmas da tela de cadastro e do perfil) ----------
+const NOME_MIN = 2;
+const NOME_MAX = 25;
+const APELIDO_MAX = 20;
+const SENHA_MIN = 6;
+const SENHA_MAX = 20;
+const EMAIL_MAX = 150;
+const SERIES = ['1º ano EM', '2º ano EM', '3º ano EM'];
+
+// E-mail no formato nome@provedor.com (qualquer provedor)
+const REGEX_EMAIL = /^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/;
+// Nome: só letras (com acento), espaço, apóstrofo e hífen
+const REGEX_NOME = /^[\p{L}' -]+$/u;
+// Apelido: 2 a 20 caracteres (letras, números, espaço, ponto, - ou _)
+const REGEX_APELIDO = /^[\p{L}\p{N} ._-]{2,20}$/u;
+
+// Hash usado quando o e-mail não existe, para o login demorar o mesmo tempo
+// e ninguém descobrir quais e-mails têm conta pelo tempo de resposta
+const HASH_FALSO = bcrypt.hashSync('senha-que-nao-existe', 10);
+
+function limparEmail(valor) {
+    return String(valor || '').toLowerCase().trim();
+}
+
+function limparNome(valor) {
+    return String(valor || '').trim().replace(/\s+/g, ' ');
+}
+
+function validarEmail(email) {
+    if (!email) return 'Informe seu e-mail.';
+    if (email.length > EMAIL_MAX || !REGEX_EMAIL.test(email) || email.includes('..')) {
+        return 'Digite um e-mail válido (ex.: nome@gmail.com).';
+    }
+    return null;
+}
+
+function validarNome(nome) {
+    if (nome.length < NOME_MIN || nome.length > NOME_MAX) {
+        return `O nome deve ter entre ${NOME_MIN} e ${NOME_MAX} caracteres.`;
+    }
+    if (!REGEX_NOME.test(nome)) return 'O nome deve ter apenas letras e espaços.';
+    return null;
+}
+
+function validarSenha(senha, rotulo = 'A senha') {
+    if (senha.length < SENHA_MIN || senha.length > SENHA_MAX) {
+        return `${rotulo} deve ter entre ${SENHA_MIN} e ${SENHA_MAX} caracteres.`;
+    }
+    return null;
+}
+
+// Cookie com o token: não pode ser lido por JavaScript (httpOnly) e não é
+// enviado por outros sites (sameSite), o que protege contra ataques CSRF
+function opcoesCookie() {
+    return {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    };
+}
 
 function gerarToken(usuarioId) {
     return jwt.sign({ id: usuarioId }, process.env.JWT_SECRET, {
@@ -21,30 +84,39 @@ function gerarToken(usuarioId) {
 const authController = {
     async cadastrar(req, res) {
         try {
-            const { nome, email, senha, serie } = req.body;
+            const nome = limparNome(req.body.nome);
+            const email = limparEmail(req.body.email);
+            const senha = String(req.body.senha || '');
+            const serie = String(req.body.serie || '').trim();
 
             if (!nome || !email || !senha) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Preencha nome, e-mail e senha.' });
             }
-            if (senha.length < 6) {
-                return res.status(400).json({ sucesso: false, mensagem: 'A senha deve ter pelo menos 6 caracteres.' });
+            const erro = validarNome(nome) || validarEmail(email) || validarSenha(senha);
+            if (erro) return res.status(400).json({ sucesso: false, mensagem: erro });
+            if (serie && !SERIES.includes(serie)) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Escolha o 1º, 2º ou 3º ano.' });
             }
 
-            const existente = await Usuario.buscarPorEmail(email.toLowerCase().trim());
+            const existente = await Usuario.buscarPorEmail(email);
             if (existente) {
                 return res.status(409).json({ sucesso: false, mensagem: 'Este e-mail já está cadastrado.' });
             }
 
             const senhaHash = await bcrypt.hash(senha, 10);
-            const novoId = await Usuario.criar({
-                nome: nome.trim(),
-                email: email.toLowerCase().trim(),
-                senhaHash,
-                serie
-            });
+            let novoId;
+            try {
+                novoId = await Usuario.criar({ nome, email, senhaHash, serie });
+            } catch (errBanco) {
+                // Dois cadastros com o mesmo e-mail ao mesmo tempo
+                if (errBanco.code === 'ER_DUP_ENTRY') {
+                    return res.status(409).json({ sucesso: false, mensagem: 'Este e-mail já está cadastrado.' });
+                }
+                throw errBanco;
+            }
 
             const token = gerarToken(novoId);
-            res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie('token', token, opcoesCookie());
 
             return res.status(201).json({
                 sucesso: true,
@@ -60,23 +132,39 @@ const authController = {
 
     async login(req, res) {
         try {
-            const { email, senha } = req.body;
+            const email = limparEmail(req.body.email);
+            const senha = String(req.body.senha || '');
             if (!email || !senha) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Informe e-mail e senha.' });
             }
 
-            const usuario = await Usuario.buscarPorEmail(email.toLowerCase().trim());
-            if (!usuario) {
-                return res.status(401).json({ sucesso: false, mensagem: 'E-mail ou senha inválidos.' });
+            const minutos = limiteLogin.minutosBloqueado(req, email);
+            if (minutos > 0) {
+                return res.status(429).json({
+                    sucesso: false,
+                    mensagem: `Muitas tentativas erradas. Tente de novo em ${minutos} minuto(s).`
+                });
             }
 
-            const senhaValida = await bcrypt.compare(senha, usuario.senha);
-            if (!senhaValida) {
-                return res.status(401).json({ sucesso: false, mensagem: 'E-mail ou senha inválidos.' });
+            const erroLogin = { sucesso: false, mensagem: 'E-mail ou senha inválidos.' };
+
+            // E-mail com formato errado ou senha muito longa: nem consulta o banco
+            if (validarEmail(email) || senha.length > 100) {
+                limiteLogin.registrarErro(req, email);
+                return res.status(401).json(erroLogin);
             }
 
+            const usuario = await Usuario.buscarPorEmail(email);
+            // Compara sempre (mesmo sem usuário) para a resposta levar o mesmo tempo
+            const senhaValida = await bcrypt.compare(senha, usuario ? usuario.senha : HASH_FALSO);
+            if (!usuario || !senhaValida) {
+                limiteLogin.registrarErro(req, email);
+                return res.status(401).json(erroLogin);
+            }
+
+            limiteLogin.limpar(req, email);
             const token = gerarToken(usuario.id);
-            res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+            res.cookie('token', token, opcoesCookie());
 
             return res.json({
                 sucesso: true,
@@ -91,7 +179,7 @@ const authController = {
     },
 
     logout(req, res) {
-        res.clearCookie('token');
+        res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
         return res.json({ sucesso: true, mensagem: 'Sessão encerrada.' });
     },
 
@@ -111,23 +199,22 @@ const authController = {
     // PUT /api/auth/perfil  { nome, apelido, serie, avatar, rankingPublico }
     async atualizarPerfil(req, res) {
         try {
-            const nome = String(req.body.nome || '').trim();
+            const nome = limparNome(req.body.nome);
             const apelido = String(req.body.apelido || '').trim();
             const serie = String(req.body.serie || '').trim();
             const avatar = req.body.avatar || null;
             const rankingPublico = req.body.rankingPublico !== false;
 
-            if (nome.length < 2 || nome.length > 120) {
-                return res.status(400).json({ sucesso: false, mensagem: 'O nome deve ter entre 2 e 120 caracteres.' });
-            }
-            if (apelido && !/^[\p{L}\p{N} ._-]{2,30}$/u.test(apelido)) {
+            const erroNome = validarNome(nome);
+            if (erroNome) return res.status(400).json({ sucesso: false, mensagem: erroNome });
+            if (apelido && !REGEX_APELIDO.test(apelido)) {
                 return res.status(400).json({
                     sucesso: false,
-                    mensagem: 'O apelido deve ter de 2 a 30 caracteres (letras, números, espaço, ponto, - ou _).'
+                    mensagem: `O apelido deve ter de 2 a ${APELIDO_MAX} caracteres (letras, números, espaço, ponto, - ou _).`
                 });
             }
-            if (serie.length > 50) {
-                return res.status(400).json({ sucesso: false, mensagem: 'A série deve ter no máximo 50 caracteres.' });
+            if (serie && !SERIES.includes(serie)) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Escolha o 1º, 2º ou 3º ano.' });
             }
             if (avatar !== null && !AVATARES.includes(avatar)) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Avatar inválido.' });
@@ -155,9 +242,8 @@ const authController = {
             if (!senhaAtual || !novaSenha) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Informe a senha atual e a nova senha.' });
             }
-            if (String(novaSenha).length < 6) {
-                return res.status(400).json({ sucesso: false, mensagem: 'A nova senha deve ter pelo menos 6 caracteres.' });
-            }
+            const erroSenha = validarSenha(String(novaSenha), 'A nova senha');
+            if (erroSenha) return res.status(400).json({ sucesso: false, mensagem: erroSenha });
 
             const senhaHashAtual = await Usuario.buscarSenha(req.usuarioId);
             const confere = senhaHashAtual && (await bcrypt.compare(String(senhaAtual), senhaHashAtual));
@@ -219,9 +305,8 @@ const authController = {
             if (!email || !codigo || !novaSenha) {
                 return res.status(400).json({ sucesso: false, mensagem: 'Preencha o código e a nova senha.' });
             }
-            if (novaSenha.length < 6) {
-                return res.status(400).json({ sucesso: false, mensagem: 'A nova senha deve ter pelo menos 6 caracteres.' });
-            }
+            const erroSenha = validarSenha(novaSenha, 'A nova senha');
+            if (erroSenha) return res.status(400).json({ sucesso: false, mensagem: erroSenha });
 
             const erroCodigo = { sucesso: false, mensagem: 'Código inválido ou expirado.' };
 

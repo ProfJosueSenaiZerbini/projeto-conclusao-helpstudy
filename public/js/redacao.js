@@ -59,10 +59,13 @@ function atualizarContadores() {
 
     const aviso = document.getElementById('aviso-linhas');
     let msg = '';
-    if (linhas > 30) msg = '⚠️ Passou de 30 linhas. A folha do ENEM tem 30 linhas: tente resumir.';
+    if (linhas > 30) msg = '⚠️ Passou de 30 linhas. A folha do ENEM tem 30 linhas: resuma o texto para conseguir salvar.';
     else if (linhas > 0 && linhas <= 7) msg = '⚠️ No ENEM, redações com até 7 linhas recebem nota zero. Continue escrevendo!';
     aviso.textContent = msg;
     aviso.classList.toggle('hidden', !msg);
+
+    // Não deixa salvar com mais de 30 linhas
+    document.getElementById('btn-salvar').disabled = linhas > 30;
 }
 
 // ---------- Tema ----------
@@ -134,6 +137,9 @@ async function salvar() {
     const texto = document.getElementById('texto').value;
     if (!tema) return status('⚠️ Escolha ou escreva um tema antes de salvar.');
     if (!texto.trim()) return status('⚠️ Escreva alguma coisa antes de salvar.');
+    if (contar(texto).linhas > 30) {
+        return status('⚠️ A redação passou de 30 linhas. Resuma o texto para conseguir salvar.');
+    }
 
     const botao = document.getElementById('btn-salvar');
     botao.disabled = true;
@@ -143,7 +149,7 @@ async function salvar() {
         method: atualId ? 'PUT' : 'POST',
         body: JSON.stringify({ tema, texto, checklist: lerChecklist() })
     });
-    botao.disabled = false;
+    botao.disabled = contar(document.getElementById('texto').value).linhas > 30;
     if (!resp) return;
     if (!resp.sucesso) return status('⚠️ ' + (resp.mensagem || 'Não foi possível salvar.'));
 

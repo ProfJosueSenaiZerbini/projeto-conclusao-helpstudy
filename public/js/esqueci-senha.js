@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('field-codigo').classList.add('has-error');
             return;
         }
-        if (novaSenha.length < 6) {
+        if (novaSenha.length < 6 || novaSenha.length > 20) {
             document.getElementById('field-senha').classList.add('has-error');
             return;
         }

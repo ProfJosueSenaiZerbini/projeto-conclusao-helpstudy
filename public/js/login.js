@@ -2,6 +2,14 @@
 // Lógica da página de Login e Cadastro
 // =====================================================================
 
+// Mesmas regras do servidor (controllers/authController.js)
+const REGEX_EMAIL = /^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/i;
+const REGEX_NOME = /^[\p{L}' -]+$/u;
+
+function emailValido(email) {
+    return email.length <= 150 && REGEX_EMAIL.test(email) && !email.includes('..');
+}
+
 function mostrarToast(mensagem, tipo = 'sucesso') {
     let toast = document.querySelector('.toast');
     if (!toast) {
@@ -74,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 mostrarToast('Preencha e-mail e senha.', 'erro');
                 return;
             }
+            if (!emailValido(email)) {
+                document.getElementById('field-email').classList.add('has-error');
+                mostrarToast('Digite um e-mail válido (ex.: nome@gmail.com).', 'erro');
+                return;
+            }
+            document.getElementById('field-email').classList.remove('has-error');
 
             definirCarregando(botao, true);
             try {
@@ -107,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formCadastro) {
         formCadastro.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nome = document.getElementById('nome').value.trim();
+            const nome = document.getElementById('nome').value.trim().replace(/\s+/g, ' ');
             const email = document.getElementById('email').value.trim();
             const serie = document.getElementById('serie').value;
             const senha = document.getElementById('senha').value;
@@ -116,9 +130,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.querySelectorAll('.field').forEach((f) => f.classList.remove('has-error'));
 
-            if (senha.length < 6) {
+            if (nome.length < 2 || nome.length > 25) {
+                document.getElementById('field-nome').classList.add('has-error');
+                mostrarToast('O nome deve ter entre 2 e 25 caracteres.', 'erro');
+                return;
+            }
+            if (!REGEX_NOME.test(nome)) {
+                document.getElementById('field-nome').classList.add('has-error');
+                mostrarToast('O nome deve ter apenas letras e espaços.', 'erro');
+                return;
+            }
+            if (!emailValido(email)) {
+                document.getElementById('field-email').classList.add('has-error');
+                mostrarToast('Digite um e-mail válido (ex.: nome@gmail.com).', 'erro');
+                return;
+            }
+            if (senha.length < 6 || senha.length > 20) {
                 document.getElementById('field-senha').classList.add('has-error');
-                mostrarToast('A senha deve ter pelo menos 6 caracteres.', 'erro');
+                mostrarToast('A senha deve ter entre 6 e 20 caracteres.', 'erro');
                 return;
             }
             if (senha !== confirmarSenha) {

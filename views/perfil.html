@@ -75,15 +75,20 @@
                     <h3><i class="fa-regular fa-user"></i> Dados do perfil</h3>
                     <label class="perfil-campo">
                         <span>Nome completo</span>
-                        <input type="text" id="campo-nome" maxlength="120" required autocomplete="name">
+                        <input type="text" id="campo-nome" maxlength="25" required autocomplete="name">
                     </label>
                     <label class="perfil-campo">
                         <span>Apelido público <small>(aparece no ranking no lugar do seu nome)</small></span>
-                        <input type="text" id="campo-apelido" maxlength="30" placeholder="Ex.: Ana Estudiosa">
+                        <input type="text" id="campo-apelido" maxlength="20" placeholder="Ex.: Ana Estudiosa">
                     </label>
                     <label class="perfil-campo">
                         <span>Série / ano</span>
-                        <input type="text" id="campo-serie" maxlength="50" placeholder="Ex.: 3º ano do Ensino Médio">
+                        <select id="campo-serie">
+                            <option value="">Selecione</option>
+                            <option value="1º ano EM">1º ano do Ensino Médio</option>
+                            <option value="2º ano EM">2º ano do Ensino Médio</option>
+                            <option value="3º ano EM">3º ano do Ensino Médio</option>
+                        </select>
                     </label>
                     <div class="perfil-campo">
                         <span>Avatar</span>
@@ -107,12 +112,12 @@
                         <input type="password" id="senha-atual" autocomplete="current-password" required>
                     </label>
                     <label class="perfil-campo">
-                        <span>Nova senha <small>(mínimo 6 caracteres)</small></span>
-                        <input type="password" id="senha-nova" autocomplete="new-password" minlength="6" required>
+                        <span>Nova senha <small>(de 6 a 20 caracteres)</small></span>
+                        <input type="password" id="senha-nova" autocomplete="new-password" minlength="6" maxlength="20" required>
                     </label>
                     <label class="perfil-campo">
                         <span>Confirmar nova senha</span>
-                        <input type="password" id="senha-confirmar" autocomplete="new-password" minlength="6" required>
+                        <input type="password" id="senha-confirmar" autocomplete="new-password" minlength="6" maxlength="20" required>
                     </label>
                     <button type="submit" class="btn btn-outline" id="btn-salvar-senha">Alterar senha</button>
                 </form>

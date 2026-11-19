@@ -116,15 +116,20 @@ async function carregar() {
 
 async function salvarPerfil(e) {
     e.preventDefault();
-    const nome = document.getElementById('campo-nome').value.trim();
+    const nome = document.getElementById('campo-nome').value.trim().replace(/\s+/g, ' ');
     const apelido = document.getElementById('campo-apelido').value.trim();
-    if (nome.length < 2) {
-        mostrarToast('Digite seu nome (pelo menos 2 letras).', 'erro');
+    if (nome.length < 2 || nome.length > 25) {
+        mostrarToast('O nome deve ter entre 2 e 25 caracteres.', 'erro');
         document.getElementById('campo-nome').focus();
         return;
     }
-    if (apelido && !/^[\p{L}\p{N} ._-]{2,30}$/u.test(apelido)) {
-        mostrarToast('O apelido pode ter letras, números, espaço, ponto, - e _ (2 a 30 caracteres).', 'erro');
+    if (!/^[\p{L}' -]+$/u.test(nome)) {
+        mostrarToast('O nome deve ter apenas letras e espaços.', 'erro');
+        document.getElementById('campo-nome').focus();
+        return;
+    }
+    if (apelido && !/^[\p{L}\p{N} ._-]{2,20}$/u.test(apelido)) {
+        mostrarToast('O apelido pode ter letras, números, espaço, ponto, - e _ (2 a 20 caracteres).', 'erro');
         document.getElementById('campo-apelido').focus();
         return;
     }
@@ -136,7 +141,7 @@ async function salvarPerfil(e) {
         body: JSON.stringify({
             nome,
             apelido,
-            serie: document.getElementById('campo-serie').value.trim(),
+            serie: document.getElementById('campo-serie').value,
             avatar: avatarEscolhido,
             rankingPublico: document.getElementById('campo-ranking').checked
         })
@@ -165,8 +170,8 @@ async function alterarSenha(e) {
         mostrarToast('Preencha a senha atual e a nova senha.', 'erro');
         return;
     }
-    if (nova.value.length < 6) {
-        mostrarToast('A nova senha deve ter pelo menos 6 caracteres.', 'erro');
+    if (nova.value.length < 6 || nova.value.length > 20) {
+        mostrarToast('A nova senha deve ter entre 6 e 20 caracteres.', 'erro');
         nova.focus();
         return;
     }

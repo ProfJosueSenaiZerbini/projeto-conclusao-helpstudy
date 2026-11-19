@@ -3,6 +3,19 @@
 // =====================================================================
 const Redacao = require('../models/Redacao');
 
+// Mesma conta de linhas da tela (public/js/redacao.js):
+// cerca de 70 letras por linha da folha do ENEM
+const LETRAS_POR_LINHA = 70;
+const MAX_LINHAS = 30;
+
+function contarLinhas(texto) {
+    return texto
+        .split('\n')
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .reduce((soma, p) => soma + Math.ceil(p.length / LETRAS_POR_LINHA), 0);
+}
+
 // Confere e limpa os dados enviados pelo navegador
 function validar(body) {
     const tema = String(body.tema || '').trim();
@@ -13,6 +26,9 @@ function validar(body) {
     if (tema.length > 255) return { erro: 'O tema deve ter no máximo 255 caracteres.' };
     if (!texto.trim()) return { erro: 'Escreva alguma coisa antes de salvar.' };
     if (texto.length > 6000) return { erro: 'A redação ficou grande demais (máximo de 6000 caracteres).' };
+    if (contarLinhas(texto) > MAX_LINHAS) {
+        return { erro: `A redação passou de ${MAX_LINHAS} linhas. Resuma o texto para conseguir salvar.` };
+    }
     return { dados: { tema, texto, checklist } };
 }
 
